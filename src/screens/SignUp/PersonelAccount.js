@@ -118,6 +118,8 @@ const PersonelAccountSignup = () => {
                                         style={styles.rowtextInput}
                                         placeholder={Languages.pa_signup_city}
                                         placeholderTextColor={Colors.PrimaryColor}
+                                        value={city}
+                                        onChangeText={(text)=>{setCity(text)}}
 
                                     />
                                 </View>
@@ -187,7 +189,7 @@ const PersonelAccountSignup = () => {
                         <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.pa_signup_btn_txt}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate("BusinessAccountSignup")}} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.pa_signup_ba_btn_txt}</Text>
                         </TouchableOpacity>
                     </View>

@@ -10,12 +10,13 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 const PersonelAccount = () => {
 
     const navigation = useNavigation();
-    const [passwordVisible, setPasswordVisible] = useState(true)
+
+   
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+    const [passwordVisible, setPasswordVisible] = useState(true)
 
     const [passwordValidation, setPasswordValidation] = useState("")
     const [emailValidation, setEmailValidation] = useState("")
