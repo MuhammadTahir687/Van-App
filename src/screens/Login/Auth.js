@@ -36,6 +36,7 @@ const Auth = () => {
                     <View style={styles.languagedropdowncontainer}>
                         <Text style={styles.languageHeading}>Select Language</Text>
                         <DropdownPicker
+                            listMode={"SCROLLVIEW"}
                             data={data}
                             value={value}
                             setValue={setValue}

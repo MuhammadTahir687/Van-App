@@ -141,5 +141,26 @@ export const styles = StyleSheet.create({
         zIndex:1,
         marginTop:20,
         width:"85%",
+    },
+    datecontainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        borderWidth: 1,
+        borderRadius: 10,
+        marginHorizontal: 4,
+        marginVertical: 5,
+        height: 50,
+        borderColor: Colors.PrimaryColor,
+        paddingHorizontal: 5
+    },
+    datebtn:{
+        flex:1,
+        justifyContent:"center",
+        width:"100%", 
+        marginHorizontal: 5
+    },
+    datetext:{
+        color:Colors.PrimaryColor,
+        marginLeft:5
     }
 })
