@@ -12,6 +12,7 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import Languages from '../../constants/Localization/localization';
 
 const BusinessAccountSignup = () => {
 
@@ -138,11 +139,11 @@ const BusinessAccountSignup = () => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/Logo.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Business Account</Text>
+                        <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
                         <View style={styles.dropdowncontainer}>
                             <DropdownPicker
                                 listMode={"SCROLLVIEW"}
-                                placeholder="Select Category"
+                                placeholder={Languages.ba_signup_category}
                                 open={open}
                                 value={value}
                                 data={data}
@@ -155,7 +156,7 @@ const BusinessAccountSignup = () => {
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder='Enter Name'
+                                placeholder={Languages.ba_signup_name}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={name}
                                 onChangeText={(text) => { setName(text), setNameValidation("") }}
@@ -166,7 +167,7 @@ const BusinessAccountSignup = () => {
                             <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder='Enter Email'
+                                placeholder={Languages.ba_signup_email}
                                 keyboardType={"email-address"}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={email}
@@ -194,7 +195,7 @@ const BusinessAccountSignup = () => {
                                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                     <TextInput
                                         style={styles.rowtextInput}
-                                        placeholder='Enter City'
+                                        placeholder={Languages.ba_signup_city}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={city}
                                         onChangeText={(text) => { setCity(text) }}
@@ -209,7 +210,7 @@ const BusinessAccountSignup = () => {
                                 <FontAwesome5 name={"phone-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                 <TextInput
                                     style={styles.rowtextInput}
-                                    placeholder='Enter Phone'
+                                    placeholder={Languages.ba_signup_phone}
                                     keyboardType={"numeric"}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={phone}
@@ -222,7 +223,7 @@ const BusinessAccountSignup = () => {
                                     <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                     <TextInput
                                         style={styles.rowtextInput}
-                                        placeholder='Enter Age'
+                                        placeholder={Languages.ba_signup_age}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={age}
                                         onChangeText={(text) => { setAge(text) }}
@@ -234,7 +235,7 @@ const BusinessAccountSignup = () => {
                                     <Fontisto name={"room"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                     <TextInput
                                         style={styles.rowtextInput}
-                                        placeholder='Enter Hotel Rooms'
+                                        placeholder={Languages.ba_signup_hotel_rooms}
                                         keyboardType='numeric'
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={hotelRooms}
@@ -297,7 +298,7 @@ const BusinessAccountSignup = () => {
                                     <FontAwesome5 name={"building"} color={Colors.PrimaryColor} />
                                     <TextInput
                                         style={styles.textInput}
-                                        placeholder='Enter Hotel Name'
+                                        placeholder={Languages.ba_signup_hotel_name}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={hotelName}
                                         onChangeText={(text) => { setHotelName(text),setHotelNameValidation("") }}
@@ -308,7 +309,7 @@ const BusinessAccountSignup = () => {
                                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                                     <TextInput
                                         style={styles.textInput}
-                                        placeholder='Enter Hotel Address'
+                                        placeholder={Languages.ba_signup_hotel_address}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={hotelAddress}
                                         onChangeText={(text) => { setHotelAddress(text),setHotelAddressValidation("") }}
@@ -318,7 +319,7 @@ const BusinessAccountSignup = () => {
                                 <View style={{ ...styles.dropdowncontainer, marginTop: 5 }}>
                                     <DropdownPicker
                                         multiple={true}
-                                        placeholder="Select Amenities"
+                                        placeholder={Languages.ba_signup_hotel_ameneties}
                                         listMode="MODAL"
                                         open={amenitiesOpen}
                                         value={amenities}
@@ -330,7 +331,7 @@ const BusinessAccountSignup = () => {
                                 <View style={styles.datecontainer}>
                                     <FontAwesome5 name={"calendar-alt"} size={15} color={Colors.PrimaryColor} />
                                     <TouchableOpacity style={styles.datebtn} onPress={() => { setShowDate(true) }}>
-                                        {showHotelPlaceholder == true ? <Text style={styles.datetext}>Enter Hotel Foundation Date</Text> : <Text style={styles.datetext}>{moment(hotelDate).format('ll')}</Text>}
+                                        {showHotelPlaceholder == true ? <Text style={styles.datetext}>{Languages.ba_signup_hotel_foundation_date}</Text> : <Text style={styles.datetext}>{moment(hotelDate).format('ll')}</Text>}
                                         {showDate && <DateTimePicker
                                             value={hotelDate}
                                             onChange={handleDate}
@@ -342,7 +343,7 @@ const BusinessAccountSignup = () => {
                                     <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
                                     <TextInput
                                         style={styles.textbox}
-                                        placeholder='Enter Breif Introduction'
+                                        placeholder={Languages.ba_signup_hotel_breif_introduction}
                                         underlineColorAndroid="transparent"
                                         multiline={true}
                                         numberOfLines={8}
@@ -359,7 +360,7 @@ const BusinessAccountSignup = () => {
                             <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder='Enter Password'
+                                placeholder={Languages.ba_signup_password}
                                 secureTextEntry={passwordVisible}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={password}
@@ -377,10 +378,10 @@ const BusinessAccountSignup = () => {
 
 
                         <TouchableOpacity onPress={()=>{Submit()}} style={styles.btn}>
-                            <Text style={styles.btntext}>Sign Up</Text>
+                            <Text style={styles.btntext}>{Languages.ba_signup_btn_txt}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
-                            <Text style={styles.btntext}>Personel Account</Text>
+                            <Text style={styles.btntext}>{Languages.ba_signup_pa_btn_txt}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
