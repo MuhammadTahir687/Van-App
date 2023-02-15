@@ -63,11 +63,11 @@ const BusinessAccount = () => {
             </View>
             <View style={styles.container}>
                 <View style={styles.subcontainer}>
-                    <Text style={styles.loginHeading}>Business Account</Text>
+                    <Text style={styles.loginHeading}>{Languages.ba_login_screen_h}</Text>
                     <View style={styles.dropdowncontainer}>
                             <DropdownPicker
                                 listMode={"SCROLLVIEW"}
-                                placeholder="Select Category"
+                                placeholder={Languages.ba_login_category}
                                 open={open}
                                 value={value}
                                 data={data}
@@ -83,7 +83,7 @@ const BusinessAccount = () => {
                             <TextInput
                                 style={styles.textInput}
                                 placeholderTextColor={Colors.PrimaryColor}
-                                placeholder={Languages.pa_login_email}
+                                placeholder={Languages.ba_login_email}
                                 keyboardType={"email-address"}
                                 value={email}
                                 onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
@@ -94,7 +94,7 @@ const BusinessAccount = () => {
                             <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={Languages.pa_login_password}
+                                placeholder={Languages.ba_login_password}
                                 secureTextEntry={passwordVisible}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={password}
@@ -108,10 +108,10 @@ const BusinessAccount = () => {
                         {passwordValidation && <ErrorMessage error={passwordValidation} />}
 
                     <TouchableOpacity onPress={()=>{Submit()}} style={styles.btn}>
-                        <Text style={styles.btntext}>Login</Text>
+                        <Text style={styles.btntext}>{Languages.ba_login_btn_txt}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {  navigation.goBack() }} style={styles.btn}>
-                        <Text style={styles.btntext}>Personel Account</Text>
+                        <Text style={styles.btntext}>{Languages.ba_login_pa_btn_txt}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
