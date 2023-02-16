@@ -52,6 +52,12 @@ const Languages = new LocalizedStrings({
         ba_signup_phone: "Enter Phone",
         ba_signup_password: "Enter Password",
 
+        //Taxi Signup
+        ba_signup_taxi_model: "Enter Taxi Model",
+        ba_signup_taxi_hire_rate: "Enter Taxi Hire Rate",
+        ba_signup_taxi_plate_number: "Enter Taxi Plate Number",
+        ba_signup_taxi_introduction: "Enter Breif Introduction",
+        
         //Hotel Reservation Signup
         ba_signup_hotel_rooms: "Enter Hotel Rooms",
         ba_signup_hotel_name: "Enter Hotel Name",
@@ -112,6 +118,12 @@ const Languages = new LocalizedStrings({
         ba_signup_age: "Enter Age",
         ba_signup_phone: "Enter Phone",
         ba_signup_password: "Enter Password",
+
+        //Taxi Signup
+        ba_signup_taxi_model: "Enter Taxi Model",
+        ba_signup_taxi_hire_rate: "Enter Taxi Hire Rate",
+        ba_signup_taxi_plate_number: "Enter Taxi Plate Number",
+        ba_signup_taxi_introduction: "Enter Breif Introduction",
 
         //Hotel Reservation Signup
         ba_signup_hotel_rooms: "Enter Hotel Rooms",
