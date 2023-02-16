@@ -60,12 +60,12 @@ const BusinessAccountSignup = () => {
 
     // Taxi
 
-    const [taxiModel,setTaxiModel]=useState("")
-    const [taxihireRate,setTaxiHireRate]=useState("")
-    const [taxiPlateNumber,settaxiPlateNumber]=useState("")
-    const [taxiIntroduction,setTaxiIntroduction]=useState("")
-    const [taxiModelValidation,setTaxiModelValidation]=useState("")
-    const [taxiPlateNumberValidation,setTaxiPlateNumberValidation]=useState("")
+    const [taxiModel, setTaxiModel] = useState("")
+    const [taxihireRate, setTaxiHireRate] = useState("")
+    const [taxiPlateNumber, settaxiPlateNumber] = useState("")
+    const [taxiIntroduction, setTaxiIntroduction] = useState("")
+    const [taxiModelValidation, setTaxiModelValidation] = useState("")
+    const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
 
     //*Hotel Reservation*/
     const [hotelName, setHotelName] = useState('')
@@ -98,15 +98,15 @@ const BusinessAccountSignup = () => {
 
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if(value==null) setCategoryValidation("Select Category*")
+        if (value == null) setCategoryValidation("Select Category*")
         else if (name == "") setNameValidation("Required*")
-        else if (email == "")setEmailValidation("Required*")
+        else if (email == "") setEmailValidation("Required*")
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
-        else if(value=="Taxi" && taxiModel=="") setTaxiModelValidation("Required*")
-        else if(value=="Taxi" && taxiPlateNumber=="") setTaxiPlateNumberValidation("Required*")
-        else if (value =="Hotel Reservation" && hotelName =="") setHotelNameValidation("Required*")
-        else if (value =="Hotel Reservation" && hotelAddress =="") setHotelAddressValidation("Required*")
+        else if (value == "Taxi" && taxiModel == "") setTaxiModelValidation("Required*")
+        else if (value == "Taxi" && taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
+        else if (value == "Hotel Reservation" && hotelName == "") setHotelNameValidation("Required*")
+        else if (value == "Hotel Reservation" && hotelAddress == "") setHotelAddressValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
             navigation.replace("BusinessAccount")
@@ -130,10 +130,10 @@ const BusinessAccountSignup = () => {
                                 value={value}
                                 data={data}
                                 setOpen={setOpen}
-                                setValue={(value)=>{setValue(value),setCategoryValidation("")}}
+                                setValue={(value) => { setValue(value), setCategoryValidation("") }}
                             />
                         </View>
-                        {categoryValidation && <ErrorMessage error={categoryValidation}/>}
+                        {categoryValidation && <ErrorMessage error={categoryValidation} />}
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -232,65 +232,65 @@ const BusinessAccountSignup = () => {
 
                         {/************************Taxi*******************/}
 
-                        {value != null && value == "Taxi" && 
-                        <>
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_taxi_model}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={taxiModel}
-                                onChangeText={(text)=>{setTaxiModel(text),setTaxiModelValidation("")}}
+                        {value != null && value == "Taxi" &&
+                            <>
+                                <View style={styles.inputContainer}>
+                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder={Languages.ba_signup_taxi_model}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={taxiModel}
+                                        onChangeText={(text) => { setTaxiModel(text), setTaxiModelValidation("") }}
 
-                            />
-                        </View>
-                        {taxiModelValidation && <ErrorMessage error={taxiModelValidation}/>}
+                                    />
+                                </View>
+                                {taxiModelValidation && <ErrorMessage error={taxiModelValidation} />}
 
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_taxi_hire_rate}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={taxihireRate}
-                                onChangeText={(text)=>{setTaxiHireRate(text)}}
+                                <View style={styles.inputContainer}>
+                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder={Languages.ba_signup_taxi_hire_rate}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={taxihireRate}
+                                        onChangeText={(text) => { setTaxiHireRate(text) }}
 
-                            />
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_taxi_plate_number}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={taxiPlateNumber}
-                                onChangeText={(text)=>{settaxiPlateNumber(text),setTaxiPlateNumberValidation("")}}
+                                    />
+                                </View>
+                                <View style={styles.inputContainer}>
+                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder={Languages.ba_signup_taxi_plate_number}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={taxiPlateNumber}
+                                        onChangeText={(text) => { settaxiPlateNumber(text), setTaxiPlateNumberValidation("") }}
 
-                            />
-                        </View>
-                        {taxiPlateNumberValidation && <ErrorMessage error={taxiPlateNumberValidation}/>}
+                                    />
+                                </View>
+                                {taxiPlateNumberValidation && <ErrorMessage error={taxiPlateNumberValidation} />}
 
-                        <View style={styles.descriptionbox}>
-                            <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
-                            <TextInput
-                                style={styles.textbox}
-                                placeholder={Languages.ba_signup_taxi_introduction}
-                                underlineColorAndroid="transparent"
-                                multiline={true}
-                                numberOfLines={8}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={taxiIntroduction}
-                                onChangeText={(text)=>{setTaxiIntroduction(text)}}
+                                <View style={styles.descriptionbox}>
+                                    <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
+                                    <TextInput
+                                        style={styles.textbox}
+                                        placeholder={Languages.ba_signup_taxi_introduction}
+                                        underlineColorAndroid="transparent"
+                                        multiline={true}
+                                        numberOfLines={8}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={taxiIntroduction}
+                                        onChangeText={(text) => { setTaxiIntroduction(text) }}
 
-                            />
-                        </View>
-                        </>
+                                    />
+                                </View>
+                            </>
                         }
- 
-                      {/************************Hotel Reservation*******************/}
 
-                        
+                        {/************************Hotel Reservation*******************/}
+
+
                         {value != null && value == 'Hotel Reservation' &&
                             <>
                                 <View style={styles.inputContainer}>
@@ -300,10 +300,10 @@ const BusinessAccountSignup = () => {
                                         placeholder={Languages.ba_signup_hotel_name}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={hotelName}
-                                        onChangeText={(text) => { setHotelName(text),setHotelNameValidation("") }}
+                                        onChangeText={(text) => { setHotelName(text), setHotelNameValidation("") }}
                                     />
                                 </View>
-                                {hotelNameValidation && <ErrorMessage error={hotelNameValidation}/>}
+                                {hotelNameValidation && <ErrorMessage error={hotelNameValidation} />}
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                                     <TextInput
@@ -311,10 +311,10 @@ const BusinessAccountSignup = () => {
                                         placeholder={Languages.ba_signup_hotel_address}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={hotelAddress}
-                                        onChangeText={(text) => { setHotelAddress(text),setHotelAddressValidation("") }}
+                                        onChangeText={(text) => { setHotelAddress(text), setHotelAddressValidation("") }}
                                     />
                                 </View>
-                                {hotelAddressValidation && <ErrorMessage error={hotelAddressValidation}/>}
+                                {hotelAddressValidation && <ErrorMessage error={hotelAddressValidation} />}
                                 <View style={{ ...styles.dropdowncontainer, marginTop: 5 }}>
                                     <DropdownPicker
                                         multiple={true}
@@ -376,7 +376,7 @@ const BusinessAccountSignup = () => {
 
 
 
-                        <TouchableOpacity onPress={()=>{Submit()}} style={styles.btn}>
+                        <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.ba_signup_btn_txt}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
