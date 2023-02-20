@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
     maincontainer: {
         flex: 1,
         backgroundColor: Colors.PrimaryColor,
-        // justifyContent: "center",
     },
     maincontent: {
         justifyContent: "center",
