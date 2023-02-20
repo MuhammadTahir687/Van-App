@@ -14,7 +14,7 @@ const Splash = () => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar animated={true} backgroundColor={Colors.PrimaryColor} barStyle="light-content" />
-            <Image source={require("../../assets/Logo.png")} resizeMode="contain" style={styles.image} />
+            <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
         </SafeAreaView>
     )
 }

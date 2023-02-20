@@ -60,7 +60,7 @@ const PersonelAccountSignup = () => {
         <SafeAreaView style={styles.maincontainer}>
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
-                    <Image source={require("../../assets/Logo.png")} resizeMode={'contain'} style={styles.image} />
+                    <Image source={require("../../assets/oneapp-logo1.png")} resizeMode={'contain'} style={styles.image} />
                     <View style={styles.subcontainer}>
                         <Text style={styles.loginHeading}>{Languages.pa_signup_screen_h}</Text>
                         <View style={styles.inputContainer}>
@@ -119,7 +119,7 @@ const PersonelAccountSignup = () => {
                                         placeholder={Languages.pa_signup_city}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={city}
-                                        onChangeText={(text)=>{setCity(text)}}
+                                        onChangeText={(text) => { setCity(text) }}
 
                                     />
                                 </View>
@@ -189,7 +189,7 @@ const PersonelAccountSignup = () => {
                         <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.pa_signup_btn_txt}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{navigation.navigate("BusinessAccountSignup")}} style={styles.btn}>
+                        <TouchableOpacity onPress={() => { navigation.navigate("BusinessAccountSignup") }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.pa_signup_ba_btn_txt}</Text>
                         </TouchableOpacity>
                     </View>

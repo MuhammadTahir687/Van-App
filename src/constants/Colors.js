@@ -1,5 +1,6 @@
-export const Colors={
-PrimaryColor:"#5980c2",
-WhiteColor:"#fff"
+export const Colors = {
+    // PrimaryColor: "#5980c2",
+    PrimaryColor: "#161144",
+    WhiteColor: "#fff"
 
 }
