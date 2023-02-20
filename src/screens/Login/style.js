@@ -13,16 +13,16 @@ export const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        flexGrow:1,
+        flexGrow: 1,
         alignItems: "center",
         justifyContent: "center",
         marginHorizontal: 20,
-        paddingBottom:20
+        paddingBottom: 20
     },
     image: {
         width: 200,
         height: 100,
-        marginVertical:20
+        marginVertical: 20
     },
     authtext: {
         color: Colors.PrimaryColor,
@@ -42,8 +42,8 @@ export const styles = StyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: 15,
         paddingVertical: 15,
-        alignItems:"center",
-        justifyContent:"center",
+        alignItems: "center",
+        justifyContent: "center",
 
     },
     loginHeading: {
@@ -53,12 +53,12 @@ export const styles = StyleSheet.create({
         textAlign: "center",
         marginVertical: 15
     },
-    languageHeading:{
+    languageHeading: {
         fontWeight: "bold",
         color: Colors.PrimaryColor,
         fontSize: 15,
         textAlign: "center",
-        marginBottom:10
+        marginBottom: 10
     },
     inputContainer: {
         flexDirection: "row",
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginVertical: 10,
         borderRadius: 10,
-        marginHorizontal:15,
+        marginHorizontal: 15,
     },
     textInput: {
         marginHorizontal: 10,
@@ -84,22 +84,22 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 10,
         width: "85%",
-        height:50,
-        justifyContent:"center"
+        height: 50,
+        justifyContent: "center"
     },
     btntext: {
         fontSize: 15,
         color: Colors.WhiteColor,
         textAlign: "center",
     },
-    dropdowncontainer:{
-        zIndex:1,
-        width:'100%',
-        marginBottom:10,
+    dropdowncontainer: {
+        zIndex: 1,
+        width: '100%',
+        marginBottom: 10,
     },
-    languagedropdowncontainer:{
-        zIndex:1,
-        marginTop:20,
-        width:"85%",
+    languagedropdowncontainer: {
+        zIndex: 1,
+        marginTop: 20,
+        width: "85%",
     }
 })

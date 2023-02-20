@@ -24,7 +24,7 @@ const BusinessAccount = () => {
 
     const [passwordValidation, setPasswordValidation] = useState("")
     const [emailValidation, setEmailValidation] = useState("")
-    const [categoryValidation,setCategoryValidation]=useState("")
+    const [categoryValidation, setCategoryValidation] = useState("")
 
     const data = [
         { label: 'Taxi', value: 'Taxi' },
@@ -36,7 +36,7 @@ const BusinessAccount = () => {
 
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if(value==null){
+        if (value == null) {
             setCategoryValidation("Required*")
         }
         else if (email == "") {
@@ -57,14 +57,14 @@ const BusinessAccount = () => {
 
     return (
         <SafeAreaView style={styles.maincontainer}>
-            <ScrollView  contentContainerStyle={styles.maincontent}>
-            <View style={{ alignItems: "center" }}>
-                    <Image source={require("../../assets/Logo.png")} resizeMode="contain" style={styles.image} />
-            </View>
-            <View style={styles.container}>
-                <View style={styles.subcontainer}>
-                    <Text style={styles.loginHeading}>{Languages.ba_login_screen_h}</Text>
-                    <View style={styles.dropdowncontainer}>
+            <ScrollView contentContainerStyle={styles.maincontent}>
+                <View style={{ alignItems: "center" }}>
+                    <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
+                </View>
+                <View style={styles.container}>
+                    <View style={styles.subcontainer}>
+                        <Text style={styles.loginHeading}>{Languages.ba_login_screen_h}</Text>
+                        <View style={styles.dropdowncontainer}>
                             <DropdownPicker
                                 listMode={"SCROLLVIEW"}
                                 placeholder={Languages.ba_login_category}
@@ -72,14 +72,14 @@ const BusinessAccount = () => {
                                 value={value}
                                 data={data}
                                 setOpen={setOpen}
-                                setValue={(value)=>{setValue(value),setCategoryValidation("")}}
+                                setValue={(value) => { setValue(value), setCategoryValidation("") }}
 
                             />
-                    </View>
-                    {categoryValidation && <ErrorMessage error={categoryValidation}/>}
+                        </View>
+                        {categoryValidation && <ErrorMessage error={categoryValidation} />}
 
-                    <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
+                        <View style={styles.inputContainer}>
+                            <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
                                 placeholderTextColor={Colors.PrimaryColor}
@@ -107,14 +107,14 @@ const BusinessAccount = () => {
                         </View>
                         {passwordValidation && <ErrorMessage error={passwordValidation} />}
 
-                    <TouchableOpacity onPress={()=>{Submit()}} style={styles.btn}>
-                        <Text style={styles.btntext}>{Languages.ba_login_btn_txt}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {  navigation.goBack() }} style={styles.btn}>
-                        <Text style={styles.btntext}>{Languages.ba_login_pa_btn_txt}</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
+                            <Text style={styles.btntext}>{Languages.ba_login_btn_txt}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
+                            <Text style={styles.btntext}>{Languages.ba_login_pa_btn_txt}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
             </ScrollView>
         </SafeAreaView >
     )
