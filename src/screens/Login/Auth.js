@@ -24,8 +24,8 @@ const Auth = () => {
     return (
         <SafeAreaView style={styles.maincontainer}>
             <StatusBar animated={true} backgroundColor={Colors.PrimaryColor} barStyle="light-content" />
-            <View style={{alignItems:"center"}}>
-            <Image source={require("../../assets/Logo.png")} resizeMode="contain" style={styles.image} />
+            <View style={{ alignItems: "center" }}>
+                <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
             </View>
             <View style={styles.container}>
                 <View style={styles.subcontainer}>
@@ -48,7 +48,7 @@ const Auth = () => {
                     <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccount") }} style={styles.btn}>
                         <Text style={styles.btntext}>{Languages.auth_login_btn_txt}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccountSignup") }}  style={styles.btn}>
+                    <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccountSignup") }} style={styles.btn}>
                         <Text style={styles.btntext}>{Languages.auth_signup_btn_txt}</Text>
                     </TouchableOpacity>
                 </View>

@@ -10,7 +10,6 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 const PersonelAccount = () => {
 
     const navigation = useNavigation();
-
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordVisible, setPasswordVisible] = useState(true)
@@ -43,7 +42,7 @@ const PersonelAccount = () => {
         <SafeAreaView style={styles.maincontainer}>
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={{ alignItems: "center" }}>
-                    <Image source={require("../../assets/Logo.png")} resizeMode="contain" style={styles.image} />
+                    <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                 </View>
                 <View style={styles.container}>
                     <View style={styles.subcontainer}>

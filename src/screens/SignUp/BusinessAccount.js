@@ -119,7 +119,7 @@ const BusinessAccountSignup = () => {
         <SafeAreaView style={styles.maincontainer}>
             <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
-                    <Image source={require("../../assets/Logo.png")} resizeMode="contain" style={styles.image} />
+                    <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
                         <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
                         <View style={styles.dropdowncontainer}>
