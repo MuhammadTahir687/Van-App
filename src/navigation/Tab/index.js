@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import TouristTaxiBooking from '../../screens/Taxi/TouristTaxiBooking';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import TouristHotelReservation from '../../screens/Hotel/TouristHotelReservation';
+import HotelDetail from '../../screens/Hotel/HotelDetail';
 
 const Tab = createBottomTabNavigator();
 

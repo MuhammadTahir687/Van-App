@@ -7,6 +7,7 @@ import Auth from "../../screens/Login/Auth";
 import PersonelAccountSignup from "../../screens/SignUp/PersonelAccount";
 import BusinessAccountSignup from "../../screens/SignUp/BusinessAccount";
 import TabScreens from "../Tab";
+import HotelDetail from "../../screens/Hotel/HotelDetail";
 
 
 
@@ -24,6 +25,7 @@ const StackNavigation = () => {
         <Stack.Screen name="PersonelAccountSignup" component={PersonelAccountSignup} />
         <Stack.Screen name="BusinessAccountSignup" component={BusinessAccountSignup} />
         <Stack.Screen name="TabScreens" component={TabScreens} />
+        <Stack.Screen name="HotelDetail" component={HotelDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   )
