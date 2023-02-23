@@ -18,22 +18,19 @@ const PersonelAccount = () => {
 
 
     const Submit = async () => {
-        navigation.navigate("TabScreens")
-        // let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        // if (email == "") {
-        //     setEmailValidation("Required*")
-        // }
-        // else if (reg.test(email) == false) {
-        //     setEmailValidation("Enter a valid email address")
-        // }
-        // else if (password == "") {
-        //     setPasswordValidation("Required")
-        // }
-        // else {
-        //     navigation.navigate("TabScreens")
-        // }
-
-
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if (email == "") {
+            setEmailValidation("Required*")
+        }
+        else if (reg.test(email) == false) {
+            setEmailValidation("Enter a valid email address")
+        }
+        else if (password == "") {
+            setPasswordValidation("Required")
+        }
+        else {
+            navigation.navigate("TabScreens")
+        }
     }
 
 
