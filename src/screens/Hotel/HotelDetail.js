@@ -1,19 +1,37 @@
 import React from 'react'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, FlatList, ImageBackground, useWindowDimensions } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Colors } from '../../constants/Colors';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import HotelRoom1 from '../../assets/HotelRoom1.jpeg';
+import HotelRoom2 from '../../assets/HotelRoom2.jpeg';
+import HotelRoom3 from '../../assets/HotelRoom3.jpg';
 
 const HotelDetail = ({ route, navigation }) => {
+
+    const { width, height } = useWindowDimensions()
     const data = route?.params?.data
+    const images = [{ id: 1, image: HotelRoom1 }, { id: 2, image: HotelRoom2 }, { id: 3, image: HotelRoom3 }]
+
     return (
         <SafeAreaView style={styles.hotelDetailContainer}>
             <ScrollView>
-                <ImageBackground source={data?.image} style={styles.image}>
+                <View style={styles.swiperContainer}>
+                    <SwiperFlatList
+                        showPagination
+                        paginationActiveColor={Colors.PrimaryColor}
+                        data={images}
+                        renderItem={({ item }) => (
+                            <Image source={item.image} style={{ width: width, height: 250 }} />
+                        )}
+                    />
+                </View>
+                {/* <ImageBackground source={data?.image} style={styles.image}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign name="arrowleft" size={20} color={'white'} style={{ margin: 20 }} />
                     </TouchableOpacity>
-                </ImageBackground>
+                </ImageBackground> */}
                 <View>
                     <View style={styles.hotelInfoContainer}>
                         <Text style={styles.hotelName}>{data?.name}</Text>
@@ -38,6 +56,7 @@ export default HotelDetail
 export const styles = StyleSheet.create({
 
     hotelDetailContainer: { flex: 1, backgroundColor: "white" },
+    swiperContainer: { flex: 1 },
     image: { height: 250, width: "100%", borderBottomLeftRadius: 25, borderBottomRightRadius: 25, overflow: "hidden" },
     hotelInfoContainer: { flexDirection: "row", justifyContent: "space-between", marginHorizontal: 20, alignItems: "center", marginVertical: 10 },
     hotelName: { color: "black", fontSize: 25, fontWeight: "bold" },
