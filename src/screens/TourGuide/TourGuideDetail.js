@@ -52,7 +52,7 @@ const TourGuideDetail = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.cardContainer, backgroundColor: '#3D62C1' }}>
-                        <Text style={styles.cardHeading}>Basic $200</Text>
+                        <Text style={styles.cardHeading}>Standard $500</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
                         <TourGuideCardList text={"Hotel Stay"} />
                         <TourGuideCardList text={"Sightseeing (Tickets Not Included)"} />
@@ -61,7 +61,7 @@ const TourGuideDetail = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.cardContainer, backgroundColor: "#FE3773" }}>
-                        <Text style={styles.cardHeading}>Basic $200</Text>
+                        <Text style={styles.cardHeading}>Premium $700</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
                         <TourGuideCardList text={"Hotel Stay"} />
                         <TourGuideCardList text={"Sightseeing (Tickets Not Included)"} />
