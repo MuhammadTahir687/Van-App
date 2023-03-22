@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CarRental1 from '../../assets/CarRental1.jpg';
@@ -8,14 +8,32 @@ import { Rating } from 'react-native-elements';
 import { Colors } from '../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { UserServices } from '../../services/userServices';
 
 
 const TouristCarRental = () => {
     const navigation = useNavigation();
+    const [data, setData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState([])
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
+
+    useEffect(() => {
+        GetData()
+    }, [])
+
+    const GetData = async () => {
+        try {
+            const resp = await UserServices.UserData('carRentalFleet')
+            if (resp) {
+                setData(resp.data)
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    }
+
     const HotelData = [
         { id: 1, name: "Car Rental Agency #1", address: "Barcelona, Spain", country: "Spain", image: CarRental1, price: 200 },
         { id: 2, name: "Car Rental Agency #2", address: "Lahore, Pakistan", country: "Pakistan", image: CarRental2, price: 300 },
@@ -44,7 +62,7 @@ const TouristCarRental = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headertext}>Hotel Reservation</Text>
+                <Text style={styles.headertext}>Car Rental</Text>
             </View>
             <View style={styles.searchContainer}>
                 <Ionicons name={"search"} size={20} color={Colors.WhiteColor} />
@@ -56,7 +74,7 @@ const TouristCarRental = () => {
                     style={styles.searchInput}
                 />
             </View>
-            <View style={styles.countryFilterContainer}>
+            {/* <View style={styles.countryFilterContainer}>
                 <FlatList
                     horizontal
                     data={CountryFilter}
@@ -65,26 +83,26 @@ const TouristCarRental = () => {
                     renderItem={({ item, index }) => (
                         <TouchableOpacity onPress={() => { setFilterbtn(index), setCountryFilter(item.name) }} key={index} style={{ ...styles.coutryBtn, backgroundColor: filterbtn == index ? Colors.PrimaryColor : "#e8e7e6" }}>
                             <Text style={{ color: filterbtn == index ? Colors.WhiteColor : "black" }}>{item.name}</Text>
-                            {/* {filterbtn == index && <Ionicons name='close' size={15} color={Colors.WhiteColor} />} */}
                         </TouchableOpacity>
                     )}
 
                 />
-            </View>
+            </View> */}
 
             <FlatList
-                data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
-                keyExtractor={item => item.id}
+                // data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
+                data={data.filter((item) => item?.car_agent_code.toLowerCase().includes(search.toLowerCase()))}
+                keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => { navigation.navigate("CarRentalDetail", { data: item }) }} style={styles.hotelCardContainer}>
-                        <Image source={item?.image} style={styles.image} />
+                        <Image source={{ uri: item?.car_image_url }} style={styles.image} />
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
-                                <Text style={styles.hotelName}>{item?.name}</Text>
-                                <Text style={styles.hotelAddress}>{item?.address}</Text>
+                                <Text style={styles.hotelName}>{item?.car_agent_code}</Text>
+                                {/* <Text style={styles.hotelAddress}>{item?.address}</Text> */}
                             </View>
                             <View>
-                                <Text style={styles.hotelPrice}>{'$ ' + item?.price}</Text>
+                                <Text style={styles.hotelPrice}>{item?.currency + " " + item?.hire_rate}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>

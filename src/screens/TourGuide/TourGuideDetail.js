@@ -12,7 +12,7 @@ const TourGuideDetail = ({ route }) => {
 
     const { width, height } = useWindowDimensions()
     const data = route?.params?.data
-    const images = [{ id: 1, image: Trip1 }, { id: 2, image: Trip2 }, { id: 3, image: Trip3 }]
+    const images = [{ id: 1, image: data?.place_image_url }]
 
     return (
         <SafeAreaView style={styles.tourGuideDetailContainer}>
@@ -23,7 +23,7 @@ const TourGuideDetail = ({ route }) => {
                         paginationActiveColor={Colors.PrimaryColor}
                         data={images}
                         renderItem={({ item }) => (
-                            <Image source={item.image} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item.image }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>
@@ -34,14 +34,19 @@ const TourGuideDetail = ({ route }) => {
                 </ImageBackground> */}
                 <View>
                     <View style={styles.tourGuideInfoContainer}>
-                        <Text style={styles.tourGuideName}>{data?.name}</Text>
-                        {/* <Text style={styles.tourGuidePrice}>$ {data?.price}</Text> */}
+                        <Text style={styles.tourGuideName}>{data?.trip_name}</Text>
+                        <Text style={styles.tourGuidePrice}>{data?.currency + " " + data?.trip_fee}</Text>
                     </View>
-                    <Text style={styles.tourGuideAddress}>{data?.address}</Text>
+                    <View style={styles.addressLimitContainer}>
+                        <Text style={styles.tourGuideAddress}>{data?.city + ", " + data?.country}</Text>
+                        <Text style={styles.tourGuideAddress}>Limit:{data?.visitors_limit}</Text>
+                    </View>
+                    <Text style={styles.aboutItemHeading}>Meeting Place</Text>
+                    <Text style={styles.aboutText}>{data?.meeting_place}</Text>
                     <Text style={styles.aboutItemHeading}>About this Trip</Text>
-                    <Text style={styles.aboutText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</Text>
+                    <Text style={styles.aboutText}>{data?.trip_description}</Text>
                 </View>
-                <View>
+                {/* <View>
                     <View style={{ ...styles.cardContainer, backgroundColor: "#3CADA9" }}>
                         <Text style={styles.cardHeading}>Basic $200</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
@@ -52,7 +57,7 @@ const TourGuideDetail = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.cardContainer, backgroundColor: '#3D62C1' }}>
-                        <Text style={styles.cardHeading}>Basic $200</Text>
+                        <Text style={styles.cardHeading}>Standard $500</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
                         <TourGuideCardList text={"Hotel Stay"} />
                         <TourGuideCardList text={"Sightseeing (Tickets Not Included)"} />
@@ -61,7 +66,7 @@ const TourGuideDetail = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.cardContainer, backgroundColor: "#FE3773" }}>
-                        <Text style={styles.cardHeading}>Basic $200</Text>
+                        <Text style={styles.cardHeading}>Premium $700</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
                         <TourGuideCardList text={"Hotel Stay"} />
                         <TourGuideCardList text={"Sightseeing (Tickets Not Included)"} />
@@ -69,7 +74,7 @@ const TourGuideDetail = ({ route }) => {
                             <Text style={{ color: "#FE3773" }}>Choose Plan</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
             </ScrollView>
         </SafeAreaView>
     )
@@ -93,4 +98,5 @@ const styles = StyleSheet.create({
     cardContainer: { flex: 1, margin: 10, paddingVertical: 10, borderRadius: 10 },
     cardHeading: { textAlign: "center", color: Colors.WhiteColor, fontSize: 25, fontWeight: "bold" },
     cardBtn: { borderRadius: 10, alignItems: "center", backgroundColor: Colors.WhiteColor, alignSelf: "center", margin: 10, padding: 10 },
+    addressLimitContainer: { flexDirection: "row", justifyContent: "space-between" }
 })

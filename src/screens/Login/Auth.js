@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { StatusBar, Text, View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -8,17 +8,24 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Languages from '../../constants/Localization/localization';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const Auth = () => {
 
 
     const navigation = useNavigation();
+
+    const { selectedLanguage, setselectedLanguage } = useContext(RootContext)
+
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState("en");
 
+
+
     const data = [
         { label: 'English', value: 'en' },
-        { label: 'Urdu', value: 'ur' },
+        { label: 'Persian', value: 'per' },
+        { label: 'Turkey', value: 'tur' }
     ]
 
     return (
@@ -42,7 +49,7 @@ const Auth = () => {
                             setValue={setValue}
                             open={open}
                             setOpen={setOpen}
-                            onChangeValue={Languages.setLanguage(value)}
+                            onChangeValue={() => { Languages.setLanguage(value), setselectedLanguage(value) }}
                         />
                     </View>
                     <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccount") }} style={styles.btn}>

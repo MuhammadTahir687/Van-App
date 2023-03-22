@@ -49,7 +49,19 @@ const PersonelAccountSignup = () => {
             setPasswordValidation("Required*")
         }
         else {
-            navigation.replace("PersonelAccount")
+            const body = {
+                tourist_name: name,
+                registration_date: new Date(),
+                country: country,
+                city: city,
+                passport_id: passport,
+                age_years: age,
+                phone: phone,
+                email: email,
+                password: password,
+            }
+            console.log(body)
+            // navigation.replace("PersonelAccount")
         }
 
 
@@ -149,6 +161,7 @@ const PersonelAccountSignup = () => {
                                         placeholder={Languages.pa_signup_age}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={age}
+                                        keyboardType={"numeric"}
                                         onChangeText={(text) => { setAge(text) }}
                                     />
                                 </View>

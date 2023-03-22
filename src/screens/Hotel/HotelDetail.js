@@ -12,18 +12,21 @@ const HotelDetail = ({ route, navigation }) => {
 
     const { width, height } = useWindowDimensions()
     const data = route?.params?.data
-    const images = [{ id: 1, image: HotelRoom1 }, { id: 2, image: HotelRoom2 }, { id: 3, image: HotelRoom3 }]
+    const hotelRoomsData = route?.params?.hotelRooms;
+
+    const filterHotelRooms = hotelRoomsData?.filter((item) => item?.manager_code == data?.manager_code)
+    const images = [{ id: 1, image: data?.hotel_image_url }]
 
     return (
         <SafeAreaView style={styles.hotelDetailContainer}>
-            <ScrollView>
+            <ScrollView style={{ flexGrow: 1 }}>
                 <View style={styles.swiperContainer}>
                     <SwiperFlatList
                         showPagination
                         paginationActiveColor={Colors.PrimaryColor}
                         data={images}
                         renderItem={({ item }) => (
-                            <Image source={item.image} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item.image }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>
@@ -33,20 +36,43 @@ const HotelDetail = ({ route, navigation }) => {
                     </TouchableOpacity>
                 </ImageBackground> */}
                 <View>
-                    <View style={styles.hotelInfoContainer}>
-                        <Text style={styles.hotelName}>{data?.name}</Text>
-                        <Text style={styles.hotelPrice}>$ {data?.price}</Text>
+
+                    <Text style={styles.hotelName}>{data?.hotel_name}</Text>
+                    <Text style={styles.hotelPrice}>Rooms: {data?.number_of_rooms}</Text>
+                    <Text style={styles.hotelAddress}>{data?.hotel_address}</Text>
+                    <View>
+                        <Text style={styles.aboutItemHeading}>Hotel Amenities</Text>
+                        <View style={styles.amenitiesContainer}>
+                            {data?.amenities?.map((item, index) => (
+                                <View key={index} style={styles.amenitiesView}>
+                                    <Text style={styles.amenitiesText}>{item}</Text>
+                                </View>
+                            ))}
+                        </View>
+
                     </View>
-                    <Text style={styles.hotelAddress}>{data?.address}</Text>
-                    <Text style={styles.aboutItemHeading}>About this Hotel</Text>
-                    <Text style={styles.aboutText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</Text>
+                    {/* <Text style={styles.aboutItemHeading}>About this Hotel</Text> */}
+                    <Text style={styles.aboutText}>{data?.brief_introduction}</Text>
                 </View>
+                <Text style={styles.aboutItemHeading}>Hotel Rooms</Text>
+                {filterHotelRooms?.map((item, index) => (
+                    <TouchableOpacity onPress={() => { navigation.navigate("HotelRoomDetail", { data: item }) }} key={index} style={{ flex: 1, marginVertical: 5, marginHorizontal: 10, flexDirection: "row" }}>
+                        <Image source={{ uri: item?.room_image_url }} style={{ width: "50%", height: 100, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }} />
+                        <View style={{ backgroundColor: "white", elevation: 3, width: "50%", borderTopRightRadius: 10, borderBottomRightRadius: 10, paddingLeft: 10, justifyContent: "center" }}>
+                            <Text style={{ fontWeight: "bold" }}>{item?.room_name}</Text>
+                            <Text>Price: {item?.currency + " " + item?.unit_price}</Text>
+                            <Text>Type: {item?.room_type}</Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
+
+
             </ScrollView>
-            <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => { alert("Hotel Booked") }} style={styles.bookingBtn}>
                     <Text style={styles.btnText}>Book Now</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </SafeAreaView>
     )
 }
@@ -59,12 +85,16 @@ export const styles = StyleSheet.create({
     swiperContainer: { flex: 1 },
     image: { height: 250, width: "100%", borderBottomLeftRadius: 25, borderBottomRightRadius: 25, overflow: "hidden" },
     hotelInfoContainer: { flexDirection: "row", justifyContent: "space-between", marginHorizontal: 20, alignItems: "center", marginVertical: 10 },
-    hotelName: { color: "black", fontSize: 25, fontWeight: "bold" },
-    hotelPrice: { fontSize: 20, color: "black" },
-    aboutItemHeading: { color: "black", marginHorizontal: 20, marginVertical: 10, fontWeight: "bold", fontSize: 20 },
-    aboutText: { marginHorizontal: 20, textAlign: "justify", color: "gray" },
+    hotelName: { marginHorizontal: 20, color: "black", fontSize: 25, fontWeight: "bold" },
+    hotelPrice: { marginHorizontal: 20, fontSize: 13, color: "gray" },
+    aboutItemHeading: { color: "black", marginHorizontal: 20, marginVertical: 10, fontWeight: "bold", fontSize: 15 },
+    aboutText: { marginHorizontal: 20, textAlign: "justify", color: "gray", marginTop: 10 },
     buttonContainer: { justifyContent: "flex-end", marginVertical: 10 },
     bookingBtn: { backgroundColor: Colors.PrimaryColor, marginHorizontal: 20, alignItems: "center", paddingVertical: 10, borderRadius: 10 },
     btnText: { color: "white", fontWeight: "bold" },
-    hotelAddress: { color: "gray", marginHorizontal: 20 }
+    hotelAddress: { color: "gray", marginHorizontal: 20 },
+    amenitiesContainer: { flexDirection: "row", flexWrap: "wrap", marginHorizontal: 20 },
+    amenitiesView: { marginHorizontal: 5, backgroundColor: Colors.PrimaryColor, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5, marginTop: 10 },
+    amenitiesText: { color: Colors.WhiteColor, fontSize: 12 }
+
 })
