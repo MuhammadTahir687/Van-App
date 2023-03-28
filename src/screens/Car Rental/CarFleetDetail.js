@@ -4,12 +4,12 @@ import { Colors } from '../../constants/Colors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
 
-const HotelRoomDetail = ({ route, navigation }) => {
+const CarFleetDetail = ({ route, navigation }) => {
 
     const { width, height } = useWindowDimensions()
     const data = route?.params?.data
 
-    const images = [{ id: 1, image: data?.room_image_url }]
+    const images = [{ id: 1, image: data?.car_image_url }]
 
     return (
         <SafeAreaView style={styles.HotelRoomDetailContainer}>
@@ -31,10 +31,11 @@ const HotelRoomDetail = ({ route, navigation }) => {
                 </ImageBackground> */}
                 <View>
                     <View style={styles.RoomInfoContainer}>
-                        <Text style={styles.RoomName}>{data?.room_name}</Text>
-                        <Text style={styles.RoomPrice}>{data?.currency + " " + data?.unit_price}</Text>
+                        <Text style={styles.RoomName}>{data?.car_name}</Text>
+
                     </View>
-                    <Text style={styles.RoomAddress}>Type: {data?.room_type}</Text>
+                    <Text style={styles.RoomPrice}>{data?.currency + " " + data?.hire_rate}</Text>
+                    <Text style={styles.RoomAddress}>Plate#: {data?.plate_no}</Text>
                     {/* <View>
                         <Text style={styles.aboutItemHeading}>Room Amenities</Text>
                         <View style={{ flexDirection: "row", flexWrap: "wrap", marginHorizontal: 20 }}>
@@ -46,12 +47,12 @@ const HotelRoomDetail = ({ route, navigation }) => {
                         </View>
 
                     </View> */}
-                    <Text style={styles.aboutItemHeading}>About this Room</Text>
-                    <Text style={styles.aboutText}>{data?.room_description}</Text>
+                    <Text style={styles.aboutItemHeading}>About this Fleet</Text>
+                    <Text style={styles.aboutText}>{data?.brief_introduction_model}</Text>
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => { alert("Room Booked") }} style={styles.bookingBtn}>
+                <TouchableOpacity onPress={() => { alert("Fleet Booked") }} style={styles.bookingBtn}>
                     <Text style={styles.btnText}>Book Now</Text>
                 </TouchableOpacity>
             </View>
@@ -64,7 +65,7 @@ const HotelRoomDetail = ({ route, navigation }) => {
     )
 }
 
-export default HotelRoomDetail
+export default CarFleetDetail
 
 export const styles = StyleSheet.create({
 
@@ -73,8 +74,8 @@ export const styles = StyleSheet.create({
     image: { height: 250, width: "100%", borderBottomLeftRadius: 25, borderBottomRightRadius: 25, overflow: "hidden" },
     RoomInfoContainer: { flexDirection: "row", justifyContent: "space-between", marginHorizontal: 20, alignItems: "center", marginVertical: 10 },
     RoomName: { color: "black", fontSize: 25, fontWeight: "bold" },
-    RoomPrice: { fontSize: 20, color: "black" },
-    aboutItemHeading: { color: "black", marginHorizontal: 20, marginVertical: 10, fontWeight: "bold", fontSize: 20 },
+    RoomPrice: { marginLeft: 20, fontSize: 20, color: "black" },
+    aboutItemHeading: { color: "black", marginHorizontal: 20, marginVertical: 10, fontWeight: "bold", fontSize: 15 },
     aboutText: { marginHorizontal: 20, textAlign: "justify", color: "gray" },
     buttonContainer: { justifyContent: "flex-end", marginVertical: 10 },
     bookingBtn: { backgroundColor: Colors.PrimaryColor, marginHorizontal: 20, alignItems: "center", paddingVertical: 10, borderRadius: 10 },

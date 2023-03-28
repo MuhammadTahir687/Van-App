@@ -15,24 +15,24 @@ const TouristTourGuide = () => {
     const navigation = useNavigation();
     const [data, setData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState([])
+    const [guidesTripPlans, setGuideTripPlans] = useState([])
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
-
-    const [countryData, setCountryData] = useState([])
 
     useEffect(() => {
         GetData()
     }, [])
 
+
     const GetData = async () => {
         try {
-            // const response = await axios.get("https://eu-central-1.aws.data.mongodb-api.com/app/data_lookup-emecl/endpoint/showcountries");
 
-            const resp = await UserServices.UserData('guidesTripPlans')
+            const resp = await UserServices.UserData('guides')
+            const placesResponse = await UserServices.UserData("guidesTripPlans")
             if (resp) {
-                // setCountryData(response?.data[0])
                 setData(resp.data)
+                setGuideTripPlans(placesResponse.data)
             }
         } catch (error) {
             console.log("Error", error)
@@ -41,38 +41,6 @@ const TouristTourGuide = () => {
 
 
 
-    const HotelData = [
-        { id: 1, name: "Hunza Skardu", address: "Pakistan", country: "Pakistan", image: Trip1, price: 200 },
-        { id: 2, name: "Hunza Apricot and Cherry Blossom Trip", address: "Pakistan", country: "Pakistan", image: Trip2, price: 300 },
-        { id: 3, name: "Naran Hunza", address: "Pakistan", country: "Pakistan", image: Trip3, price: 250 }
-    ]
-    const CountryFilter = [
-        { id: 1, name: "All" },
-        { id: 2, name: "Spain" },
-        { id: 3, name: "Pakistan" },
-        { id: 4, name: "Islamabad" },
-    ]
-
-    const CountryList = data?.map((item) => item.country)?.concat("All").sort()
-
-    // const filterListCountry = Object.keys(countryData).filter((item, index) => CountryList.map((list) => countryData[item]?.name?.common == list))
-    // // const filterData = data[filter]
-    // console.log(filterListCountry)
-
-
-
-    const SelectedItems = (item) => {
-        if (!selectedCountry.includes(item)) {
-            setSelectedCountry([...selectedCountry, item])
-        } else {
-            let newSelectedCountry = selectedCountry
-            const findIndex = selectedCountry.findIndex(f => f === item)
-            newSelectedCountry.splice(findIndex, 1)
-            setSelectedCountry([...newSelectedCountry])
-        }
-    }
-
-    const filterTourlData = data?.filter((item) => item?.country?.includes(countryFilter));
 
     return (
         <SafeAreaView style={styles.container}>
@@ -108,22 +76,26 @@ const TouristTourGuide = () => {
 
             <FlatList
                 // data={countryFilter == "All" ? data?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase())) : filterTourlData?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase()))}
-                data={data?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase()) || item?.country.toLowerCase().includes(search.toLowerCase()))}
+                data={data?.filter((item) => item?.guide_name.toLowerCase().includes(search.toLowerCase()) || item?.country.toLowerCase().includes(search.toLowerCase()))}
+
                 keyExtractor={item => item._id}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => { navigation.navigate("TourGuideDetail", { data: item }) }} style={styles.hotelCardContainer}>
-                        <Image source={{ uri: item?.place_image_url }} style={styles.image} />
-                        <View style={styles.hotelDescriptionContainer}>
-                            <View>
-                                <Text style={styles.hotelName}>{item?.trip_name}</Text>
-                                <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
+                renderItem={({ item }) => {
+                    return (
+                        <TouchableOpacity onPress={() => { navigation.navigate("TourGuideDetail", { data: item, placesData: guidesTripPlans }) }} style={styles.hotelCardContainer}>
+                            <Image source={{ uri: item?.profile_image_url }} style={styles.image} />
+                            <View style={styles.hotelDescriptionContainer}>
+                                <View>
+                                    <Text style={styles.hotelName}>{item?.guide_code}</Text>
+                                    <Text style={styles.hotelName}>{item?.guide_name}</Text>
+                                    <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
+                                </View>
+                                {/* <View>
+                                    <Text style={styles.hotelPrice}>{item?.currency + " " + item?.trip_fee}</Text>
+                                </View> */}
                             </View>
-                            <View>
-                                <Text style={styles.hotelPrice}>{item?.currency + " " + item?.trip_fee}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                )}
+                        </TouchableOpacity>
+                    )
+                }}
             />
         </SafeAreaView>
     )

@@ -13,6 +13,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
+import { TaxiServices } from '../../services/taxiServices';
+import Loader from '../../components/Loader/Loader';
 
 const BusinessAccountSignup = () => {
 
@@ -20,6 +22,8 @@ const BusinessAccountSignup = () => {
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
+    const [loading, setLoading] = useState(false)
+
     const [country, setCountry] = useState('')
     const [countryCode, setCountryCode] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(true)
@@ -66,6 +70,7 @@ const BusinessAccountSignup = () => {
     const [taxiIntroduction, setTaxiIntroduction] = useState("")
     const [taxiModelValidation, setTaxiModelValidation] = useState("")
     const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
+    const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
 
     //*Hotel Reservation*/
     const [hotelName, setHotelName] = useState('')
@@ -104,12 +109,50 @@ const BusinessAccountSignup = () => {
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
         else if (value == "Taxi" && taxiModel == "") setTaxiModelValidation("Required*")
+        else if (value == "Taxi" && taxihireRate == "") setTaxiHireRateValidation("Required*")
         else if (value == "Taxi" && taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
         else if (value == "Hotel Reservation" && hotelName == "") setHotelNameValidation("Required*")
         else if (value == "Hotel Reservation" && hotelAddress == "") setHotelAddressValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
-            navigation.replace("BusinessAccount")
+            const taxi_body = {
+                taxi_driver_code: "TD-101",
+                driver_name: name,
+                taxi_model_name: taxiModel,
+                tax_image_url: "https://www.historyhit.com/app/uploads/fly-images/5161222/Van-Castle-1-1576x1074.jpg",
+                brief_introduction: hotelDescription,
+                currency: "$",
+                hire_rate: taxihireRate,
+                plate_no: taxiPlateNumber,
+                country: country,
+                city: city,
+                phone: phone,
+                email: email,
+                password: password,
+                status_ready: true,
+                registration_date: new Date(),
+                admin_approved: false,
+                admin_remarks: "Administration remarks if any...",
+                log_last_login: new Date(),
+            }
+            console.log(taxi_body)
+
+            try {
+                if (value == "Taxi") {
+                    setLoading(true)
+                    const taxiResponse = await TaxiServices.TaxiRegistration(taxi_body)
+                    if (taxiResponse) {
+                        console.log("Taxi response: ", taxiResponse)
+                        setLoading(false)
+                        navigation.replace("BusinessAccount")
+                    }
+                }
+
+            } catch (error) {
+                setLoading(false)
+                console.log(error)
+
+            }
         }
 
 
@@ -117,6 +160,7 @@ const BusinessAccountSignup = () => {
 
     return (
         <SafeAreaView style={styles.maincontainer}>
+            <Loader loading={loading} setLoading={setLoading} />
             <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
@@ -208,6 +252,7 @@ const BusinessAccountSignup = () => {
                                         placeholder={Languages.ba_signup_age}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={age}
+                                        keyboardType={"numeric"}
                                         onChangeText={(text) => { setAge(text) }}
                                     />
                                 </View>
@@ -254,10 +299,13 @@ const BusinessAccountSignup = () => {
                                         placeholder={Languages.ba_signup_taxi_hire_rate}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={taxihireRate}
-                                        onChangeText={(text) => { setTaxiHireRate(text) }}
+                                        keyboardType={'numeric'}
+                                        onChangeText={(text) => { setTaxiHireRate(text), setTaxiHireRateValidation("") }}
 
                                     />
                                 </View>
+                                {taxiHireRateValidation && <ErrorMessage error={taxiHireRateValidation} />}
+
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                     <TextInput

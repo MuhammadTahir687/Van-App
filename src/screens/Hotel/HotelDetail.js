@@ -24,9 +24,9 @@ const HotelDetail = ({ route, navigation }) => {
                     <SwiperFlatList
                         showPagination
                         paginationActiveColor={Colors.PrimaryColor}
-                        data={images}
+                        data={data?.hotel_view_url}
                         renderItem={({ item }) => (
-                            <Image source={{ uri: item.image }} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>

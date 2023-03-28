@@ -7,14 +7,21 @@ import { useNavigation } from '@react-navigation/native';
 import Languages from '../../constants/Localization/localization';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import { AuthServices } from '../../services/authServices';
+import Loader from '../../components/Loader/Loader';
+import Alert from '../../components/Alert/Alert';
+
 
 const PersonelAccountSignup = () => {
 
     const navigation = useNavigation();
 
+    const [loading, setLoading] = useState(false)
     const [country, setCountry] = useState('')
     const [countryCode, setCountryCode] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(true)
+    const [showAlert, setShowAlert] = useState(false)
+    const [alertDetail, setAlertDetail] = useState({ message: "", color: "green" })
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -29,6 +36,9 @@ const PersonelAccountSignup = () => {
     const [countryValidation, setCountryValidation] = useState("")
     const [emailValidation, setEmailValidation] = useState("")
     const [ageValidation, setAgeValidation] = useState("")
+    const [cityValidation, setCityValidation] = useState("")
+    const [passportValidation, setPassportValidation] = useState("")
+    const [phoneValidation, setPhoneValidation] = useState("")
 
 
     const Submit = async () => {
@@ -45,11 +55,26 @@ const PersonelAccountSignup = () => {
         else if (country == "") {
             setCountryValidation("Required*")
         }
+        else if (city == "") {
+            setCityValidation("Required*")
+        }
+        else if (passport == "") {
+            setPassportValidation("Required*")
+        }
+        else if (age == "") {
+            setAgeValidation("Required*")
+        }
+        else if (phone == "") {
+            setPhoneValidation("Required*")
+        }
         else if (password == "") {
             setPasswordValidation("Required*")
         }
         else {
+            setLoading(true)
             const body = {
+                category: "PA",
+                tourist_code: "C",
                 tourist_name: name,
                 registration_date: new Date(),
                 country: country,
@@ -59,9 +84,26 @@ const PersonelAccountSignup = () => {
                 phone: phone,
                 email: email,
                 password: password,
+                admin_remarks: "",
+                log_last_login: new Date()
             }
             console.log(body)
-            // navigation.replace("PersonelAccount")
+            try {
+                const response = await AuthServices.PA_Register(body)
+                if (response?.data) {
+                    setLoading(false)
+                    setShowAlert(true)
+                    setAlertDetail({ message: "Account Created Successfully", color: "green" })
+                    console.log(response.data)
+                    navigation.replace("PersonelAccount")
+                }
+            } catch (error) {
+                setLoading(false)
+                setAlertDetail({ message: "Email Already Exists", color: "red" })
+                setShowAlert(true)
+                console.log("Error: " + error)
+            }
+
         }
 
 
@@ -70,6 +112,8 @@ const PersonelAccountSignup = () => {
 
     return (
         <SafeAreaView style={styles.maincontainer}>
+            <Loader loading={loading} setLoading={setLoading} />
+            <Alert showAlert={showAlert} message={alertDetail?.message} color={alertDetail?.color} onCancelPressed={() => { setShowAlert(false) }} />
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode={'contain'} style={styles.image} />
@@ -92,6 +136,7 @@ const PersonelAccountSignup = () => {
                                 style={styles.textInput}
                                 placeholder={Languages.pa_signup_email}
                                 keyboardType={"email-address"}
+                                autoCapitalize='none'
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={email}
                                 onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
@@ -112,7 +157,7 @@ const PersonelAccountSignup = () => {
                         {countryValidation && <ErrorMessage error={countryValidation}/>} */}
 
                         <View style={styles.rowcontainer}>
-                            <View style={{ flex: 1 }}>
+                            <View style={{ flex: 1, height: 50 }}>
                                 <CountryPickerModal
                                     countryCode={countryCode}
                                     setCountryCode={setCountryCode}
@@ -131,15 +176,18 @@ const PersonelAccountSignup = () => {
                                         placeholder={Languages.pa_signup_city}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={city}
-                                        onChangeText={(text) => { setCity(text) }}
+                                        onChangeText={(text) => { setCity(text), setCityValidation("") }}
 
                                     />
                                 </View>
+                                {cityValidation && <ErrorMessage error={cityValidation} />}
+
                             </View>
+
                         </View>
 
                         <View style={styles.rowcontainer}>
-                            <View style={{ flex: 1 }}>
+                            <View style={{ flex: 1, height: 50 }}>
                                 <View style={{ ...styles.rowinputcontainer, marginRight: 5 }}>
                                     <FontAwesome5 name={"id-card"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                     <TextInput
@@ -147,10 +195,12 @@ const PersonelAccountSignup = () => {
                                         placeholder={Languages.pa_signup_passport}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={passport}
-                                        onChangeText={(text) => { setPassport(text) }}
+                                        onChangeText={(text) => { setPassport(text), setPassportValidation("") }}
 
                                     />
                                 </View>
+                                {passportValidation && <ErrorMessage error={passportValidation} />}
+
                             </View>
 
                             <View style={{ flex: 1 }}>
@@ -162,9 +212,11 @@ const PersonelAccountSignup = () => {
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={age}
                                         keyboardType={"numeric"}
-                                        onChangeText={(text) => { setAge(text) }}
+                                        onChangeText={(text) => { setAge(text), setAgeValidation("") }}
                                     />
                                 </View>
+                                {ageValidation && <ErrorMessage error={ageValidation} />}
+
                             </View>
                         </View>
 
@@ -176,10 +228,12 @@ const PersonelAccountSignup = () => {
                                 keyboardType={"numeric"}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={phone}
-                                onChangeText={(text) => { setPhone(text) }}
+                                onChangeText={(text) => { setPhone(text), setPhoneValidation("") }}
 
                             />
                         </View>
+                        {phoneValidation && <ErrorMessage error={phoneValidation} />}
+
 
                         <View style={{ ...styles.inputContainer, marginHorizontal: 20 }}>
                             <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />

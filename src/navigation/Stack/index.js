@@ -11,6 +11,8 @@ import HotelDetail from "../../screens/Hotel/HotelDetail";
 import CarRentalDetail from "../../screens/Car Rental/CarRentalDetail";
 import TourGuideDetail from "../../screens/TourGuide/TourGuideDetail";
 import HotelRoomDetail from "../../screens/Hotel/HotelRoomDetail";
+import TourPlacesDetail from "../../screens/TourGuide/TourPlacesDetail";
+import CarFleetDetail from "../../screens/Car Rental/CarFleetDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +20,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
+      <Stack.Navigator initialRouteName="PersonelAccount" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="PersonelAccount" component={PersonelAccount} />
@@ -29,7 +31,9 @@ const StackNavigation = () => {
         <Stack.Screen name="HotelDetail" component={HotelDetail} />
         <Stack.Screen name="HotelRoomDetail" component={HotelRoomDetail} />
         <Stack.Screen name="CarRentalDetail" component={CarRentalDetail} />
+        <Stack.Screen name="CarFleetDetail" component={CarFleetDetail} />
         <Stack.Screen name="TourGuideDetail" component={TourGuideDetail} />
+        <Stack.Screen name="TourPlacesDetail" component={TourPlacesDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -9,6 +9,7 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { AuthServices } from '../../services/authServices';
 import Loader from '../../components/Loader/Loader';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { save_data } from '../../components/Storage/Storage';
 
 const PersonelAccount = () => {
 
@@ -39,13 +40,15 @@ const PersonelAccount = () => {
                 email: email,
                 password: password
             }
+            console.log(body)
             try {
                 setLoading(true)
                 const resp = await AuthServices.PA_Login(body)
 
-                if (resp) {
+                if (resp.data) {
                     console.log(resp.data)
                     setLoading(false)
+                    await save_data("user", resp.data[0])
                     // navigation.replace("TabScreens")
                     navigation.reset({ index: 0, routes: [{ name: 'TabScreens' }] });
                 }
@@ -93,6 +96,7 @@ const PersonelAccount = () => {
                                 placeholderTextColor={Colors.PrimaryColor}
                                 placeholder={Languages.pa_login_email}
                                 keyboardType={"email-address"}
+                                autoCapitalize='none'
                                 value={email}
                                 onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
                             />

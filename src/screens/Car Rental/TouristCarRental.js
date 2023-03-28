@@ -14,6 +14,7 @@ import { UserServices } from '../../services/userServices';
 const TouristCarRental = () => {
     const navigation = useNavigation();
     const [data, setData] = useState([])
+    const [fleetData, setFleetData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState([])
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
@@ -25,9 +26,11 @@ const TouristCarRental = () => {
 
     const GetData = async () => {
         try {
-            const resp = await UserServices.UserData('carRentalFleet')
+            const resp = await UserServices.UserData('carRentalAgents')
+            const fleetResponse = await UserServices.UserData('carRentalFleet')
             if (resp) {
                 setData(resp.data)
+                setFleetData(fleetResponse.data)
             }
         } catch (error) {
             console.log("Error", error)
@@ -91,19 +94,18 @@ const TouristCarRental = () => {
 
             <FlatList
                 // data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
-                data={data.filter((item) => item?.car_agent_code.toLowerCase().includes(search.toLowerCase()))}
+                data={data.filter((item) => item?.agency_name.toLowerCase().includes(search.toLowerCase()))}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => { navigation.navigate("CarRentalDetail", { data: item }) }} style={styles.hotelCardContainer}>
-                        <Image source={{ uri: item?.car_image_url }} style={styles.image} />
+                    <TouchableOpacity onPress={() => { navigation.navigate("CarRentalDetail", { data: item, fleetData: fleetData }) }} style={styles.hotelCardContainer}>
+                        <Image source={{ uri: item?.agency_image_url }} style={styles.image} />
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
-                                <Text style={styles.hotelName}>{item?.car_agent_code}</Text>
-                                {/* <Text style={styles.hotelAddress}>{item?.address}</Text> */}
+                                <Text style={styles.hotelName}>{item?.agency_name}</Text>
+                                <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
+                                <Text style={styles.hotelAddress}>{item?.agency_address}</Text>
                             </View>
-                            <View>
-                                <Text style={styles.hotelPrice}>{item?.currency + " " + item?.hire_rate}</Text>
-                            </View>
+
                         </View>
                     </TouchableOpacity>
                 )}
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     countryFilterContainer: { marginHorizontal: 10 },
     coutryBtn: { marginHorizontal: 5, paddingHorizontal: 20, paddingVertical: 5, height: 30, marginVertical: 10, borderRadius: 50, alignItems: "center", justifyContent: "center" },
     hotelCardContainer: { margin: 10, borderRadius: 10, backgroundColor: "white" },
-    image: { width: "100%", height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
+    image: { resizeMode: "contain", width: "100%", height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
     hotelDescriptionContainer: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", margin: 10 },
     hotelName: { fontSize: 15, fontWeight: "bold" },
     hotelAddress: { color: "#ababab" },
