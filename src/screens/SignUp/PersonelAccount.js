@@ -73,11 +73,12 @@ const PersonelAccountSignup = () => {
         else {
             setLoading(true)
             const body = {
-                category: "PA",
+
                 tourist_code: "C",
                 tourist_name: name,
                 registration_date: new Date(),
                 country: country,
+                country_code: countryCode,
                 city: city,
                 passport_id: passport,
                 age_years: age,

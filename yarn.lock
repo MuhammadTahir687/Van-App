@@ -6009,7 +6009,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.6.0, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6224,6 +6224,13 @@ react-native-swiper-flatlist@^3.0.18:
   version "3.0.18"
   resolved "https://registry.npmjs.org/react-native-swiper-flatlist/-/react-native-swiper-flatlist-3.0.18.tgz"
   integrity sha512-GHo54SS72sJWWGjnS18AeVievOeSMkTJaLSSS99/kHcnB1Wo3MJKYggtPjFVmc7eFaHcOIwqtGvyNEPxN2MsSA==
+
+react-native-switch@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-switch/-/react-native-switch-1.5.1.tgz#da032f66547053aa004c7a159422dbca8fadd944"
+  integrity sha512-nfuPrrPKzeZL1mQH0u1rlEGv9W1+okU/xOcNNaDNz/LhSdzWOZ04ogJ4iEj7Sth3hkBxv4XwFQZTgCc07we+cg==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-vector-icons@^9.2.0:
   version "9.2.0"

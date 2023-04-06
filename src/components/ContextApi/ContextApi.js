@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 export const RootContext = React.createContext();
 
-const ContextProvider=({children})=>{
+const ContextProvider = ({ children }) => {
 
-	const [selectedLanguage,setselectedLanguage]=useState("en")
+	const [selectedLanguage, setselectedLanguage] = useState("en")
+	const [user, setUser] = useState("")
 
 	const defaultContext = {
 		selectedLanguage,
-        setselectedLanguage
+		setselectedLanguage,
+		user,
+		setUser
 	}
 	return (
 		<RootContext.Provider value={defaultContext}>

@@ -1,25 +1,17 @@
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Colors } from '../../constants/Colors'
 import { Avatar } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { get_data } from '../../components/Storage/Storage'
+import { RootContext } from '../../components/ContextApi/ContextApi'
 
 
 const Profile = ({ navigation }) => {
 
-    const [user, setUser] = useState("")
+    const { user } = useContext(RootContext)
 
-    useEffect(() => {
-        UserData()
-    }, [])
-
-    const UserData = async () => {
-        const data = await get_data("user")
-        console.log(data)
-        setUser(data)
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -59,11 +51,11 @@ const Profile = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.btn}>
-                    <Text style={styles.btnText}>Bookings</Text>
-                    <Ionicons name='arrow-forward-sharp' size={20} color={Colors.PrimaryColor} />
+                <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditTouristProfile", { userData: user }) }}>
+                    <Text style={styles.btnText}>Edit Profile</Text>
+                    <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'PersonelAccount' }], }) }} style={styles.btn}>
                     <Text style={styles.btnText}>Log Out</Text>
                     <Ionicons name='log-out-outline' size={20} color={Colors.PrimaryColor} />
                 </TouchableOpacity>

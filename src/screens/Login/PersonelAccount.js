@@ -10,10 +10,15 @@ import { AuthServices } from '../../services/authServices';
 import Loader from '../../components/Loader/Loader';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { save_data } from '../../components/Storage/Storage';
+import { useContext } from 'react';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const PersonelAccount = () => {
 
     const navigation = useNavigation();
+
+    const { user, setUser } = useContext(RootContext)
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordVisible, setPasswordVisible] = useState(true)
@@ -49,7 +54,7 @@ const PersonelAccount = () => {
                     console.log(resp.data)
                     setLoading(false)
                     await save_data("user", resp.data[0])
-                    // navigation.replace("TabScreens")
+                    setUser(resp.data[0])
                     navigation.reset({ index: 0, routes: [{ name: 'TabScreens' }] });
                 }
 

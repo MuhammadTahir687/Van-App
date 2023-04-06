@@ -13,6 +13,9 @@ import TourGuideDetail from "../../screens/TourGuide/TourGuideDetail";
 import HotelRoomDetail from "../../screens/Hotel/HotelRoomDetail";
 import TourPlacesDetail from "../../screens/TourGuide/TourPlacesDetail";
 import CarFleetDetail from "../../screens/Car Rental/CarFleetDetail";
+import TaxiDriverTabScreens from "../Tab/TaxiDriver";
+import EditTouristProfile from "../../screens/Profile/EditTouristProfile";
+import EditTaxiDriverProfile from "../../screens/Profile/EditTaxiDriverProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +23,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PersonelAccount" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
+      <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="PersonelAccount" component={PersonelAccount} />
@@ -34,7 +37,11 @@ const StackNavigation = () => {
         <Stack.Screen name="CarFleetDetail" component={CarFleetDetail} />
         <Stack.Screen name="TourGuideDetail" component={TourGuideDetail} />
         <Stack.Screen name="TourPlacesDetail" component={TourPlacesDetail} />
+        <Stack.Screen name="TaxiDriverTabScreens" component={TaxiDriverTabScreens} />
+        <Stack.Screen name="EditTouristProfile" component={EditTouristProfile} />
+        <Stack.Screen name="EditTaxiDriverProfile" component={EditTaxiDriverProfile} />
       </Stack.Navigator>
+
     </NavigationContainer>
   )
 }

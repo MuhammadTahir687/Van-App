@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Colors';
 import { Avatar } from "react-native-elements";
@@ -14,6 +14,7 @@ const TouristTaxiBooking = () => {
 
     const [location, setLocation] = useState("");
     const [data, setData] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
 
 
     useEffect(() => { GetLocation(), GetData() }, [])
@@ -21,9 +22,11 @@ const TouristTaxiBooking = () => {
 
     const GetData = async () => {
         try {
+
             const resp = await UserServices.UserData('taxiDrivers')
             if (resp) {
                 setData(resp.data)
+                setRefreshing(false)
             }
         } catch (error) {
             console.log("Error", error)
@@ -60,9 +63,12 @@ const TouristTaxiBooking = () => {
     };
 
     const region = { latitude: location != "" ? location?.coords?.latitude : 37.78825, longitude: location != "" ? location?.coords?.longitude : -122.4324, latitudeDelta: 0.000922, longitudeDelta: 0.000821 }
+    console.log("Images", data.map((item) => item.taxi_image_url))
 
     return (
         <SafeAreaView style={styles.container}>
+
+
             <View style={styles.header}>
                 <Text style={styles.headertext}>Taxi</Text>
             </View>
@@ -83,19 +89,26 @@ const TouristTaxiBooking = () => {
                 </MapView>
             </View>
 
-            <ScrollView style={styles.scrollcontainer}>
-                {data.map((item, index) => (
+            <ScrollView refreshControl={<RefreshControl progressBackgroundColor={Colors.PrimaryColor} colors={[Colors.WhiteColor]} refreshing={refreshing} onRefresh={() => { setRefreshing(true), GetData() }} />} style={styles.scrollcontainer}>
+                {data?.filter((item) => item.status_ready == true)?.map((item, index) => (
                     <View style={styles.listcontainer} key={index}>
-                        <Avatar
+                        {item?.taxi_image_url !== "" && item?.taxi_image_url !== undefined ? <Avatar
                             size="large"
                             rounded
                             icon={{ name: 'user', type: 'font-awesome' }}
                             source={{
                                 uri: item?.taxi_image_url,
                             }}
-                            activeOpacity={0.7}
                             containerStyle={styles.avatar}
-                        />
+                        /> :
+                            <Avatar
+                                size="large"
+                                rounded
+                                icon={{ name: 'user', type: 'font-awesome' }}
+                                title={item?.driver_name.split(" ").map((n) => n[0]).join("")}
+                                containerStyle={styles.avatar}
+                            />
+                        }
                         <View style={styles.listdetailcontainer}>
                             <Text style={styles.name}>{item?.driver_name}</Text>
                             <View>
