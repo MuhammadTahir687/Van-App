@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HotelRoom1 from '../../assets/HotelRoom1.jpeg';
@@ -8,25 +8,33 @@ import { Rating } from 'react-native-elements';
 import { Colors } from '../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { UserServices } from '../../services/userServices';
 
 
 const TouristHotelReservation = () => {
     const navigation = useNavigation();
+    const [data, setData] = useState([])
+    const [hotelRoomsData, setHotelRoomsData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState([])
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
-    const HotelData = [
-        { id: 1, name: "Lux Hotel", address: "Barcelona, Spain", country: "Spain", image: HotelRoom1, price: 200 },
-        { id: 2, name: "Royal Hotel", address: "Lahore, Pakistan", country: "Pakistan", image: HotelRoom2, price: 300 },
-        { id: 3, name: "Nova Hotel", address: "Lahore, Pakistan", country: "Pakistan", image: HotelRoom3, price: 250 }
-    ]
-    const CountryFilter = [
-        { id: 1, name: "All" },
-        { id: 2, name: "Spain" },
-        { id: 3, name: "Pakistan" },
-        { id: 4, name: "Islamabad" },
-    ]
+
+    useEffect(() => { GetData() }, [])
+
+
+    const GetData = async () => {
+        try {
+            const resp = await UserServices.UserData('hotelManagers')
+            const roomsResponse = await UserServices.UserData("hotelRooms")
+            if (resp) {
+                setData(resp.data)
+                setHotelRoomsData(roomsResponse.data)
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    }
 
     const SelectedItems = (item) => {
         if (!selectedCountry.includes(item)) {
@@ -39,7 +47,9 @@ const TouristHotelReservation = () => {
         }
     }
 
-    const filterHotelData = HotelData.filter((item) => item.country.includes(countryFilter));
+    const CountryList = data?.map((item) => item?.country)?.concat("All")?.sort()
+    const filterHotelData = data?.filter((item) => item?.country?.includes(countryFilter));
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -56,37 +66,35 @@ const TouristHotelReservation = () => {
                     style={styles.searchInput}
                 />
             </View>
-            <View style={styles.countryFilterContainer}>
+            {/* {data.length > 0 && <View style={styles.countryFilterContainer}>
                 <FlatList
                     horizontal
-                    data={CountryFilter}
+                    data={CountryList?.filter((value, index, array) => array.indexOf(value) === index)}
                     showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item, index }) => (
-                        <TouchableOpacity onPress={() => { setFilterbtn(index), setCountryFilter(item.name) }} key={index} style={{ ...styles.coutryBtn, backgroundColor: filterbtn == index ? Colors.PrimaryColor : "#e8e7e6" }}>
-                            <Text style={{ color: filterbtn == index ? Colors.WhiteColor : "black" }}>{item.name}</Text>
-                            {/* {filterbtn == index && <Ionicons name='close' size={15} color={Colors.WhiteColor} />} */}
+                        <TouchableOpacity onPress={() => { setFilterbtn(index), setCountryFilter(item) }} key={index} style={{ ...styles.coutryBtn, backgroundColor: filterbtn == index ? Colors.PrimaryColor : "#e8e7e6" }}>
+                            <Text style={{ color: filterbtn == index ? Colors.WhiteColor : "black" }}>{item}</Text>
                         </TouchableOpacity>
                     )}
 
                 />
             </View>
-
-
+            } */}
 
             <FlatList
-                data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
-                keyExtractor={item => item.id}
+                // data={countryFilter == "All" ? data.filter((item) => item?.hotel_name?.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item?.hotel_name?.toLowerCase().includes(search.toLowerCase()))}
+                data={data.filter((item) => item?.hotel_name?.toLowerCase().includes(search.toLowerCase()) || item?.country?.toLowerCase().includes(search.toLowerCase()))}
+                keyExtractor={item => item._id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => { navigation.navigate("HotelDetail", { data: item }) }} style={styles.hotelCardContainer}>
-                        <Image source={item.image} style={styles.image} />
+                    <TouchableOpacity onPress={() => { navigation.navigate("HotelDetail", { data: item, hotelRooms: hotelRoomsData }) }} style={styles.hotelCardContainer}>
+                        <Image source={{ uri: item?.hotel_image_url }} style={styles.image} />
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
-                                <Text style={styles.hotelName}>{item.name}</Text>
-                                <Text style={styles.hotelAddress}>{item.address}</Text>
-                            </View>
-                            <View>
-                                <Text style={styles.hotelPrice}>{'$ ' + item.price}</Text>
+                                <Text style={styles.hotelName}>{item?.hotel_name}</Text>
+                                <Text style={styles.hotelPrice}>Rooms: {item?.number_of_rooms}</Text>
+                                <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
+                                <Text style={styles.hotelAddress}>{item?.hotel_address}</Text>
+
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -110,6 +118,6 @@ const styles = StyleSheet.create({
     hotelDescriptionContainer: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", margin: 10 },
     hotelName: { fontSize: 15, fontWeight: "bold" },
     hotelAddress: { color: "#ababab" },
-    hotelPrice: { fontWeight: "bold", fontSize: 15 }
+    hotelPrice: { color: "#ababab" }
 
 })

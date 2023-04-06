@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Trip1 from '../../assets/Trip1.jpg';
@@ -7,45 +7,45 @@ import Trip3 from '../../assets/Trip3.jpg';
 import { Colors } from '../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { UserServices } from '../../services/userServices';
+import axios from 'axios';
 
 const TouristTourGuide = () => {
 
     const navigation = useNavigation();
+    const [data, setData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState([])
+    const [guidesTripPlans, setGuideTripPlans] = useState([])
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
 
-    const HotelData = [
-        { id: 1, name: "Hunza Skardu", address: "Pakistan", country: "Pakistan", image: Trip1, price: 200 },
-        { id: 2, name: "Hunza Apricot and Cherry Blossom Trip", address: "Pakistan", country: "Pakistan", image: Trip2, price: 300 },
-        { id: 3, name: "Naran Hunza", address: "Pakistan", country: "Pakistan", image: Trip3, price: 250 }
-    ]
-    const CountryFilter = [
-        { id: 1, name: "All" },
-        { id: 2, name: "Spain" },
-        { id: 3, name: "Pakistan" },
-        { id: 4, name: "Islamabad" },
-    ]
+    useEffect(() => {
+        GetData()
+    }, [])
 
-    const SelectedItems = (item) => {
-        if (!selectedCountry.includes(item)) {
-            setSelectedCountry([...selectedCountry, item])
-        } else {
-            let newSelectedCountry = selectedCountry
-            const findIndex = selectedCountry.findIndex(f => f === item)
-            newSelectedCountry.splice(findIndex, 1)
-            setSelectedCountry([...newSelectedCountry])
+
+    const GetData = async () => {
+        try {
+
+            const resp = await UserServices.UserData('guides')
+            const placesResponse = await UserServices.UserData("guidesTripPlans")
+            if (resp) {
+                setData(resp.data)
+                setGuideTripPlans(placesResponse.data)
+            }
+        } catch (error) {
+            console.log("Error", error)
         }
     }
 
-    const filterHotelData = HotelData.filter((item) => item.country.includes(countryFilter));
+
+
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headertext}>Hotel Reservation</Text>
+                <Text style={styles.headertext}>Tour Guide</Text>
             </View>
             <View style={styles.searchContainer}>
                 <Ionicons name={"search"} size={20} color={Colors.WhiteColor} />
@@ -57,39 +57,45 @@ const TouristTourGuide = () => {
                     style={styles.searchInput}
                 />
             </View>
-            <View style={styles.countryFilterContainer}>
+
+            {/* {data.length > 0 && <View style={styles.countryFilterContainer}>
                 <FlatList
                     horizontal
-                    data={CountryFilter}
+                    data={CountryList?.filter((value, index, array) => array.indexOf(value) === index)}
                     showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item) => item.id.toString()}
+                    // keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item, index }) => (
-                        <TouchableOpacity onPress={() => { setFilterbtn(index), setCountryFilter(item.name) }} key={index} style={{ ...styles.coutryBtn, backgroundColor: filterbtn == index ? Colors.PrimaryColor : "#e8e7e6" }}>
-                            <Text style={{ color: filterbtn == index ? Colors.WhiteColor : "black" }}>{item.name}</Text>
-                            {/* {filterbtn == index && <Ionicons name='close' size={15} color={Colors.WhiteColor} />} */}
+                        <TouchableOpacity onPress={() => { setFilterbtn(index), setCountryFilter(item) }} key={index} style={{ ...styles.coutryBtn, backgroundColor: filterbtn == index ? Colors.PrimaryColor : "#e8e7e6" }}>
+                            <Text style={{ color: filterbtn == index ? Colors.WhiteColor : "black" }}>{item}</Text>
                         </TouchableOpacity>
                     )}
 
                 />
             </View>
+            } */}
 
             <FlatList
-                data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => { navigation.navigate("TourGuideDetail", { data: item }) }} style={styles.hotelCardContainer}>
-                        <Image source={item?.image} style={styles.image} />
-                        <View style={styles.hotelDescriptionContainer}>
-                            <View>
-                                <Text style={styles.hotelName}>{item?.name}</Text>
-                                <Text style={styles.hotelAddress}>{item?.address}</Text>
+                // data={countryFilter == "All" ? data?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase())) : filterTourlData?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase()))}
+                data={data?.filter((item) => item?.guide_name.toLowerCase().includes(search.toLowerCase()) || item?.country.toLowerCase().includes(search.toLowerCase()))}
+
+                keyExtractor={item => item._id}
+                renderItem={({ item }) => {
+                    return (
+                        <TouchableOpacity onPress={() => { navigation.navigate("TourGuideDetail", { data: item, placesData: guidesTripPlans }) }} style={styles.hotelCardContainer}>
+                            <Image source={{ uri: item?.profile_image_url }} style={styles.image} />
+                            <View style={styles.hotelDescriptionContainer}>
+                                <View>
+                                    <Text style={styles.hotelName}>{item?.guide_code}</Text>
+                                    <Text style={styles.hotelName}>{item?.guide_name}</Text>
+                                    <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
+                                </View>
+                                {/* <View>
+                                    <Text style={styles.hotelPrice}>{item?.currency + " " + item?.trip_fee}</Text>
+                                </View> */}
                             </View>
-                            {/* <View>
-                                <Text style={styles.hotelPrice}>{'$ ' + item?.price}</Text>
-                            </View> */}
-                        </View>
-                    </TouchableOpacity>
-                )}
+                        </TouchableOpacity>
+                    )
+                }}
             />
         </SafeAreaView>
     )

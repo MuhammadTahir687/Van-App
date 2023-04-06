@@ -6,18 +6,30 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import Languages from '../../constants/Localization/localization';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import { AuthServices } from '../../services/authServices';
+import Loader from '../../components/Loader/Loader';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { save_data } from '../../components/Storage/Storage';
+import { useContext } from 'react';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const PersonelAccount = () => {
 
     const navigation = useNavigation();
+
+    const { user, setUser } = useContext(RootContext)
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordVisible, setPasswordVisible] = useState(true)
     const [passwordValidation, setPasswordValidation] = useState("")
     const [emailValidation, setEmailValidation] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
 
 
     const Submit = async () => {
+
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (email == "") {
             setEmailValidation("Required*")
@@ -29,7 +41,28 @@ const PersonelAccount = () => {
             setPasswordValidation("Required")
         }
         else {
-            navigation.navigate("TabScreens")
+            const body = {
+                email: email,
+                password: password
+            }
+            console.log(body)
+            try {
+                setLoading(true)
+                const resp = await AuthServices.PA_Login(body)
+
+                if (resp.data) {
+                    console.log(resp.data)
+                    setLoading(false)
+                    await save_data("user", resp.data[0])
+                    setUser(resp.data[0])
+                    navigation.reset({ index: 0, routes: [{ name: 'TabScreens' }] });
+                }
+
+            } catch (error) {
+                setLoading(false)
+                setShowAlert(true)
+                console.log("Error: ", error)
+            }
         }
     }
 
@@ -37,6 +70,23 @@ const PersonelAccount = () => {
 
     return (
         <SafeAreaView style={styles.maincontainer}>
+            <Loader loading={loading} setLoading={setLoading} />
+            <AwesomeAlert
+                show={showAlert}
+                showProgress={false}
+                title="Error"
+                message="Invalid Credentials"
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="Cancel"
+                confirmText="Sign Up"
+                confirmButtonColor="green"
+                cancelButtonColor='red'
+                onCancelPressed={() => { setShowAlert(false) }}
+                onConfirmPressed={() => { setShowAlert(false), navigation.replace("PersonelAccountSignup") }}
+            />
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={{ alignItems: "center" }}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
@@ -51,6 +101,7 @@ const PersonelAccount = () => {
                                 placeholderTextColor={Colors.PrimaryColor}
                                 placeholder={Languages.pa_login_email}
                                 keyboardType={"email-address"}
+                                autoCapitalize='none'
                                 value={email}
                                 onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
                             />
@@ -82,6 +133,7 @@ const PersonelAccount = () => {
                     </View>
                 </View>
             </ScrollView>
+
         </SafeAreaView>
     )
 }

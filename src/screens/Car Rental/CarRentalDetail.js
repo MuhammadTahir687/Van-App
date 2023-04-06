@@ -11,8 +11,11 @@ import CarRental3 from '../../assets/CarRental3.jpg';
 const CarRentalDetail = ({ route, navigation }) => {
 
     const { width, height } = useWindowDimensions()
-    const data = route?.params?.data
-    const images = [{ id: 1, image: CarRental1 }, { id: 2, image: CarRental2 }, { id: 3, image: CarRental3 }]
+    const data = route?.params?.data;
+    const fleetData = route?.params?.fleetData;
+    const filterfleetData = fleetData?.filter((item) => item?.car_agent_code == data?.car_agent_code)
+
+    const images = [{ id: 1, image: data?.car_image_url }]
 
     return (
         <SafeAreaView style={styles.carRentalDetailContainer}>
@@ -21,9 +24,9 @@ const CarRentalDetail = ({ route, navigation }) => {
                     <SwiperFlatList
                         showPagination
                         paginationActiveColor={Colors.PrimaryColor}
-                        data={images}
+                        data={data?.fleet_image_url}
                         renderItem={({ item }) => (
-                            <Image source={item.image} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>
@@ -34,13 +37,27 @@ const CarRentalDetail = ({ route, navigation }) => {
                 </ImageBackground> */}
                 <View>
                     <View style={styles.carRentalInfoContainer}>
-                        <Text style={styles.carRentalName}>{data?.name}</Text>
-                        <Text style={styles.carRentalPrice}>$ {data?.price}</Text>
+                        <Text style={styles.carRentalName}>{data?.agency_name}</Text>
+                        <Text style={styles.carRentalPrice}>{data?.city + ", " + data?.country}</Text>
+                        <Text style={styles.carRentalPrice}>{data?.agency_address}</Text>
+                        <Text style={styles.carRentalPrice}>Total Cars: {data?.number_of_cars}</Text>
+
                     </View>
-                    <Text style={styles.carRentalAddress}>{data?.address}</Text>
+                    {/* <Text style={styles.carRentalAddress}>{data?.address}</Text> */}
                     <Text style={styles.aboutItemHeading}>About this Agency</Text>
-                    <Text style={styles.aboutText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</Text>
+                    <Text style={styles.aboutText}>{data?.brief_introduction}</Text>
                 </View>
+                <Text style={styles.aboutItemHeading}>Car Rental Fleets</Text>
+                {filterfleetData?.map((item, index) => (
+                    <TouchableOpacity onPress={() => { navigation.navigate("CarFleetDetail", { data: item }) }} key={index} style={{ flex: 1, marginVertical: 5, marginHorizontal: 10, flexDirection: "row" }}>
+                        <Image source={{ uri: item?.car_image_url }} style={{ width: "50%", height: 100, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }} />
+                        <View style={{ backgroundColor: "white", elevation: 3, width: "50%", borderTopRightRadius: 10, borderBottomRightRadius: 10, paddingLeft: 10, justifyContent: "center" }}>
+                            <Text style={{ fontWeight: "bold" }}>{item?.car_name}</Text>
+                            <Text>Price: {item?.currency + " " + item?.hire_rate}</Text>
+                            <Text>Plate#: {item?.plate_no}</Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
             </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => { alert("Car is Booked") }} style={styles.bookingBtn}>
@@ -58,10 +75,10 @@ export const styles = StyleSheet.create({
     carRentalDetailContainer: { flex: 1, backgroundColor: "white" },
     swiperContainer: { flex: 1 },
     image: { height: 250, width: "100%", borderBottomLeftRadius: 25, borderBottomRightRadius: 25, overflow: "hidden" },
-    carRentalInfoContainer: { flexDirection: "row", justifyContent: "space-between", marginHorizontal: 20, alignItems: "center", marginVertical: 10 },
-    carRentalName: { color: "black", fontSize: 25, fontWeight: "bold" },
-    carRentalPrice: { fontSize: 20, color: "black" },
-    aboutItemHeading: { color: "black", marginHorizontal: 20, marginVertical: 10, fontWeight: "bold", fontSize: 20 },
+    carRentalInfoContainer: { marginHorizontal: 20, marginVertical: 10 },
+    carRentalName: { color: "black", fontSize: 20, fontWeight: "bold" },
+    carRentalPrice: { fontSize: 15, color: "gray" },
+    aboutItemHeading: { color: "black", marginHorizontal: 20, marginVertical: 5, fontWeight: "bold", fontSize: 15 },
     aboutText: { marginHorizontal: 20, textAlign: "justify", color: "gray" },
     buttonContainer: { justifyContent: "flex-end", marginVertical: 10 },
     bookingBtn: { backgroundColor: Colors.PrimaryColor, marginHorizontal: 20, alignItems: "center", paddingVertical: 10, borderRadius: 10 },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -13,25 +13,47 @@ import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
+import { TaxiServices } from '../../services/taxiServices';
+import Loader from '../../components/Loader/Loader';
 
-const BusinessAccountSignup = () => {
+const BusinessAccountSignup = ({ route }) => {
 
     const navigation = useNavigation();
 
+    const userData = route?.params?.userData;
+    const cat = route?.params?.cat;
+
+
+    useEffect(() => {
+        EditProfile()
+    }, [cat, userData])
+
+    const EditProfile = () => {
+        if (cat == "TD") {
+            setValue("Taxi")
+        }
+    }
+
+
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
-    const [country, setCountry] = useState('')
-    const [countryCode, setCountryCode] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const [country, setCountry] = useState(userData?.country ?? "")
+    const [countryCode, setCountryCode] = useState(userData?.country_code ?? '')
     const [passwordVisible, setPasswordVisible] = useState(true)
     const [countryValidation, setCountryValidation] = useState("")
     const [categoryValidation, setCategoryValidation] = useState("")
 
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [city, setCity] = useState("")
+    const [name, setName] = useState(userData?.driver_name ?? "")
+    const [email, setEmail] = useState(userData?.email ?? "")
+    const [city, setCity] = useState(userData?.email ?? "")
     const [age, setAge] = useState("")
-    const [phone, setPhone] = useState("")
+    const [phone, setPhone] = useState(userData?.phone ?? "")
     const [password, setPassword] = useState("")
+    const [image, setImage] = useState(userData?.taxi_image_url ?? "")
+    const [showImage, setShowImage] = useState(userData?.taxi_image_url ? true : false)
+    const [currency, setCurrency] = useState(userData?.currency ?? "")
 
     const [nameValidation, setNameValidation] = useState("")
     const [passwordValidation, setPasswordValidation] = useState("")
@@ -60,12 +82,14 @@ const BusinessAccountSignup = () => {
 
     // Taxi
 
-    const [taxiModel, setTaxiModel] = useState("")
-    const [taxihireRate, setTaxiHireRate] = useState("")
-    const [taxiPlateNumber, settaxiPlateNumber] = useState("")
-    const [taxiIntroduction, setTaxiIntroduction] = useState("")
+    const [taxiModel, setTaxiModel] = useState(userData?.taxi_model_name ?? "")
+    const [taxihireRate, setTaxiHireRate] = useState(userData?.hire_rate?.toString() ?? "")
+    const [taxiPlateNumber, settaxiPlateNumber] = useState(userData?.plate_no ?? "")
+    const [taxiIntroduction, setTaxiIntroduction] = useState(userData?.brief_introduction ?? "")
     const [taxiModelValidation, setTaxiModelValidation] = useState("")
     const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
+    const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
+    const [currencyValidation, setCurrencyValidation] = useState("")
 
     //*Hotel Reservation*/
     const [hotelName, setHotelName] = useState('')
@@ -104,12 +128,52 @@ const BusinessAccountSignup = () => {
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
         else if (value == "Taxi" && taxiModel == "") setTaxiModelValidation("Required*")
+        else if (value == "Taxi" && currency == "") setCurrencyValidation("Required*")
+        else if (value == "Taxi" && taxihireRate == "") setTaxiHireRateValidation("Required*")
         else if (value == "Taxi" && taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
         else if (value == "Hotel Reservation" && hotelName == "") setHotelNameValidation("Required*")
         else if (value == "Hotel Reservation" && hotelAddress == "") setHotelAddressValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
-            navigation.replace("BusinessAccount")
+            const taxi_body = {
+                taxi_driver_code: new Date().toDateString(),
+                driver_name: name,
+                taxi_model_name: taxiModel,
+                taxi_image_url: image,
+                brief_introduction: taxiIntroduction,
+                currency: currency,
+                hire_rate: taxihireRate,
+                plate_no: taxiPlateNumber,
+                country: country,
+                country_code: countryCode,
+                city: city,
+                phone: phone,
+                email: email,
+                password: password,
+                status_ready: true,
+                registration_date: new Date(),
+                admin_approved: false,
+                admin_remarks: "Administration remarks if any...",
+                log_last_login: new Date(),
+            }
+            console.log(taxi_body)
+
+            try {
+                if (value == "Taxi") {
+                    setLoading(true)
+                    const taxiResponse = await TaxiServices.TaxiRegistration(taxi_body)
+                    if (taxiResponse) {
+                        console.log("Taxi response: ", taxiResponse)
+                        setLoading(false)
+                        navigation.replace("BusinessAccount")
+                    }
+                }
+
+            } catch (error) {
+                setLoading(false)
+                console.log(error)
+
+            }
         }
 
 
@@ -117,6 +181,7 @@ const BusinessAccountSignup = () => {
 
     return (
         <SafeAreaView style={styles.maincontainer}>
+            <Loader loading={loading} setLoading={setLoading} />
             <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
@@ -134,6 +199,11 @@ const BusinessAccountSignup = () => {
                             />
                         </View>
                         {categoryValidation && <ErrorMessage error={categoryValidation} />}
+
+                        {/* To add Headings on profile edit */}
+                        {/* <Text style={{ textAlign: "left", width: "100%", left: 10, color: Colors.PrimaryColor }}>Name</Text> */}
+
+
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -153,6 +223,7 @@ const BusinessAccountSignup = () => {
                                 keyboardType={"email-address"}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={email}
+                                autoCapitalize='none'
                                 onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
 
                             />
@@ -208,6 +279,7 @@ const BusinessAccountSignup = () => {
                                         placeholder={Languages.ba_signup_age}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={age}
+                                        keyboardType={"numeric"}
                                         onChangeText={(text) => { setAge(text) }}
                                     />
                                 </View>
@@ -238,6 +310,21 @@ const BusinessAccountSignup = () => {
                                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                     <TextInput
                                         style={styles.textInput}
+                                        placeholder={"Enter Image Url"}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={image}
+                                        onChangeText={(text) => { setImage(text) }}
+
+                                    />
+                                </View>
+                                <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
+                                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                                </TouchableOpacity>
+                                {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}
+                                <View style={styles.inputContainer}>
+                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                    <TextInput
+                                        style={styles.textInput}
                                         placeholder={Languages.ba_signup_taxi_model}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={taxiModel}
@@ -246,6 +333,19 @@ const BusinessAccountSignup = () => {
                                     />
                                 </View>
                                 {taxiModelValidation && <ErrorMessage error={taxiModelValidation} />}
+                                <View style={styles.inputContainer}>
+                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder={"Currency"}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={currency}
+
+                                        onChangeText={(text) => { setCurrency(text), setCurrencyValidation("") }}
+
+                                    />
+                                </View>
+                                {currencyValidation && <ErrorMessage error={currencyValidation} />}
 
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
@@ -254,10 +354,13 @@ const BusinessAccountSignup = () => {
                                         placeholder={Languages.ba_signup_taxi_hire_rate}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={taxihireRate}
-                                        onChangeText={(text) => { setTaxiHireRate(text) }}
+                                        keyboardType={'numeric'}
+                                        onChangeText={(text) => { setTaxiHireRate(text), setTaxiHireRateValidation("") }}
 
                                     />
                                 </View>
+                                {taxiHireRateValidation && <ErrorMessage error={taxiHireRateValidation} />}
+
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                     <TextInput

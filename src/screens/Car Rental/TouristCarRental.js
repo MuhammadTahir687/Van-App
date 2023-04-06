@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CarRental1 from '../../assets/CarRental1.jpg';
@@ -8,14 +8,35 @@ import { Rating } from 'react-native-elements';
 import { Colors } from '../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { UserServices } from '../../services/userServices';
 
 
 const TouristCarRental = () => {
     const navigation = useNavigation();
+    const [data, setData] = useState([])
+    const [fleetData, setFleetData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState([])
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
+
+    useEffect(() => {
+        GetData()
+    }, [])
+
+    const GetData = async () => {
+        try {
+            const resp = await UserServices.UserData('carRentalAgents')
+            const fleetResponse = await UserServices.UserData('carRentalFleet')
+            if (resp) {
+                setData(resp.data)
+                setFleetData(fleetResponse.data)
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    }
+
     const HotelData = [
         { id: 1, name: "Car Rental Agency #1", address: "Barcelona, Spain", country: "Spain", image: CarRental1, price: 200 },
         { id: 2, name: "Car Rental Agency #2", address: "Lahore, Pakistan", country: "Pakistan", image: CarRental2, price: 300 },
@@ -44,7 +65,7 @@ const TouristCarRental = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headertext}>Hotel Reservation</Text>
+                <Text style={styles.headertext}>Car Rental</Text>
             </View>
             <View style={styles.searchContainer}>
                 <Ionicons name={"search"} size={20} color={Colors.WhiteColor} />
@@ -56,7 +77,7 @@ const TouristCarRental = () => {
                     style={styles.searchInput}
                 />
             </View>
-            <View style={styles.countryFilterContainer}>
+            {/* <View style={styles.countryFilterContainer}>
                 <FlatList
                     horizontal
                     data={CountryFilter}
@@ -65,27 +86,26 @@ const TouristCarRental = () => {
                     renderItem={({ item, index }) => (
                         <TouchableOpacity onPress={() => { setFilterbtn(index), setCountryFilter(item.name) }} key={index} style={{ ...styles.coutryBtn, backgroundColor: filterbtn == index ? Colors.PrimaryColor : "#e8e7e6" }}>
                             <Text style={{ color: filterbtn == index ? Colors.WhiteColor : "black" }}>{item.name}</Text>
-                            {/* {filterbtn == index && <Ionicons name='close' size={15} color={Colors.WhiteColor} />} */}
                         </TouchableOpacity>
                     )}
 
                 />
-            </View>
+            </View> */}
 
             <FlatList
-                data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
-                keyExtractor={item => item.id}
+                // data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
+                data={data.filter((item) => item?.agency_name.toLowerCase().includes(search.toLowerCase()))}
+                keyExtractor={item => item._id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => { navigation.navigate("CarRentalDetail", { data: item }) }} style={styles.hotelCardContainer}>
-                        <Image source={item?.image} style={styles.image} />
+                    <TouchableOpacity onPress={() => { navigation.navigate("CarRentalDetail", { data: item, fleetData: fleetData }) }} style={styles.hotelCardContainer}>
+                        <Image source={{ uri: item?.agency_image_url }} style={styles.image} />
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
-                                <Text style={styles.hotelName}>{item?.name}</Text>
-                                <Text style={styles.hotelAddress}>{item?.address}</Text>
+                                <Text style={styles.hotelName}>{item?.agency_name}</Text>
+                                <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
+                                <Text style={styles.hotelAddress}>{item?.agency_address}</Text>
                             </View>
-                            <View>
-                                <Text style={styles.hotelPrice}>{'$ ' + item?.price}</Text>
-                            </View>
+
                         </View>
                     </TouchableOpacity>
                 )}
@@ -105,7 +125,7 @@ const styles = StyleSheet.create({
     countryFilterContainer: { marginHorizontal: 10 },
     coutryBtn: { marginHorizontal: 5, paddingHorizontal: 20, paddingVertical: 5, height: 30, marginVertical: 10, borderRadius: 50, alignItems: "center", justifyContent: "center" },
     hotelCardContainer: { margin: 10, borderRadius: 10, backgroundColor: "white" },
-    image: { width: "100%", height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
+    image: { resizeMode: "contain", width: "100%", height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 },
     hotelDescriptionContainer: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", margin: 10 },
     hotelName: { fontSize: 15, fontWeight: "bold" },
     hotelAddress: { color: "#ababab" },

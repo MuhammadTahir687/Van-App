@@ -9,6 +9,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import Languages from '../../constants/Localization/localization';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import { TaxiServices } from '../../services/taxiServices';
+import { save_data } from '../../components/Storage/Storage';
+import Loader from '../../components/Loader/Loader';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const BusinessAccount = () => {
 
@@ -25,6 +29,9 @@ const BusinessAccount = () => {
     const [passwordValidation, setPasswordValidation] = useState("")
     const [emailValidation, setEmailValidation] = useState("")
     const [categoryValidation, setCategoryValidation] = useState("")
+
+    const [loading, setLoading] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
 
     const data = [
         { label: 'Taxi', value: 'Taxi' },
@@ -49,7 +56,29 @@ const BusinessAccount = () => {
             setPasswordValidation("Required")
         }
         else {
-            alert("Succeed")
+            const body = {
+                email: email,
+                password: password
+            }
+            try {
+                if (value == "Taxi") {
+                    setLoading(true)
+                    const resp = await TaxiServices.TaxiLogin(body)
+
+                    if (resp.data) {
+                        console.log(resp.data)
+                        setLoading(false)
+                        await save_data("user", resp.data[0])
+                        // navigation.replace("TabScreens")
+                        navigation.reset({ index: 0, routes: [{ name: 'TaxiDriverTabScreens' }] });
+                    }
+                }
+            } catch (error) {
+                setShowAlert(true)
+                setLoading(false)
+                console.log("Error: " + error)
+            }
+
         }
 
 
@@ -57,6 +86,23 @@ const BusinessAccount = () => {
 
     return (
         <SafeAreaView style={styles.maincontainer}>
+            <Loader loading={loading} setLoading={setLoading} />
+            <AwesomeAlert
+                show={showAlert}
+                showProgress={false}
+                title="Error"
+                message="Invalid Credentials"
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="Cancel"
+                confirmText="Sign Up"
+                confirmButtonColor="green"
+                cancelButtonColor='red'
+                onCancelPressed={() => { setShowAlert(false) }}
+                onConfirmPressed={() => { setShowAlert(false), navigation.replace("BusinessAccountSignup") }}
+            />
             <ScrollView contentContainerStyle={styles.maincontent}>
                 <View style={{ alignItems: "center" }}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
@@ -81,6 +127,7 @@ const BusinessAccount = () => {
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                             <TextInput
+                                autoCapitalize='none'
                                 style={styles.textInput}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 placeholder={Languages.ba_login_email}
@@ -110,7 +157,7 @@ const BusinessAccount = () => {
                         <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.ba_login_btn_txt}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
+                        <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccount") }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.ba_login_pa_btn_txt}</Text>
                         </TouchableOpacity>
                     </View>

@@ -4,8 +4,9 @@ import { Colors } from "../../constants/Colors";
 export const styles = StyleSheet.create({
     maincontainer: {
         flex: 1,
-        backgroundColor: Colors.PrimaryColor,
+        backgroundColor: Colors.WhiteColor,
         justifyContent: "center",
+
     },
     maincontent: {
         // justifyContent: "center",
@@ -14,12 +15,7 @@ export const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        flexGrow: 1,
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
         marginHorizontal: 20,
-        paddingBottom: 20
     },
     image: {
         width: 200,
@@ -42,7 +38,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 20,
         paddingVertical: 15,
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "center"
 
     },
     loginHeading: {
@@ -110,11 +107,10 @@ export const styles = StyleSheet.create({
         borderColor: Colors.PrimaryColor,
     },
     rowcontainer: {
-        flex: 1,
-        // height:50,
+        height: 50,
         flexDirection: "row",
         marginVertical: 5,
-        marginHorizontal: 5
+        marginHorizontal: 15
     },
     btn: {
         backgroundColor: Colors.PrimaryColor,
@@ -162,5 +158,32 @@ export const styles = StyleSheet.create({
     datetext: {
         color: Colors.PrimaryColor,
         marginLeft: 5
+    },
+    fieldName: {
+        textAlign: "left",
+        width: "100%",
+        left: 10,
+        color: Colors.PrimaryColor
+    },
+    imageBtn: {
+        backgroundColor: Colors.PrimaryColor,
+        paddingHorizontal: 40,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginHorizontal: 15,
+        marginTop: 5
+    },
+    imageBtnText: {
+        color: Colors.WhiteColor,
+        textAlign: "center"
+    },
+    imageContainer: {
+        alignItems: "center"
+    },
+    taxiImage: {
+        width: 200,
+        height: 200,
+        margin: 10,
+        borderRadius: 10
     }
 })

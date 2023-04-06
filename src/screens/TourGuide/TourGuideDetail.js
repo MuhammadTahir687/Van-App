@@ -8,11 +8,14 @@ import Trip3 from '../../assets/Trip3.jpg';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import TourGuideCardList from '../../components/TourGuideCard/TourGuideCardList';
 
-const TourGuideDetail = ({ route }) => {
+const TourGuideDetail = ({ route, navigation }) => {
 
     const { width, height } = useWindowDimensions()
     const data = route?.params?.data
-    const images = [{ id: 1, image: Trip1 }, { id: 2, image: Trip2 }, { id: 3, image: Trip3 }]
+    const placesData = route?.params?.placesData
+    const images = [{ id: 1, image: data?.place_image_url }]
+
+    const filterPlacesData = placesData?.filter((item) => item?.guide_code == data?.guide_code)
 
     return (
         <SafeAreaView style={styles.tourGuideDetailContainer}>
@@ -21,9 +24,9 @@ const TourGuideDetail = ({ route }) => {
                     <SwiperFlatList
                         showPagination
                         paginationActiveColor={Colors.PrimaryColor}
-                        data={images}
+                        data={data?.trips_view_url}
                         renderItem={({ item }) => (
-                            <Image source={item.image} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>
@@ -34,14 +37,30 @@ const TourGuideDetail = ({ route }) => {
                 </ImageBackground> */}
                 <View>
                     <View style={styles.tourGuideInfoContainer}>
-                        <Text style={styles.tourGuideName}>{data?.name}</Text>
-                        {/* <Text style={styles.tourGuidePrice}>$ {data?.price}</Text> */}
+                        <Text style={styles.tourGuideName}>{data?.guide_name}</Text>
+
+                        {/* <Text style={styles.tourGuidePrice}>{data?.currency + " " + data?.trip_fee}</Text> */}
                     </View>
-                    <Text style={styles.tourGuideAddress}>{data?.address}</Text>
-                    <Text style={styles.aboutItemHeading}>About this Trip</Text>
-                    <Text style={styles.aboutText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</Text>
+
+                    <View style={styles.addressLimitContainer}>
+                        <Text style={styles.tourGuideAddress}>{data?.city + ", " + data?.country}</Text>
+                        {/* <Text style={styles.tourGuideAddress}>Limit:{data?.visitors_limit}</Text> */}
+                    </View>
+
+
+                    <Text style={styles.aboutItemHeading}>Tour Places</Text>
+                    {filterPlacesData?.map((item, index) => (
+                        <TouchableOpacity onPress={() => { navigation.navigate("TourPlacesDetail", { data: item }) }} key={index} style={{ flex: 1, marginVertical: 5, marginHorizontal: 10, flexDirection: "row" }}>
+                            <Image source={{ uri: item?.place_image_url }} style={{ width: "50%", height: 100, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }} />
+                            <View style={{ backgroundColor: "white", elevation: 3, width: "50%", borderTopRightRadius: 10, borderBottomRightRadius: 10, paddingLeft: 10, justifyContent: "center" }}>
+                                <Text style={{ fontWeight: "bold" }}>{item?.trip_name}</Text>
+                                <Text>Price: {item?.currency + " " + item?.trip_fee}</Text>
+                                <Text>Meeting Place: {item?.meeting_place}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))}
                 </View>
-                <View>
+                {/* <View>
                     <View style={{ ...styles.cardContainer, backgroundColor: "#3CADA9" }}>
                         <Text style={styles.cardHeading}>Basic $200</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
@@ -52,7 +71,7 @@ const TourGuideDetail = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.cardContainer, backgroundColor: '#3D62C1' }}>
-                        <Text style={styles.cardHeading}>Basic $200</Text>
+                        <Text style={styles.cardHeading}>Standard $500</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
                         <TourGuideCardList text={"Hotel Stay"} />
                         <TourGuideCardList text={"Sightseeing (Tickets Not Included)"} />
@@ -61,7 +80,7 @@ const TourGuideDetail = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.cardContainer, backgroundColor: "#FE3773" }}>
-                        <Text style={styles.cardHeading}>Basic $200</Text>
+                        <Text style={styles.cardHeading}>Premium $700</Text>
                         <TourGuideCardList text={"7 Days, 6 NIghts"} />
                         <TourGuideCardList text={"Hotel Stay"} />
                         <TourGuideCardList text={"Sightseeing (Tickets Not Included)"} />
@@ -69,7 +88,7 @@ const TourGuideDetail = ({ route }) => {
                             <Text style={{ color: "#FE3773" }}>Choose Plan</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
             </ScrollView>
         </SafeAreaView>
     )
@@ -93,4 +112,5 @@ const styles = StyleSheet.create({
     cardContainer: { flex: 1, margin: 10, paddingVertical: 10, borderRadius: 10 },
     cardHeading: { textAlign: "center", color: Colors.WhiteColor, fontSize: 25, fontWeight: "bold" },
     cardBtn: { borderRadius: 10, alignItems: "center", backgroundColor: Colors.WhiteColor, alignSelf: "center", margin: 10, padding: 10 },
+    addressLimitContainer: { flexDirection: "row", justifyContent: "space-between" }
 })

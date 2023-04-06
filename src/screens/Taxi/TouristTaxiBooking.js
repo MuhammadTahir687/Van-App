@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Colors';
 import { Avatar } from "react-native-elements";
@@ -7,25 +7,44 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import MeIcon from '../../assets/me-icon.png';
+import { UserServices } from '../../services/userServices';
 
 
 const TouristTaxiBooking = () => {
 
     const [location, setLocation] = useState("");
+    const [data, setData] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => { GetLocation() }, [])
+
+    useEffect(() => { GetLocation(), GetData() }, [])
 
 
-    const data = [
-        { id: 1, name: "Ali", Distance: "10 km", point: 10 },
-        { id: 2, name: "Umer", Distance: "10 km", point: 5 },
-        { id: 3, name: "David", Distance: "10 km", point: 10 },
-        { id: 4, name: "Akram", Distance: "10 km", point: 5 },
-        { id: 5, name: "Karim", Distance: "10 km", point: 10 },
-        { id: 6, name: "Jhon", Distance: "10 km", point: 5 },
-        { id: 7, name: "Thomas", Distance: "10 km", point: 10 },
-        { id: 8, name: "Nik", Distance: "10 km", point: 5 },
-    ]
+    const GetData = async () => {
+        try {
+
+            const resp = await UserServices.UserData('taxiDrivers')
+            if (resp) {
+                setData(resp.data)
+                setRefreshing(false)
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    }
+
+
+
+    // const data = [
+    //     { id: 1, name: "Ali", Distance: "10 km", point: 10 },
+    //     { id: 2, name: "Umer", Distance: "10 km", point: 5 },
+    //     { id: 3, name: "David", Distance: "10 km", point: 10 },
+    //     { id: 4, name: "Akram", Distance: "10 km", point: 5 },
+    //     { id: 5, name: "Karim", Distance: "10 km", point: 10 },
+    //     { id: 6, name: "Jhon", Distance: "10 km", point: 5 },
+    //     { id: 7, name: "Thomas", Distance: "10 km", point: 10 },
+    //     { id: 8, name: "Nik", Distance: "10 km", point: 5 },
+    // ]
 
     const GetLocation = () => {
         Geolocation.getCurrentPosition(
@@ -44,9 +63,12 @@ const TouristTaxiBooking = () => {
     };
 
     const region = { latitude: location != "" ? location?.coords?.latitude : 37.78825, longitude: location != "" ? location?.coords?.longitude : -122.4324, latitudeDelta: 0.000922, longitudeDelta: 0.000821 }
+    console.log("Images", data.map((item) => item.taxi_image_url))
 
     return (
         <SafeAreaView style={styles.container}>
+
+
             <View style={styles.header}>
                 <Text style={styles.headertext}>Taxi</Text>
             </View>
@@ -67,30 +89,43 @@ const TouristTaxiBooking = () => {
                 </MapView>
             </View>
 
-            <ScrollView style={styles.scrollcontainer}>
-                {data.map((item, index) => (
+            <ScrollView refreshControl={<RefreshControl progressBackgroundColor={Colors.PrimaryColor} colors={[Colors.WhiteColor]} refreshing={refreshing} onRefresh={() => { setRefreshing(true), GetData() }} />} style={styles.scrollcontainer}>
+                {data?.filter((item) => item.status_ready == true)?.map((item, index) => (
                     <View style={styles.listcontainer} key={index}>
-                        <Avatar
+                        {item?.taxi_image_url !== "" && item?.taxi_image_url !== undefined ? <Avatar
                             size="large"
                             rounded
                             icon={{ name: 'user', type: 'font-awesome' }}
                             source={{
-                                uri:
-                                    'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                                uri: item?.taxi_image_url,
                             }}
-                            activeOpacity={0.7}
                             containerStyle={styles.avatar}
-                        />
+                        /> :
+                            <Avatar
+                                size="large"
+                                rounded
+                                icon={{ name: 'user', type: 'font-awesome' }}
+                                title={item?.driver_name.split(" ").map((n) => n[0]).join("")}
+                                containerStyle={styles.avatar}
+                            />
+                        }
                         <View style={styles.listdetailcontainer}>
-                            <Text style={styles.name}>{item.name}</Text>
-                            <View >
-                                <Text>Point: {item.point}</Text>
-                                <Text>Distance: {item.Distance}</Text>
+                            <Text style={styles.name}>{item?.driver_name}</Text>
+                            <View>
+                                <View style={styles.modelbtncontainer}>
+                                    <Text style={{ flex: 1 }}>Model: {item?.taxi_model_name}</Text>
+                                    <TouchableOpacity onPress={() => { alert("Taxi Booked") }} style={styles.listbtn}>
+                                        <Text style={styles.btntext}>Book Now</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <Text>${item?.hire_rate}</Text>
+                                <Text>Plate#: {item?.plate_no}</Text>
+                                {/* <Text>Point: {item.point}</Text>
+                                <Text>Distance: {item.Distance}</Text> */}
                             </View>
                         </View>
-                        <TouchableOpacity onPress={() => { alert("Taxi Booked") }} style={styles.listbtn}>
-                            <Text style={styles.btntext}>Book Now</Text>
-                        </TouchableOpacity>
+
                     </View>
                 ))}
             </ScrollView>
@@ -110,6 +145,7 @@ const styles = StyleSheet.create({
     avatar: { backgroundColor: Colors.PrimaryColor, marginHorizontal: 10 },
     listdetailcontainer: { flex: 1 },
     name: { fontWeight: "bold", marginVertical: 10 },
-    listbtn: { backgroundColor: Colors.PrimaryColor, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5 },
+    listbtn: { backgroundColor: Colors.PrimaryColor, height: 30, paddingVertical: 5, borderRadius: 5, flex: 1, alignItems: "center" },
     btntext: { color: Colors.WhiteColor },
+    modelbtncontainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" }
 })
