@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -15,10 +15,13 @@ import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const EditTaxiDriverProfile = ({ route }) => {
 
     const navigation = useNavigation();
+
+    const { user, setUser } = useContext(RootContext)
 
     const userData = route?.params?.userData;
 
@@ -26,24 +29,23 @@ const EditTaxiDriverProfile = ({ route }) => {
 
     const [country, setCountry] = useState(userData?.country ?? "")
     const [countryCode, setCountryCode] = useState(userData?.country_code ?? '')
-    const [passwordVisible, setPasswordVisible] = useState(true)
     const [countryValidation, setCountryValidation] = useState("")
-    const [categoryValidation, setCategoryValidation] = useState("")
 
     const [name, setName] = useState(userData?.driver_name ?? "")
     const [email, setEmail] = useState(userData?.email ?? "")
-    const [city, setCity] = useState(userData?.email ?? "")
+    const [city, setCity] = useState(userData?.city ?? "")
     const [age, setAge] = useState("")
     const [phone, setPhone] = useState(userData?.phone ?? "")
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState(userData?.password ?? "")
     const [image, setImage] = useState(userData?.taxi_image_url ?? "")
     const [showImage, setShowImage] = useState(userData?.taxi_image_url ? true : false)
     const [currency, setCurrency] = useState(userData?.currency ?? "")
 
     const [nameValidation, setNameValidation] = useState("")
-    const [passwordValidation, setPasswordValidation] = useState("")
     const [emailValidation, setEmailValidation] = useState("")
-    const [ageValidation, setAgeValidation] = useState("")
+    const [passwordValidation, setPasswordValidation] = useState("")
+    const [passwordVisible, setPasswordVisible] = useState(true)
+    const [imageValidation, setImageValidation] = useState("")
 
 
 
@@ -62,18 +64,17 @@ const EditTaxiDriverProfile = ({ route }) => {
 
 
     const Submit = async () => {
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (name == "") setNameValidation("Required*")
-        else if (email == "") setEmailValidation("Required*")
-        else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
+        else if (password == "") setPasswordValidation("Required*")
         else if (country == "") setCountryValidation("Required*")
         else if (taxiModel == "") setTaxiModelValidation("Required*")
         else if (currency == "") setCurrencyValidation("Required*")
         else if (taxihireRate == "") setTaxiHireRateValidation("Required*")
         else if (taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
+        else if (image == "") setImageValidation("Required*")
         else {
             const taxi_body = {
-                taxi_driver_code: new Date().toDateString(),
+                taxi_driver_code: userData?.taxi_driver_code,
                 driver_name: name,
                 taxi_model_name: taxiModel,
                 taxi_image_url: image,
@@ -86,31 +87,27 @@ const EditTaxiDriverProfile = ({ route }) => {
                 city: city,
                 phone: phone,
                 email: email,
-                password: password,
-                status_ready: true,
-                registration_date: new Date(),
-                admin_approved: false,
-                admin_remarks: "Administration remarks if any...",
-                log_last_login: new Date(),
+                password: password
             }
             console.log(taxi_body)
 
-            // try {
+            try {
 
-            //     setLoading(true)
-            //     const taxiResponse = await TaxiServices.TaxiRegistration(taxi_body)
-            //     if (taxiResponse) {
-            //         console.log("Taxi response: ", taxiResponse)
-            //         setLoading(false)
-            //         navigation.replace("BusinessAccount")
-            //     }
+                setLoading(true)
+                const taxiResponse = await TaxiServices.TaxiUpdateProfile(taxi_body)
+                if (taxiResponse) {
+                    console.log("Taxi response: ", taxiResponse?.data)
+                    setLoading(false)
+                    setUser(taxiResponse?.data)
+                    navigation.goBack()
+                }
 
 
-            // } catch (error) {
-            //     setLoading(false)
-            //     console.log(error)
+            } catch (error) {
+                setLoading(false)
+                console.log(error)
 
-            // }
+            }
         }
 
 
@@ -132,11 +129,12 @@ const EditTaxiDriverProfile = ({ route }) => {
                         onChangeText={(text) => { setName(text), setNameValidation("") }}
                     />
                 </View>
-                {nameValidation && <ErrorMessage error={nameValidation} />}
-                <View style={styles.inputContainer}>
+                {nameValidation && <ErrorMessage margin={10} error={nameValidation} />}
+                {/* <View style={styles.inputContainer}>
                     <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                     <TextInput
                         autoCapitalize='none'
+                        editable={false}
                         style={styles.textInput}
                         placeholder={Languages.ba_signup_email}
                         keyboardType={"email-address"}
@@ -146,7 +144,25 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                     />
                 </View>
-                {emailValidation && <ErrorMessage error={emailValidation} />}
+                {emailValidation && <ErrorMessage error={emailValidation} />} */}
+
+                <View style={{ ...styles.inputContainer }}>
+                    <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder={Languages.ba_signup_password}
+                        secureTextEntry={passwordVisible}
+                        placeholderTextColor={Colors.PrimaryColor}
+                        value={password}
+                        onChangeText={(text) => { setPassword(text), setPasswordValidation("") }}
+
+                    />
+                    <TouchableOpacity onPress={() => { setPasswordVisible(!passwordVisible) }} >
+                        <FontAwesome5 name={passwordVisible ? "eye-slash" : "eye"} color={Colors.PrimaryColor} />
+                    </TouchableOpacity>
+
+                </View>
+                {passwordValidation && <ErrorMessage margin={10} error={passwordValidation} />}
 
 
                 <View style={styles.rowcontainer}>
@@ -158,7 +174,7 @@ const EditTaxiDriverProfile = ({ route }) => {
                             setCountry={setCountry}
                             setCountryValidation={setCountryValidation}
                         />
-                        {countryValidation && <ErrorMessage error={countryValidation} />}
+                        {countryValidation && <ErrorMessage margin={10} error={countryValidation} />}
                     </View>
 
                     <View style={{ flex: 1 }}>
@@ -177,7 +193,7 @@ const EditTaxiDriverProfile = ({ route }) => {
                 </View>
 
                 <View style={styles.rowcontainer}>
-                    <View style={{ ...styles.rowinputcontainer, marginRight: 10 }}>
+                    <View style={{ ...styles.rowinputcontainer }}>
                         <FontAwesome5 name={"phone-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                         <TextInput
                             style={styles.rowtextInput}
@@ -190,7 +206,7 @@ const EditTaxiDriverProfile = ({ route }) => {
                         />
                     </View>
 
-                    <View style={styles.rowinputcontainer}>
+                    {/* <View style={styles.rowinputcontainer}>
                         <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                         <TextInput
                             style={styles.rowtextInput}
@@ -200,7 +216,7 @@ const EditTaxiDriverProfile = ({ route }) => {
                             keyboardType={"numeric"}
                             onChangeText={(text) => { setAge(text) }}
                         />
-                    </View>
+                    </View> */}
 
                 </View>
 
@@ -211,10 +227,12 @@ const EditTaxiDriverProfile = ({ route }) => {
                         placeholder={"Enter Image Url"}
                         placeholderTextColor={Colors.PrimaryColor}
                         value={image}
-                        onChangeText={(text) => { setImage(text) }}
+                        onChangeText={(text) => { setImage(text), setImageValidation("") }}
 
                     />
                 </View>
+                {imageValidation && <ErrorMessage margin={10} error={imageValidation} />}
+
                 <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.imageBtn}>
                     <Text style={styles.imageBtnText}>Load Image</Text>
                 </TouchableOpacity>
@@ -233,7 +251,7 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                     />
                 </View>
-                {taxiModelValidation && <ErrorMessage error={taxiModelValidation} />}
+                {taxiModelValidation && <ErrorMessage margin={10} error={taxiModelValidation} />}
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                     <TextInput
@@ -246,7 +264,7 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                     />
                 </View>
-                {currencyValidation && <ErrorMessage error={currencyValidation} />}
+                {currencyValidation && <ErrorMessage margin={10} error={currencyValidation} />}
 
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
@@ -260,7 +278,7 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                     />
                 </View>
-                {taxiHireRateValidation && <ErrorMessage error={taxiHireRateValidation} />}
+                {taxiHireRateValidation && <ErrorMessage margin={10} error={taxiHireRateValidation} />}
 
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
@@ -273,7 +291,7 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                     />
                 </View>
-                {taxiPlateNumberValidation && <ErrorMessage error={taxiPlateNumberValidation} />}
+                {taxiPlateNumberValidation && <ErrorMessage margin={10} error={taxiPlateNumberValidation} />}
 
                 <View style={styles.descriptionbox}>
                     <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />

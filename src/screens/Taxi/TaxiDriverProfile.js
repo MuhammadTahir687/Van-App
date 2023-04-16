@@ -4,7 +4,7 @@ import { Colors } from '../../constants/Colors'
 import { Avatar } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { get_data } from '../../components/Storage/Storage'
+import { Switch } from 'react-native-switch';
 import { RootContext } from '../../components/ContextApi/ContextApi'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -21,9 +21,6 @@ const TaxiDriverProfile = ({ navigation }) => {
                     <Ionicons name='arrow-back' size={20} color={Colors.WhiteColor} />
                 </TouchableOpacity> */}
                     <Text style={styles.headerText}>Profile</Text>
-                    {/* <TouchableOpacity onPress={() => { navigation.navigate("BusinessAccountSignup", { userData: user, cat: "TD" }) }}>
-                    <FontAwesome name='edit' size={20} color={Colors.WhiteColor} />
-                </TouchableOpacity> */}
                 </View>
 
                 <View style={styles.profileCard}>
@@ -40,6 +37,8 @@ const TaxiDriverProfile = ({ navigation }) => {
                         />
                     </View>
                     <Text style={styles.profileName}>{user?.driver_name}</Text>
+                    <Text style={styles.profileAdminText}>Admin Approved: {user?.admin_approved == true ? "Yes" : "No"}</Text>
+
                     <Text style={styles.profileDetailHeading}>Profile Detail</Text>
                     <View style={styles.profileDetail}>
                         <Ionicons name='mail' size={20} color={Colors.PrimaryColor} />
@@ -52,10 +51,6 @@ const TaxiDriverProfile = ({ navigation }) => {
                     <View style={styles.profileDetail}>
                         <Ionicons name='earth' size={20} color={Colors.PrimaryColor} />
                         <Text style={styles.profileText}>{user?.country}</Text>
-                    </View>
-                    <View style={styles.profileDetail}>
-                        <Ionicons name='information-circle' size={20} color={Colors.PrimaryColor} />
-                        <Text style={styles.profileText}>Admin Approved: {user?.admin_approved == false ? "Not Approved" : "Approved"}</Text>
                     </View>
                 </View>
 
@@ -101,10 +96,16 @@ const styles = StyleSheet.create({
     avatar: { backgroundColor: Colors.PrimaryColor, },
     avatarContainer: { alignItems: "center" },
     profileName: { textAlign: "center", color: Colors.PrimaryColor, marginVertical: 5 },
+    profileAdminText: { textAlign: "center", color: Colors.PrimaryColor, marginBottom: 5 },
     profileText: { textAlign: "center", color: Colors.PrimaryColor, marginLeft: 10 },
     profileDetail: { flexDirection: "row", marginLeft: 10, alignItems: "center" },
     profileDetailHeading: { fontWeight: "bold", marginHorizontal: 10, marginVertical: 10, color: Colors.PrimaryColor },
     btn: { backgroundColor: Colors.WhiteColor, margin: 10, height: 50, borderRadius: 10, alignItems: "center", justifyContent: "space-between", paddingHorizontal: 10, flexDirection: "row" },
     btnText: { fontWeight: "bold", color: Colors.PrimaryColor, fontSize: 15 },
-    btnContainer: { flex: 1, justifyContent: "center", marginVertical: 10 }
+    btnContainer: { flex: 1, justifyContent: "center", marginVertical: 10 },
+    statusContainer: { marginHorizontal: 20, marginTop: 50, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 10 },
+    statusText: { fontWeight: "bold", color: Colors.PrimaryColor },
+    switchContainer: { flexDirection: "row", alignItems: "center" },
+    switchLeftText: { marginRight: 10, fontSize: 10, color: Colors.PrimaryColor },
+    switchRightText: { marginLeft: 10, fontSize: 10, color: Colors.PrimaryColor }
 })

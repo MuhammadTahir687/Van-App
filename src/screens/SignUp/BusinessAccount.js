@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacit
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation } from '@react-navigation/native';
@@ -15,6 +16,7 @@ import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
+import { AuthServices } from '../../services/authServices';
 
 const BusinessAccountSignup = ({ route }) => {
 
@@ -89,7 +91,8 @@ const BusinessAccountSignup = ({ route }) => {
     const [taxiModelValidation, setTaxiModelValidation] = useState("")
     const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
     const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
-    const [currencyValidation, setCurrencyValidation] = useState("")
+    const [currencyValidation, setCurrencyValidation] = useState("");
+    const [taxiImageValidation, setTaxiImageValidation] = useState("");
 
     //*Hotel Reservation*/
     const [hotelName, setHotelName] = useState('')
@@ -101,6 +104,8 @@ const BusinessAccountSignup = ({ route }) => {
     const [amenitiesOpen, setAmenitiesOpen] = useState(false)
     const [amenities, setamenities] = useState([])
     const [hotelDescription, setHotelDescription] = useState('')
+    const [hotelImages, setHotelImages] = useState({ showHotelImage: false, hotelImagesList: [], hotelImage: "", hotelImageValue: "" })
+
     const [hotelNameValidation, setHotelNameValidation] = useState("")
     const [hotelAddressValidation, setHotelAddressValidation] = useState("")
 
@@ -127,6 +132,7 @@ const BusinessAccountSignup = ({ route }) => {
         else if (email == "") setEmailValidation("Required*")
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
+        else if (value == "Taxi" && image == "") setTaxiImageValidation("Required*")
         else if (value == "Taxi" && taxiModel == "") setTaxiModelValidation("Required*")
         else if (value == "Taxi" && currency == "") setCurrencyValidation("Required*")
         else if (value == "Taxi" && taxihireRate == "") setTaxiHireRateValidation("Required*")
@@ -150,13 +156,36 @@ const BusinessAccountSignup = ({ route }) => {
                 phone: phone,
                 email: email,
                 password: password,
-                status_ready: true,
+                status_ready: false,
                 registration_date: new Date(),
                 admin_approved: false,
                 admin_remarks: "Administration remarks if any...",
                 log_last_login: new Date(),
             }
-            console.log(taxi_body)
+            const hotelMangersBody = {
+                "manager_code": "HM",
+                "manager_name": name,
+                "hotel_name": hotelName,
+                "hotel_image_url": hotelImages?.hotelImagesList[0],
+                "hotel_view_url": hotelImages?.hotelImagesList,
+                "country": country,
+                "country_code": countryCode,
+                "city": city,
+                "foundation_date": hotelDate,
+                "brief_introduction": hotelDescription,
+                "number_of_rooms": hotelRooms,
+                "hotel_address": hotelAddress,
+                "phone": phone,
+                "email": email,
+                "password": password,
+                "registration_date": new Date(),
+                "amenities": amenities,
+                "admin_approved": true,
+                "admin_remarks": "Administration remarks if any...",
+                "log_last_login": new Date()
+            }
+
+            console.log("Hotel Mangers Body", hotelMangersBody)
 
             try {
                 if (value == "Taxi") {
@@ -165,18 +194,36 @@ const BusinessAccountSignup = ({ route }) => {
                     if (taxiResponse) {
                         console.log("Taxi response: ", taxiResponse)
                         setLoading(false)
+                        alert("Taxi Driver Registered Successfully")
+                        navigation.replace("BusinessAccount")
+                    }
+                }
+                else if (value == "Hotel Reservation") {
+                    setLoading(true)
+                    const hotelManagersResponse = await AuthServices.HM_Register(hotelMangersBody)
+                    if (hotelManagersResponse) {
+                        console.log("Hotel Manager response: ", hotelManagersResponse)
+                        setLoading(false)
+                        alert("Hotel Manager Registered Successfully")
                         navigation.replace("BusinessAccount")
                     }
                 }
 
             } catch (error) {
                 setLoading(false)
-                console.log(error)
+                alert(error?.response?.data)
+                console.log(error?.response?.data)
 
             }
         }
 
 
+    }
+
+
+    const RemoveHotelImage = (item) => {
+        const filterImages = hotelImages?.hotelImagesList?.filter(image => image != item)
+        setHotelImages({ ...hotelImages, hotelImagesList: filterImages })
     }
 
     return (
@@ -313,10 +360,12 @@ const BusinessAccountSignup = ({ route }) => {
                                         placeholder={"Enter Image Url"}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={image}
-                                        onChangeText={(text) => { setImage(text) }}
+                                        onChangeText={(text) => { setImage(text), setTaxiImageValidation("") }}
 
                                     />
                                 </View>
+                                {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
+
                                 <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
                                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                                 </TouchableOpacity>
@@ -418,6 +467,35 @@ const BusinessAccountSignup = ({ route }) => {
                                     />
                                 </View>
                                 {hotelAddressValidation && <ErrorMessage error={hotelAddressValidation} />}
+
+                                {/* ==================Hotel Image=================== */}
+                                <View style={styles.inputContainer}>
+                                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder={"Enter Image Url"}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={hotelImages?.hotelImageValue}
+                                        onChangeText={(text) => { setHotelImages({ ...hotelImages, hotelImage: text, hotelImageValue: text }) }}
+
+                                    />
+                                </View>
+                                <TouchableOpacity onPress={() => { setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" }) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, marginVertical: 10, paddingVertical: 10, borderRadius: 10 }}>
+                                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                                </TouchableOpacity>
+                                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                                    {hotelImages?.hotelImagesList?.length > 0 &&
+                                        hotelImages?.hotelImagesList?.map((item, index) => (
+                                            <>
+                                                {/* <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={{ top: 15, zIndex: 10, left: 65 }}>
+                                                    <Ionicons name={"close"} size={15} style={{ backgroundColor: "red", color: "white", borderRadius: 50 }} />
+                                                </TouchableOpacity> */}
+                                                <Image source={{ uri: item?.url }} style={{ width: 50, height: 50, margin: 10, borderRadius: 10 }} />
+                                            </>
+
+                                        ))
+                                    }
+                                </View>
                                 <View style={{ ...styles.dropdowncontainer, marginTop: 5 }}>
                                     <DropdownPicker
                                         multiple={true}
@@ -488,7 +566,7 @@ const BusinessAccountSignup = ({ route }) => {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 

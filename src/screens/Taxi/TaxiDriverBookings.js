@@ -24,8 +24,6 @@ const TaxiDriverBookings = () => {
 
 
     const [status, setStatus] = useState(false)
-    const [status1, setStatus1] = useState(false)
-
 
     const Submit = async (val) => {
         try {
@@ -34,9 +32,11 @@ const TaxiDriverBookings = () => {
                 console.log(response.data)
                 await save_data("user", response.data)
                 UserData()
+                alert("Status Changed Successfully")
             }
 
         } catch (error) {
+            alert("Something went wrong")
             console.log("error: ", error)
         }
     }
@@ -63,13 +63,6 @@ const TaxiDriverBookings = () => {
                     />
                     <Text style={{ marginLeft: 10, fontSize: 10 }}>Active</Text>
                 </View>
-            </View>
-            <View style={styles.statusContainer}>
-                <Text style={styles.statusText}>Taxi Driver Status (Review Only)</Text>
-                <TouchableOpacity onPress={() => setStatus1(!status1)} style={{ right: 20, backgroundColor: status1 == false ? "red" : "green", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
-                    <Text style={{ color: "white" }}>{status1 == false ? "Inactive" : "Active"}</Text>
-                </TouchableOpacity>
-
             </View>
 
             <View style={styles.dataContainer}>

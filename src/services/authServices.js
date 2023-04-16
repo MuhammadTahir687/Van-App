@@ -6,5 +6,8 @@ export const AuthServices = {
     },
     PA_Register(body) {
         return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/insert/one_all?NameCollection=tourists", body)
+    },
+    HM_Register(body) {
+        return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/insert/one_all?NameCollection=hotelManagers", body)
     }
 }

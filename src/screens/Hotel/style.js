@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     textInput: {
         marginHorizontal: 5,
         height: 50,
-        width: "90%",
+        width: "100%",
         color: Colors.PrimaryColor
     },
     rowtextInput: {
@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         borderWidth: 1,
         borderRadius: 10,
-        marginHorizontal: 4,
+        marginHorizontal: 15,
         marginVertical: 5,
         height: 50,
         borderColor: Colors.PrimaryColor,
@@ -185,5 +185,6 @@ export const styles = StyleSheet.create({
         height: 200,
         margin: 10,
         borderRadius: 10
-    }
+    },
+    imageLoadBtn: { alignItems: "center", backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, marginVertical: 10, paddingVertical: 10, borderRadius: 10, marginHorizontal: 15 },
 })
