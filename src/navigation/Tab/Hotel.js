@@ -8,6 +8,8 @@ import TaxiDriverCommision from '../../screens/Taxi/TaxiDriverCommision';
 import TaxiDriverProfile from '../../screens/Taxi/TaxiDriverProfile';
 import HotelRooms from '../../screens/Hotel/HotelRooms';
 import HotelProfile from '../../screens/Hotel/HotelProfile';
+import HotelBookings from '../../screens/Hotel/HotelBookings';
+import HotelPreviousBusiness from '../../screens/Hotel/HotelPreviousBusiness';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,6 +20,8 @@ const HotelTabScreens = () => {
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
                     if (route.name === 'HotelRooms') { iconName = focused ? 'ios-business' : 'ios-business-outline' }
+                    if (route.name === 'HotelBookings') { iconName = focused ? 'ios-business' : 'ios-business-outline' }
+                    if (route.name === 'HotelPreviousBusiness') { iconName = focused ? 'ios-business' : 'ios-business-outline' }
                     if (route.name === 'Profile') { iconName = focused ? 'person-circle' : 'person-circle-outline' }
 
                     return <Ionicons name={iconName} size={size} color={color} />;
@@ -28,7 +32,9 @@ const HotelTabScreens = () => {
                 tabBarStyle: { paddingBottom: 5 },
                 tabBarHideOnKeyboard: true
             })}>
+            <Tab.Screen name="HotelBookings" options={{ tabBarLabel: "Bookings" }} component={HotelBookings} />
             <Tab.Screen name="HotelRooms" options={{ tabBarLabel: "Hotel Rooms" }} component={HotelRooms} />
+            <Tab.Screen name="HotelPreviousBusiness" options={{ tabBarLabel: "Business" }} component={HotelPreviousBusiness} />
             <Tab.Screen name="Profile" component={HotelProfile} />
         </Tab.Navigator>
     )

@@ -187,4 +187,8 @@ export const styles = StyleSheet.create({
         borderRadius: 10
     },
     imageLoadBtn: { alignItems: "center", backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, marginVertical: 10, paddingVertical: 10, borderRadius: 10, marginHorizontal: 15 },
+    loadImageBtn: { backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10, marginHorizontal: 15, alignItems: "center" },
+    roomImage: { width: 200, height: 200, margin: 10, borderRadius: 10 },
+    imageContainer: { alignItems: "center" }
+
 })

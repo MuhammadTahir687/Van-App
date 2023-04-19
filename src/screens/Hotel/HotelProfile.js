@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { get_data } from '../../components/Storage/Storage'
 import { RootContext } from '../../components/ContextApi/ContextApi'
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 const HotelProfile = ({ navigation }) => {
@@ -15,51 +16,73 @@ const HotelProfile = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.headerContainer}>
-                {/* <TouchableOpacity onPress={() => { navigation.goBack() }}>
+            <ScrollView style={{ flexGrow: 1 }}>
+                <View style={styles.headerContainer}>
+                    {/* <TouchableOpacity onPress={() => { navigation.goBack() }}>
                     <Ionicons name='arrow-back' size={20} color={Colors.WhiteColor} />
                 </TouchableOpacity> */}
-                <Text style={styles.headerText}>Profile</Text>
-                {/* <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccountSignup") }}>
+                    <Text style={styles.headerText}>Profile</Text>
+                    {/* <TouchableOpacity onPress={() => { navigation.navigate("PersonelAccountSignup") }}>
                     <FontAwesome name='edit' size={20} color={Colors.WhiteColor} />
                 </TouchableOpacity> */}
-            </View>
+                </View>
 
-            <View style={styles.profileCard}>
-                <View style={styles.avatarContainer}>
-                    <Avatar
-                        size="medium"
-                        rounded
-                        icon={{ name: 'user', type: 'font-awesome' }}
-                        activeOpacity={0.7}
-                        containerStyle={styles.avatar}
-                    />
+                <View style={styles.profileCard}>
+                    <View style={styles.avatarContainer}>
+                        <Avatar
+                            size="medium"
+                            rounded
+                            icon={{ name: 'user', type: 'font-awesome' }}
+                            source={{
+                                uri: user?.hotel_image_url?.url,
+                            }}
+                            activeOpacity={0.7}
+                            containerStyle={styles.avatar}
+                        />
+                    </View>
+                    <Text style={styles.profileName}>{user?.manager_name}</Text>
+                    <Text style={styles.profileName}>Admin Approved: {user?.admin_approved == true ? "Yes" : "No"}</Text>
+
+                    <Text style={styles.profileDetailHeading}>Profile Detail</Text>
+                    <View style={styles.profileDetail}>
+                        <Ionicons name='mail' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>{user?.email}</Text>
+                    </View>
+                    <View style={styles.profileDetail}>
+                        <Ionicons name='call' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>{user?.phone}</Text>
+                    </View>
+                    <View style={styles.profileDetail}>
+                        <Ionicons name='earth' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>{user?.country}</Text>
+                    </View>
                 </View>
-                <Text style={styles.profileName}>{user?.tourist_name}</Text>
-                <Text style={styles.profileDetailHeading}>Profile Detail</Text>
-                <View style={styles.profileDetail}>
-                    <Ionicons name='mail' size={20} color={Colors.PrimaryColor} />
-                    <Text style={styles.profileText}>{user?.email}</Text>
+                <View style={styles.profileCard}>
+                    <Text style={styles.profileDetailHeading}>Hotel Detail</Text>
+                    <View style={styles.profileDetail}>
+                        <Ionicons name='ios-business' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>Hotel: {user?.hotel_name}</Text>
+                    </View>
+                    <View style={styles.profileDetail}>
+                        <Ionicons name='location' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>Address: {user?.hotel_address}</Text>
+                    </View>
+                    <View style={styles.profileDetail}>
+                        <Ionicons name='earth' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>Rooms: {user?.number_of_rooms}</Text>
+                    </View>
                 </View>
-                <View style={styles.profileDetail}>
-                    <Ionicons name='call' size={20} color={Colors.PrimaryColor} />
-                    <Text style={styles.profileText}>{user?.phone}</Text>
+                <View style={styles.btnContainer}>
+                    {/* <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditHotelManagerProfile", { userData: user }) }}>
+                        <Text style={styles.btnText}>Edit Profile</Text>
+                        <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
+                    </TouchableOpacity> */}
+                    <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'PersonelAccount' }], }) }} style={styles.btn}>
+                        <Text style={styles.btnText}>Log Out</Text>
+                        <Ionicons name='log-out-outline' size={20} color={Colors.PrimaryColor} />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.profileDetail}>
-                    <Ionicons name='earth' size={20} color={Colors.PrimaryColor} />
-                    <Text style={styles.profileText}>{user?.country}</Text>
-                </View>
-            </View>
-            <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditTouristProfile", { userData: user }) }}>
-                    <Text style={styles.btnText}>Edit Profile</Text>
-                    <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'PersonelAccount' }], }) }} style={styles.btn}>
-                    <Text style={styles.btnText}>Log Out</Text>
-                    <Ionicons name='log-out-outline' size={20} color={Colors.PrimaryColor} />
-                </TouchableOpacity>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -79,5 +102,5 @@ const styles = StyleSheet.create({
     profileDetailHeading: { fontWeight: "bold", marginHorizontal: 10, marginVertical: 10, color: Colors.PrimaryColor },
     btn: { backgroundColor: Colors.WhiteColor, margin: 10, height: 50, borderRadius: 10, alignItems: "center", justifyContent: "space-between", paddingHorizontal: 10, flexDirection: "row" },
     btnText: { fontWeight: "bold", color: Colors.PrimaryColor, fontSize: 15 },
-    btnContainer: { flex: 1, justifyContent: "center" }
+    btnContainer: { flex: 1, justifyContent: "center", marginTop: 10 }
 })

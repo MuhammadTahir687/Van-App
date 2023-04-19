@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -15,8 +15,13 @@ import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
+import { HotelServices } from '../../services/hotelServices';
+import { RootContext } from '../../components/ContextApi/ContextApi';
+
+
 const HotelRooms = () => {
 
+    const { user } = useContext(RootContext)
     const [loading, setLoading] = useState(false)
 
     const [roomName, setRoomName] = useState("")
@@ -25,11 +30,14 @@ const HotelRooms = () => {
     const [roomPrice, setRoomPrice] = useState("")
     const [roomDescription, setRoomDescription] = useState("")
 
-    const [hotelImages, setHotelImages] = useState({ showHotelImage: false, hotelImagesList: [], hotelImage: "", hotelImageValue: "" })
+    const [image, setImage] = useState("")
+    const [showImage, setShowImage] = useState(true)
 
     const [showDate, setShowDate] = useState(false)
     const [roomAvailableDate, setRoomAvailableDate] = useState(new Date())
     const [showRoomDatePlaceholder, setShowRoomDatePlaceholder] = useState(true)
+
+
 
     const [roomNameValidation, setRoomNameValidation] = useState("")
     const [roomTypeValidation, setRoomTypeValidation] = useState("")
@@ -58,18 +66,18 @@ const HotelRooms = () => {
     const Submit = async () => {
         if (roomName == "") setRoomNameValidation("Required*")
         else if (roomType == "") setRoomTypeValidation("Required*")
-        else if (!hotelImages?.hotelImagesList.length > 0) setRoomImageValidation("Required*")
+        else if (image == "") setRoomImageValidation("Required*")
         else if (currency == "") setRoomTypeValidation("Required*")
         else if (roomPrice == "") setRoomPriceValidation("Required*")
         else if (roomDescription == "") setRoomDescriptionValidation("Required*")
         else if (roomAvailableDate == "") setRoomAvailableDateValidation("Required*")
         else {
             const body = {
-                "manager_code": "HM-101",
-                "room_code": "HR-101",
+                "manager_code": user?.manager_code,
+                "room_code": new Date(),
                 "room_type": roomType,
                 "room_name": roomName,
-                "room_image_url": hotelImages?.hotelImagesList[0],
+                "room_image_url": image,
                 "room_description": roomDescription,
                 "currency": currency,
                 "unit_price": roomPrice,
@@ -78,6 +86,27 @@ const HotelRooms = () => {
                 "admin_remarks": ""
             }
             console.log(body)
+            setLoading(true)
+            try {
+                const response = await HotelServices.Add_HotelRooms(body)
+                if (response) {
+                    console.log(response?.data)
+                    setLoading(false)
+                    setRoomName("")
+                    setRoomType("")
+                    setCurrency("")
+                    setRoomPrice("")
+                    setRoomDescription("")
+                    setImage("")
+                    setShowImage(false)
+                    setShowDate(false)
+                    setShowRoomDatePlaceholder(true)
+                }
+            } catch (error) {
+                setLoading(false)
+                alert(error?.response?.data)
+
+            }
         }
     }
 
@@ -116,32 +145,23 @@ const HotelRooms = () => {
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                     <TextInput
-                        style={{ ...styles.textInput, paddingRight: 20 }}
+                        style={{ ...styles.textInput, paddingRight: 12 }}
                         placeholder={"Enter Image Url"}
                         placeholderTextColor={Colors.PrimaryColor}
-                        value={hotelImages?.hotelImageValue}
-                        onChangeText={(text) => { setHotelImages({ ...hotelImages, hotelImage: text, hotelImageValue: text }), setRoomImageValidation("") }}
+                        value={image}
+                        onChangeText={(text) => { setImage(text), setRoomImageValidation("") }}
 
                     />
                 </View>
-                {roomImageValidation && <ErrorMessage margin={10} error={roomImageValidation} />}
+                {roomImageValidation && <ErrorMessage error={roomImageValidation} />}
 
-                <TouchableOpacity onPress={() => { setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" }) }} style={styles.imageLoadBtn}>
+                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.loadImageBtn}>
                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                 </TouchableOpacity>
-                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                    {hotelImages?.hotelImagesList?.length > 0 &&
-                        hotelImages?.hotelImagesList?.map((item, index) => (
-                            <>
-                                {/* <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={{ top: 15, zIndex: 10, left: 65 }}>
-                                                    <Ionicons name={"close"} size={15} style={{ backgroundColor: "red", color: "white", borderRadius: 50 }} />
-                                                </TouchableOpacity> */}
-                                <Image source={{ uri: item?.url }} style={{ width: 50, height: 50, margin: 10, borderRadius: 10 }} />
-                            </>
-
-                        ))
-                    }
-                </View>
+                {showImage == true && image != "" &&
+                    <View style={styles.imageContainer}>
+                        <Image source={{ uri: image }} style={styles.roomImage} />
+                    </View>}
                 <View style={styles.inputContainer}>
                     <MaterialIcons name={"meeting-room"} color={Colors.PrimaryColor} />
                     <TextInput

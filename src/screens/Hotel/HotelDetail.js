@@ -26,7 +26,7 @@ const HotelDetail = ({ route, navigation }) => {
                         paginationActiveColor={Colors.PrimaryColor}
                         data={data?.hotel_view_url}
                         renderItem={({ item }) => (
-                            <Image source={{ uri: item }} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item?.url }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>

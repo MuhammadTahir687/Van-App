@@ -130,8 +130,9 @@ export const styles = StyleSheet.create({
     },
     dropdowncontainer: {
         zIndex: 1,
-        width: '97%',
+        width: '91%',
         marginBottom: 5,
+        marginHorizontal: 15
     },
     languagedropdowncontainer: {
         zIndex: 1,
@@ -143,7 +144,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         borderWidth: 1,
         borderRadius: 10,
-        marginHorizontal: 4,
+        marginHorizontal: 15,
         marginVertical: 5,
         height: 50,
         borderColor: Colors.PrimaryColor,

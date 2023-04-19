@@ -16,11 +16,11 @@ const HotelRoomDetail = ({ route, navigation }) => {
             <ScrollView style={{ flexGrow: 1 }}>
                 <View style={styles.swiperContainer}>
                     <SwiperFlatList
-                        // showPagination
+                        showPagination
                         paginationActiveColor={Colors.PrimaryColor}
                         data={images}
                         renderItem={({ item }) => (
-                            <Image source={{ uri: item.image }} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item?.image }} style={{ width: width, height: 250 }} />
                         )}
                     />
                 </View>

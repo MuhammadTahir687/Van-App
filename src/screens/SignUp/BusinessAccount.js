@@ -163,7 +163,7 @@ const BusinessAccountSignup = ({ route }) => {
                 log_last_login: new Date(),
             }
             const hotelMangersBody = {
-                "manager_code": "HM",
+                "manager_code": new Date(),
                 "manager_name": name,
                 "hotel_name": hotelName,
                 "hotel_image_url": hotelImages?.hotelImagesList[0],
@@ -180,7 +180,7 @@ const BusinessAccountSignup = ({ route }) => {
                 "password": password,
                 "registration_date": new Date(),
                 "amenities": amenities,
-                "admin_approved": true,
+                "admin_approved": false,
                 "admin_remarks": "Administration remarks if any...",
                 "log_last_login": new Date()
             }
