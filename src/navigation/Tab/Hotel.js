@@ -1,15 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import Profile from '../../screens/Profile/Profile';
-import TaxiDriverBookings from '../../screens/Taxi/TaxiDriverBookings';
-import TaxiPreviousBusiness from '../../screens/Taxi/TaxiPreviousBusiness';
-import TaxiDriverCommision from '../../screens/Taxi/TaxiDriverCommision';
-import TaxiDriverProfile from '../../screens/Taxi/TaxiDriverProfile';
-import HotelRooms from '../../screens/Hotel/HotelRooms';
 import HotelProfile from '../../screens/Hotel/HotelProfile';
 import HotelBookings from '../../screens/Hotel/HotelBookings';
 import HotelPreviousBusiness from '../../screens/Hotel/HotelPreviousBusiness';
+import HotelRooms from '../../screens/Hotel/HotelRooms';
 
 const Tab = createBottomTabNavigator();
 

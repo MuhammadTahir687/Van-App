@@ -84,6 +84,7 @@ const BusinessAccount = () => {
                     if (resp.data) {
                         console.log(resp.data)
                         setLoading(false)
+                        await save_data("user", resp.data[0])
                         setUser(resp.data[0])
                         navigation.reset({ index: 0, routes: [{ name: 'HotelTabScreens' }] });
                     }

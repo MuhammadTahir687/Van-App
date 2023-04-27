@@ -186,5 +186,33 @@ export const styles = StyleSheet.create({
         height: 200,
         margin: 10,
         borderRadius: 10
+    },
+    imageContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap"
+    },
+    loadImageBtn: {
+        backgroundColor: Colors.PrimaryColor,
+        paddingHorizontal: 40,
+        marginVertical: 10,
+        paddingVertical: 10,
+        borderRadius: 10
+    },
+    removeImageIcon: {
+        borderRadius: 50,
+        backgroundColor: "red",
+        alignSelf: "flex-end",
+        position: "absolute",
+        right: 5,
+        zIndex: 10
+    },
+    closeIcon: {
+        color: "white",
+    },
+    hotelImages: {
+        width: 50,
+        height: 50,
+        margin: 10,
+        borderRadius: 10
     }
 })

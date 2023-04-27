@@ -4,6 +4,7 @@ import { styles } from './style';
 import { Colors } from '../../constants/Colors'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
@@ -16,6 +17,7 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import { HotelServices } from '../../services/hotelServices';
 
 const EditHotelManagerProfile = ({ route }) => {
 
@@ -52,7 +54,7 @@ const EditHotelManagerProfile = ({ route }) => {
 
     const [hotelName, setHotelName] = useState(userData?.hotel_name ?? '')
     const [hotelAddress, setHotelAddress] = useState(userData?.hotel_address ?? '')
-    const [hotelRooms, setHotelRooms] = useState(userData?.hotel_rooms ?? '')
+    const [hotelRooms, setHotelRooms] = useState(userData?.number_of_rooms ?? '')
     const [showDate, setShowDate] = useState(false)
     const [hotelDate, setHotelDate] = useState(new Date(userData?.foundation_date))
     const [showHotelPlaceholder, setShowHotelPlaceholder] = useState(false)
@@ -94,43 +96,59 @@ const EditHotelManagerProfile = ({ route }) => {
     }
 
 
+    const AddHotelImages = () => {
+        if (!hotelImages?.hotelImage == "") {
+            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" })
+        }
+
+
+    }
+
+    const RemoveHotelImage = (item) => {
+        const filterImages = hotelImages?.hotelImagesList?.filter(image => image?.id != item?.id)
+        setHotelImages({ ...hotelImages, hotelImagesList: filterImages })
+    }
+
+
 
     const Submit = async () => {
         if (name == "") setNameValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else if (country == "") setCountryValidation("Required*")
-        else if (!hotelImages?.hotelImagesList?.length > 0 == "") setHotelImagesValidation("Required*")
+        else if (!hotelImages?.hotelImagesList?.length > 0) setHotelImagesValidation("Required*")
         else {
-            const taxi_body = {
-                taxi_driver_code: userData?.taxi_driver_code,
-                driver_name: name,
-                taxi_model_name: taxiModel,
-                taxi_image_url: image,
-                brief_introduction: taxiIntroduction,
-                currency: currency,
-                hire_rate: taxihireRate,
-                plate_no: taxiPlateNumber,
-                country: country,
-                country_code: countryCode,
-                city: city,
-                phone: phone,
-                email: email,
-                password: password
+
+            const managerCode = user?.manager_code;
+
+            const body = {
+                "manager_name": name,
+                "hotel_name": hotelName,
+                "hotel_image_url": hotelImages?.hotelImagesList[0],
+                "hotel_view_url": hotelImages?.hotelImagesList,
+                "country": country,
+                "country_code": countryCode,
+                "city": city,
+                "foundation_date": hotelDate,
+                "brief_introduction": hotelDescription,
+                "number_of_rooms": hotelRooms,
+                "hotel_address": hotelAddress,
+                "phone": phone,
+                "email": email,
+                "password": password,
+                "registration_date": new Date(),
+                "amenities": amenities
             }
-            console.log(taxi_body)
 
             try {
 
                 setLoading(true)
-                const taxiResponse = await TaxiServices.TaxiUpdateProfile(taxi_body)
-                if (taxiResponse) {
-                    console.log("Taxi response: ", taxiResponse?.data)
+                const response = await HotelServices.Edit_HotelManagersProfile(managerCode, body)
+                if (response) {
+                    console.log("response: ", response?.data)
                     setLoading(false)
-                    setUser(taxiResponse?.data)
+                    setUser(response?.data)
                     navigation.goBack()
                 }
-
-
             } catch (error) {
                 setLoading(false)
                 console.log(error)
@@ -281,18 +299,18 @@ const EditHotelManagerProfile = ({ route }) => {
                     />
                 </View>
                 {hotelImagesValidation && <ErrorMessage margin={10} error={hotelImagesValidation} />}
-                <TouchableOpacity onPress={() => { setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" }) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, marginVertical: 10, paddingVertical: 10, borderRadius: 10, marginHorizontal: 15, alignItems: "center" }}>
+                <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                 </TouchableOpacity>
-                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                <View style={styles.imageContainer}>
                     {hotelImages?.hotelImagesList?.length > 0 &&
                         hotelImages?.hotelImagesList?.map((item, index) => (
-                            <>
-                                {/* <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={{ top: 15, zIndex: 10, left: 65 }}>
-                                                    <Ionicons name={"close"} size={15} style={{ backgroundColor: "red", color: "white", borderRadius: 50 }} />
-                                                </TouchableOpacity> */}
-                                <Image source={{ uri: item?.url }} style={{ width: 50, height: 50, margin: 10, borderRadius: 10 }} />
-                            </>
+                            <View key={index}>
+                                <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={styles.removeImageIcon}>
+                                    <Ionicons name={"close"} size={15} style={styles.closeIcon} />
+                                </TouchableOpacity>
+                                <Image source={{ uri: item?.url }} style={styles.hotelImages} />
+                            </View>
 
                         ))
                     }

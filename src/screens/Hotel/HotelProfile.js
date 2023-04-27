@@ -73,10 +73,10 @@ const HotelProfile = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={styles.btnContainer}>
-                    {/* <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditHotelManagerProfile", { userData: user }) }}>
+                    <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditHotelManagerProfile", { userData: user }) }}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                         <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'PersonelAccount' }], }) }} style={styles.btn}>
                         <Text style={styles.btnText}>Log Out</Text>
                         <Ionicons name='log-out-outline' size={20} color={Colors.PrimaryColor} />

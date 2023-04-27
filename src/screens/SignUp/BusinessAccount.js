@@ -17,6 +17,7 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
+import { isIndexSignatureDeclaration } from 'typescript';
 
 const BusinessAccountSignup = ({ route }) => {
 
@@ -221,8 +222,16 @@ const BusinessAccountSignup = ({ route }) => {
     }
 
 
+    const AddHotelImages = () => {
+        if (!hotelImages?.hotelImage == "") {
+            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" })
+        }
+
+
+    }
+
     const RemoveHotelImage = (item) => {
-        const filterImages = hotelImages?.hotelImagesList?.filter(image => image != item)
+        const filterImages = hotelImages?.hotelImagesList?.filter(image => image?.id != item?.id)
         setHotelImages({ ...hotelImages, hotelImagesList: filterImages })
     }
 
@@ -370,6 +379,7 @@ const BusinessAccountSignup = ({ route }) => {
                                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                                 </TouchableOpacity>
                                 {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}
+
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                     <TextInput
@@ -382,6 +392,7 @@ const BusinessAccountSignup = ({ route }) => {
                                     />
                                 </View>
                                 {taxiModelValidation && <ErrorMessage error={taxiModelValidation} />}
+
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                     <TextInput
@@ -389,7 +400,6 @@ const BusinessAccountSignup = ({ route }) => {
                                         placeholder={"Currency"}
                                         placeholderTextColor={Colors.PrimaryColor}
                                         value={currency}
-
                                         onChangeText={(text) => { setCurrency(text), setCurrencyValidation("") }}
 
                                     />
@@ -456,6 +466,7 @@ const BusinessAccountSignup = ({ route }) => {
                                     />
                                 </View>
                                 {hotelNameValidation && <ErrorMessage error={hotelNameValidation} />}
+
                                 <View style={styles.inputContainer}>
                                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                                     <TextInput
@@ -480,18 +491,18 @@ const BusinessAccountSignup = ({ route }) => {
 
                                     />
                                 </View>
-                                <TouchableOpacity onPress={() => { setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" }) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, marginVertical: 10, paddingVertical: 10, borderRadius: 10 }}>
+                                <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
                                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                                 </TouchableOpacity>
-                                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                                <View style={styles.imageContainer}>
                                     {hotelImages?.hotelImagesList?.length > 0 &&
                                         hotelImages?.hotelImagesList?.map((item, index) => (
-                                            <>
-                                                {/* <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={{ top: 15, zIndex: 10, left: 65 }}>
-                                                    <Ionicons name={"close"} size={15} style={{ backgroundColor: "red", color: "white", borderRadius: 50 }} />
-                                                </TouchableOpacity> */}
-                                                <Image source={{ uri: item?.url }} style={{ width: 50, height: 50, margin: 10, borderRadius: 10 }} />
-                                            </>
+                                            <View key={isIndexSignatureDeclaration}>
+                                                <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={styles.removeImageIcon}>
+                                                    <Ionicons name={"close"} size={15} style={styles.closeIcon} />
+                                                </TouchableOpacity>
+                                                <Image source={{ uri: item?.url }} style={styles.hotelImages} />
+                                            </View>
 
                                         ))
                                     }
