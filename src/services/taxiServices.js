@@ -8,6 +8,10 @@ export const TaxiServices = {
         return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/insert/one_all?NameCollection=taxiDrivers", body)
     },
     TaxiDriverStatus(id, status) {
-        return axios.patch(`https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/patchTaxiDriveReady?taxi_driver_code=${id}&setStatusReady=${status}`)
+        return axios.patch(`https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/edit/TaxiDriveReady?taxi_driver_code=${id}&setStatusReady=${status}`)
+    },
+    TaxiUpdateProfile(body) {
+        return axios.post(`https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/edit/taxiProfileSave?taxi_driver_code=${body?.taxi_driver_code}`, body)
     }
 }
+

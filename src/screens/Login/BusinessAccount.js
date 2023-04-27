@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -13,10 +13,16 @@ import { TaxiServices } from '../../services/taxiServices';
 import { save_data } from '../../components/Storage/Storage';
 import Loader from '../../components/Loader/Loader';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { AuthServices } from '../../services/authServices';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const BusinessAccount = () => {
 
+
+
     const navigation = useNavigation();
+
+    const { user, setUser } = useContext(RootContext)
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -69,8 +75,18 @@ const BusinessAccount = () => {
                         console.log(resp.data)
                         setLoading(false)
                         await save_data("user", resp.data[0])
-                        // navigation.replace("TabScreens")
                         navigation.reset({ index: 0, routes: [{ name: 'TaxiDriverTabScreens' }] });
+                    }
+                }
+                if (value == "Hotel Reservation") {
+                    setLoading(true)
+                    const resp = await AuthServices.HM_Login(body)
+                    if (resp.data) {
+                        console.log(resp.data)
+                        setLoading(false)
+                        await save_data("user", resp.data[0])
+                        setUser(resp.data[0])
+                        navigation.reset({ index: 0, routes: [{ name: 'HotelTabScreens' }] });
                     }
                 }
             } catch (error) {

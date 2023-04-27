@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     textInput: {
         marginHorizontal: 5,
         height: 50,
-        width: "90%",
+        width: "100%",
         color: Colors.PrimaryColor
     },
     rowtextInput: {
@@ -130,9 +130,8 @@ export const styles = StyleSheet.create({
     },
     dropdowncontainer: {
         zIndex: 1,
-        width: '91%',
+        width: '97%',
         marginBottom: 5,
-        marginHorizontal: 15
     },
     languagedropdowncontainer: {
         zIndex: 1,
@@ -187,32 +186,9 @@ export const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10
     },
-    imageContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap"
-    },
-    loadImageBtn: {
-        backgroundColor: Colors.PrimaryColor,
-        paddingHorizontal: 40,
-        marginVertical: 10,
-        paddingVertical: 10,
-        borderRadius: 10
-    },
-    removeImageIcon: {
-        borderRadius: 50,
-        backgroundColor: "red",
-        alignSelf: "flex-end",
-        position: "absolute",
-        right: 5,
-        zIndex: 10
-    },
-    closeIcon: {
-        color: "white",
-    },
-    hotelImages: {
-        width: 50,
-        height: 50,
-        margin: 10,
-        borderRadius: 10
-    }
+    imageLoadBtn: { alignItems: "center", backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, marginVertical: 10, paddingVertical: 10, borderRadius: 10, marginHorizontal: 15 },
+    loadImageBtn: { backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10, marginHorizontal: 15, alignItems: "center" },
+    roomImage: { width: 200, height: 200, margin: 10, borderRadius: 10 },
+    imageContainer: { alignItems: "center" }
+
 })

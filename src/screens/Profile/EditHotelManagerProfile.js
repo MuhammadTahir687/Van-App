@@ -4,6 +4,7 @@ import { styles } from './style';
 import { Colors } from '../../constants/Colors'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
@@ -16,8 +17,9 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import { HotelServices } from '../../services/hotelServices';
 
-const EditTaxiDriverProfile = ({ route }) => {
+const EditHotelManagerProfile = ({ route }) => {
 
     const navigation = useNavigation();
 
@@ -31,10 +33,9 @@ const EditTaxiDriverProfile = ({ route }) => {
     const [countryCode, setCountryCode] = useState(userData?.country_code ?? '')
     const [countryValidation, setCountryValidation] = useState("")
 
-    const [name, setName] = useState(userData?.driver_name ?? "")
+    const [name, setName] = useState(userData?.manager_name ?? "")
     const [email, setEmail] = useState(userData?.email ?? "")
     const [city, setCity] = useState(userData?.city ?? "")
-    const [age, setAge] = useState("")
     const [phone, setPhone] = useState(userData?.phone ?? "")
     const [password, setPassword] = useState(userData?.password ?? "")
     const [image, setImage] = useState(userData?.taxi_image_url ?? "")
@@ -49,17 +50,64 @@ const EditTaxiDriverProfile = ({ route }) => {
 
 
 
-    // Taxi
+    // Hotel
 
-    const [taxiModel, setTaxiModel] = useState(userData?.taxi_model_name ?? "")
-    const [taxihireRate, setTaxiHireRate] = useState(userData?.hire_rate?.toString() ?? "")
-    const [taxiPlateNumber, settaxiPlateNumber] = useState(userData?.plate_no ?? "")
-    const [taxiIntroduction, setTaxiIntroduction] = useState(userData?.brief_introduction ?? "")
-    const [taxiModelValidation, setTaxiModelValidation] = useState("")
-    const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
-    const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
-    const [currencyValidation, setCurrencyValidation] = useState("")
+    const [hotelName, setHotelName] = useState(userData?.hotel_name ?? '')
+    const [hotelAddress, setHotelAddress] = useState(userData?.hotel_address ?? '')
+    const [hotelRooms, setHotelRooms] = useState(userData?.number_of_rooms ?? '')
+    const [showDate, setShowDate] = useState(false)
+    const [hotelDate, setHotelDate] = useState(new Date(userData?.foundation_date))
+    const [showHotelPlaceholder, setShowHotelPlaceholder] = useState(false)
+    const [amenitiesOpen, setAmenitiesOpen] = useState(false)
+    const [amenities, setamenities] = useState(userData?.amenities ?? [])
+    const [hotelDescription, setHotelDescription] = useState(userData?.brief_introduction ?? '')
+    const [hotelImages, setHotelImages] = useState({ showHotelImage: userData?.hotel_view_url ? true : false, hotelImagesList: userData?.hotel_view_url ?? [], hotelImage: "", hotelImageValue: "" })
 
+    const [hotelNameValidation, setHotelNameValidation] = useState("")
+    const [hotelAddressValidation, setHotelAddressValidation] = useState("")
+    const [hotelImagesValidation, setHotelImagesValidation] = useState("")
+
+    const Amenities = [
+        { label: 'Cable TV', value: 'Cable Tv' },
+        { label: 'Internet', value: 'Internet' },
+        { label: 'Wi-Fi', value: 'Wi-Fi' },
+        { label: 'Air Conditioning', value: 'Air Conditioning' },
+        { label: 'Pool', value: 'Pool' },
+        { label: 'Resturant', value: 'Resturant' },
+        { label: 'Laundry', value: 'Laundry' },
+        { label: 'Free Parking on premises', value: 'Free Parking on premises' },
+        { label: 'Heating', value: 'Heating' },
+    ]
+
+
+    const handleDate = (event, selectedDate) => {
+        if (selectedDate) {
+            const currentDate = selectedDate;
+            setShowDate(false)
+            setHotelDate(currentDate);
+            setShowHotelPlaceholder(false)
+            console.log("Date ==", currentDate)
+        }
+        else {
+            setShowDate(false)
+            setShowHotelPlaceholder(true)
+            setHotelDate(new Date())
+        }
+    }
+
+
+    const AddHotelImages = () => {
+        if (!hotelImages?.hotelImage == "") {
+            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" })
+        }
+
+
+    }
+
+    const RemoveHotelImage = (item) => {
+        const filterImages = hotelImages?.hotelImagesList?.filter(image => image?.id != item?.id)
+        setHotelImages({ ...hotelImages, hotelImagesList: filterImages })
+    }
 
 
 
@@ -67,42 +115,40 @@ const EditTaxiDriverProfile = ({ route }) => {
         if (name == "") setNameValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else if (country == "") setCountryValidation("Required*")
-        else if (taxiModel == "") setTaxiModelValidation("Required*")
-        else if (currency == "") setCurrencyValidation("Required*")
-        else if (taxihireRate == "") setTaxiHireRateValidation("Required*")
-        else if (taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
-        else if (image == "") setImageValidation("Required*")
+        else if (!hotelImages?.hotelImagesList?.length > 0) setHotelImagesValidation("Required*")
         else {
-            const taxi_body = {
-                taxi_driver_code: userData?.taxi_driver_code,
-                driver_name: name,
-                taxi_model_name: taxiModel,
-                taxi_image_url: image,
-                brief_introduction: taxiIntroduction,
-                currency: currency,
-                hire_rate: taxihireRate,
-                plate_no: taxiPlateNumber,
-                country: country,
-                country_code: countryCode,
-                city: city,
-                phone: phone,
-                email: email,
-                password: password
+
+            const managerCode = user?.manager_code;
+
+            const body = {
+                "manager_name": name,
+                "hotel_name": hotelName,
+                "hotel_image_url": hotelImages?.hotelImagesList[0],
+                "hotel_view_url": hotelImages?.hotelImagesList,
+                "country": country,
+                "country_code": countryCode,
+                "city": city,
+                "foundation_date": hotelDate,
+                "brief_introduction": hotelDescription,
+                "number_of_rooms": hotelRooms,
+                "hotel_address": hotelAddress,
+                "phone": phone,
+                "email": email,
+                "password": password,
+                "registration_date": new Date(),
+                "amenities": amenities
             }
-            console.log(taxi_body)
 
             try {
 
                 setLoading(true)
-                const taxiResponse = await TaxiServices.TaxiUpdateProfile(taxi_body)
-                if (taxiResponse) {
-                    console.log("Taxi response: ", taxiResponse?.data)
+                const response = await HotelServices.Edit_HotelManagersProfile(managerCode, body)
+                if (response) {
+                    console.log("response: ", response?.data)
                     setLoading(false)
-                    setUser(taxiResponse?.data)
+                    setUser(response?.data)
                     navigation.goBack()
                 }
-
-
             } catch (error) {
                 setLoading(false)
                 console.log(error)
@@ -130,21 +176,6 @@ const EditTaxiDriverProfile = ({ route }) => {
                     />
                 </View>
                 {nameValidation && <ErrorMessage margin={10} error={nameValidation} />}
-                {/* <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        autoCapitalize='none'
-                        editable={false}
-                        style={styles.textInput}
-                        placeholder={Languages.ba_signup_email}
-                        keyboardType={"email-address"}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={email}
-                        onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
-
-                    />
-                </View>
-                {emailValidation && <ErrorMessage error={emailValidation} />} */}
 
                 <View style={{ ...styles.inputContainer }}>
                     <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
@@ -221,93 +252,106 @@ const EditTaxiDriverProfile = ({ route }) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                    <Fontisto name={"room"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                     <TextInput
-                        style={{ ...styles.textInput, paddingRight: 12 }}
+                        style={styles.rowtextInput}
+                        placeholder={Languages.ba_signup_hotel_rooms}
+                        keyboardType='numeric'
+                        placeholderTextColor={Colors.PrimaryColor}
+                        value={hotelRooms}
+                        onChangeText={(text) => { setHotelRooms(text) }}
+
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <FontAwesome5 name={"building"} color={Colors.PrimaryColor} />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder={Languages.ba_signup_hotel_name}
+                        placeholderTextColor={Colors.PrimaryColor}
+                        value={hotelName}
+                        onChangeText={(text) => { setHotelName(text), setHotelNameValidation("") }}
+                    />
+                </View>
+                {hotelNameValidation && <ErrorMessage margin={10} error={hotelNameValidation} />}
+                <View style={styles.inputContainer}>
+                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder={Languages.ba_signup_hotel_address}
+                        placeholderTextColor={Colors.PrimaryColor}
+                        value={hotelAddress}
+                        onChangeText={(text) => { setHotelAddress(text), setHotelAddressValidation("") }}
+                    />
+                </View>
+                {hotelAddressValidation && <ErrorMessage margin={10} error={hotelAddressValidation} />}
+
+                {/* ==================Hotel Image=================== */}
+                <View style={styles.inputContainer}>
+                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
+                    <TextInput
+                        style={styles.textInput}
                         placeholder={"Enter Image Url"}
                         placeholderTextColor={Colors.PrimaryColor}
-                        value={image}
-                        onChangeText={(text) => { setImage(text), setImageValidation("") }}
+                        value={hotelImages?.hotelImageValue}
+                        onChangeText={(text) => { setHotelImages({ ...hotelImages, hotelImage: text, hotelImageValue: text }) }}
 
                     />
                 </View>
-                {imageValidation && <ErrorMessage margin={10} error={imageValidation} />}
-
-                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.imageBtn}>
-                    <Text style={styles.imageBtnText}>Load Image</Text>
+                {hotelImagesValidation && <ErrorMessage margin={10} error={hotelImagesValidation} />}
+                <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
+                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                 </TouchableOpacity>
-                {showImage == true && image != "" &&
-                    <View style={styles.imageContainer}>
-                        <Image source={{ uri: image }} style={styles.taxiImage} />
-                    </View>}
-                <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder={Languages.ba_signup_taxi_model}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={taxiModel}
-                        onChangeText={(text) => { setTaxiModel(text), setTaxiModelValidation("") }}
+                <View style={styles.imageContainer}>
+                    {hotelImages?.hotelImagesList?.length > 0 &&
+                        hotelImages?.hotelImagesList?.map((item, index) => (
+                            <View key={index}>
+                                <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={styles.removeImageIcon}>
+                                    <Ionicons name={"close"} size={15} style={styles.closeIcon} />
+                                </TouchableOpacity>
+                                <Image source={{ uri: item?.url }} style={styles.hotelImages} />
+                            </View>
 
+                        ))
+                    }
+                </View>
+                <View style={{ ...styles.dropdowncontainer, marginTop: 5 }}>
+                    <DropdownPicker
+                        multiple={true}
+                        placeholder={Languages.ba_signup_hotel_ameneties}
+                        listMode="MODAL"
+                        open={amenitiesOpen}
+                        value={amenities}
+                        data={Amenities}
+                        setOpen={setAmenitiesOpen}
+                        setValue={setamenities}
                     />
                 </View>
-                {taxiModelValidation && <ErrorMessage margin={10} error={taxiModelValidation} />}
-                <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder={"Currency"}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={currency}
-
-                        onChangeText={(text) => { setCurrency(text), setCurrencyValidation("") }}
-
-                    />
+                <View style={styles.datecontainer}>
+                    <FontAwesome5 name={"calendar-alt"} size={15} color={Colors.PrimaryColor} />
+                    <TouchableOpacity style={styles.datebtn} onPress={() => { setShowDate(true) }}>
+                        {showHotelPlaceholder == true ? <Text style={styles.datetext}>{Languages.ba_signup_hotel_foundation_date}</Text> : <Text style={styles.datetext}>{moment(hotelDate).format('ll')}</Text>}
+                        {showDate && <DateTimePicker
+                            value={hotelDate}
+                            onChange={handleDate}
+                        />
+                        }
+                    </TouchableOpacity>
                 </View>
-                {currencyValidation && <ErrorMessage margin={10} error={currencyValidation} />}
-
-                <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder={Languages.ba_signup_taxi_hire_rate}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={taxihireRate}
-                        keyboardType={'numeric'}
-                        onChangeText={(text) => { setTaxiHireRate(text), setTaxiHireRateValidation("") }}
-
-                    />
-                </View>
-                {taxiHireRateValidation && <ErrorMessage margin={10} error={taxiHireRateValidation} />}
-
-                <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder={Languages.ba_signup_taxi_plate_number}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={taxiPlateNumber}
-                        onChangeText={(text) => { settaxiPlateNumber(text), setTaxiPlateNumberValidation("") }}
-
-                    />
-                </View>
-                {taxiPlateNumberValidation && <ErrorMessage margin={10} error={taxiPlateNumberValidation} />}
-
                 <View style={styles.descriptionbox}>
                     <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
                     <TextInput
                         style={styles.textbox}
-                        placeholder={Languages.ba_signup_taxi_introduction}
+                        placeholder={Languages.ba_signup_hotel_breif_introduction}
                         underlineColorAndroid="transparent"
                         multiline={true}
                         numberOfLines={8}
                         placeholderTextColor={Colors.PrimaryColor}
-                        value={taxiIntroduction}
-                        onChangeText={(text) => { setTaxiIntroduction(text) }}
+                        value={hotelDescription}
+                        onChangeText={(text) => { setHotelDescription(text) }}
 
                     />
                 </View>
-
 
                 <TouchableOpacity onPress={() => { Submit() }} style={{ ...styles.btn, marginBottom: 50 }}>
                     <Text style={styles.btntext}>Save</Text>
@@ -317,5 +361,5 @@ const EditTaxiDriverProfile = ({ route }) => {
     )
 }
 
-export default EditTaxiDriverProfile
+export default EditHotelManagerProfile
 

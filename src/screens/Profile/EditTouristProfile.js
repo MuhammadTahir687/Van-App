@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 import { styles } from "./style"
 import { Colors } from '../../constants/Colors'
@@ -10,12 +10,14 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { AuthServices } from '../../services/authServices';
 import Loader from '../../components/Loader/Loader';
 import Alert from '../../components/Alert/Alert';
+import { UserServices } from '../../services/userServices';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const EditTouristProfile = ({ route }) => {
 
-    const userData = route?.params?.userData;
+    const { user, setUser } = useContext(RootContext)
 
-    console.log("User data: ", userData)
+    const userData = route?.params?.userData;
 
     const navigation = useNavigation();
 
@@ -69,9 +71,9 @@ const EditTouristProfile = ({ route }) => {
             setPhoneValidation("Required*")
         }
         else {
-            // setLoading(true)
+            setLoading(true)
             const body = {
-                tourist_code: "C",
+                tourist_code: userData?.tourist_code,
                 tourist_name: name,
                 registration_date: new Date(),
                 country: country,
@@ -86,22 +88,22 @@ const EditTouristProfile = ({ route }) => {
                 log_last_login: new Date()
             }
 
-            alert("Profile Updated Successfully")
-            // try {
-            //     const response = await AuthServices.PA_Register(body)
-            //     if (response?.data) {
-            //         setLoading(false)
-            //         setShowAlert(true)
-            //         setAlertDetail({ message: "Profile Updated Successfully", color: "green" })
-            //         console.log(response.data)
-            //         navigation.navigate("profile")
-            //     }
-            // } catch (error) {
-            //     setLoading(false)
-            //     setAlertDetail({ message: "Profile Not Updated", color: "red" })
-            //     setShowAlert(true)
-            //     console.log("Error: " + error)
-            // }
+            try {
+                const response = await UserServices.UpdateUserProfile(userData?.tourist_code, body)
+                if (response?.data) {
+                    console.log("Profile Update", response?.data)
+                    setLoading(false)
+                    setShowAlert(true)
+                    setUser(response?.data)
+                    setAlertDetail({ message: "Profile Updated Successfully", color: "green" })
+                    navigation.goBack()
+                }
+            } catch (error) {
+                setLoading(false)
+                setAlertDetail({ message: "Profile Not Updated", color: "red" })
+                setShowAlert(true)
+                console.log("Error: " + error)
+            }
 
         }
 

@@ -9,9 +9,11 @@ import { Colors } from '../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserServices } from '../../services/userServices';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 
 const TouristHotelReservation = () => {
+
     const navigation = useNavigation();
     const [data, setData] = useState([])
     const [hotelRoomsData, setHotelRoomsData] = useState([])
@@ -19,6 +21,8 @@ const TouristHotelReservation = () => {
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
+    const [refreshing, setRefreshing] = useState(false);
+
 
     useEffect(() => { GetData() }, [])
 
@@ -28,6 +32,7 @@ const TouristHotelReservation = () => {
             const resp = await UserServices.UserData('hotelManagers')
             const roomsResponse = await UserServices.UserData("hotelRooms")
             if (resp) {
+                setRefreshing(false)
                 setData(resp.data)
                 setHotelRoomsData(roomsResponse.data)
             }
@@ -82,12 +87,13 @@ const TouristHotelReservation = () => {
             } */}
 
             <FlatList
+                refreshControl={<RefreshControl progressBackgroundColor={Colors.PrimaryColor} colors={[Colors.WhiteColor]} refreshing={refreshing} onRefresh={() => { setRefreshing(true), GetData() }} />}
                 // data={countryFilter == "All" ? data.filter((item) => item?.hotel_name?.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item?.hotel_name?.toLowerCase().includes(search.toLowerCase()))}
                 data={data.filter((item) => item?.hotel_name?.toLowerCase().includes(search.toLowerCase()) || item?.country?.toLowerCase().includes(search.toLowerCase()))}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => { navigation.navigate("HotelDetail", { data: item, hotelRooms: hotelRoomsData }) }} style={styles.hotelCardContainer}>
-                        <Image source={{ uri: item?.hotel_image_url }} style={styles.image} />
+                        <Image source={{ uri: item?.hotel_image_url?.url }} style={styles.image} />
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
                                 <Text style={styles.hotelName}>{item?.hotel_name}</Text>
