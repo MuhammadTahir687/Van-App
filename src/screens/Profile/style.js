@@ -192,8 +192,10 @@ export const styles = StyleSheet.create({
         flexWrap: "wrap"
     },
     loadImageBtn: {
+        alignItems:"center",
         backgroundColor: Colors.PrimaryColor,
         paddingHorizontal: 40,
+        marginHorizontal:20,
         marginVertical: 10,
         paddingVertical: 10,
         borderRadius: 10
