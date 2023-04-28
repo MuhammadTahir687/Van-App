@@ -6,25 +6,19 @@ import { Colors } from '../../constants/Colors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Loader from '../../components/Loader/Loader';
 import { UserServices } from '../../services/userServices';
-import { useNavigation } from '@react-navigation/native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 
 const HotelRooms = () => {
 
     const navigation = useNavigation()
+    const isFocused=useIsFocused()
     const { user, setUser } = useContext(RootContext)
     const [hotelRoomsData, setHotelRoomsData] = useState([])
     const [loading, setLoading] = useState(false)
 
 
-    useFocusEffect(
-        React.useCallback(() => {
-            GetData()
-
-            return () => GetData();
-        }, [])
-    );
+    useEffect(()=>{GetData()},[isFocused])
 
 
     const GetData = async () => {

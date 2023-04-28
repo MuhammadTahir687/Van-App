@@ -77,7 +77,7 @@ const HotelProfile = ({ navigation }) => {
                         <Text style={styles.btnText}>Edit Profile</Text>
                         <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'PersonelAccount' }], }) }} style={styles.btn}>
+                    <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'BusinessAccount' }], }) }} style={styles.btn}>
                         <Text style={styles.btnText}>Log Out</Text>
                         <Ionicons name='log-out-outline' size={20} color={Colors.PrimaryColor} />
                     </TouchableOpacity>
