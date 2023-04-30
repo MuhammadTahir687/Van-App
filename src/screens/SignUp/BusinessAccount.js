@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -17,51 +17,43 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
-import { isIndexSignatureDeclaration } from 'typescript';
+import TaxiSignup from './TaxiSignup';
+import HotelSignup from './HotelSignup';
+import CarRentalSignup from './CarRentalSignup';
+import Car from '../../assets/car.png';
+import Hotel from '../../assets/hotel.png';
+import Taxi from '../../assets/taxi.png'
+
 
 const BusinessAccountSignup = ({ route }) => {
 
     const navigation = useNavigation();
 
-    const userData = route?.params?.userData;
-    const cat = route?.params?.cat;
-
-
-    useEffect(() => {
-        EditProfile()
-    }, [cat, userData])
-
-    const EditProfile = () => {
-        if (cat == "TD") {
-            setValue("Taxi")
-        }
-    }
-
-
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [loading, setLoading] = useState(false)
 
-    const [country, setCountry] = useState(userData?.country ?? "")
-    const [countryCode, setCountryCode] = useState(userData?.country_code ?? '')
-    const [passwordVisible, setPasswordVisible] = useState(true)
-    const [countryValidation, setCountryValidation] = useState("")
+    // const [country, setCountry] = useState("")
+    // const [countryCode, setCountryCode] = useState('')
+    // const [passwordVisible, setPasswordVisible] = useState(true)
+    // const [countryValidation, setCountryValidation] = useState("")
     const [categoryValidation, setCategoryValidation] = useState("")
 
-    const [name, setName] = useState(userData?.driver_name ?? "")
-    const [email, setEmail] = useState(userData?.email ?? "")
-    const [city, setCity] = useState(userData?.email ?? "")
-    const [age, setAge] = useState("")
-    const [phone, setPhone] = useState(userData?.phone ?? "")
-    const [password, setPassword] = useState("")
-    const [image, setImage] = useState(userData?.taxi_image_url ?? "")
-    const [showImage, setShowImage] = useState(userData?.taxi_image_url ? true : false)
-    const [currency, setCurrency] = useState(userData?.currency ?? "")
+    // const [name, setName] = useState("")
+    // const [email, setEmail] = useState("")
+    // const [city, setCity] = useState("")
+    // const [age, setAge] = useState("")
+    // const [phone, setPhone] = useState("")
+    // const [password, setPassword] = useState("")
+    // const [image, setImage] = useState("")
+    // const [showImage, setShowImage] = useState(false)
+    // const [currency, setCurrency] = useState("")
 
-    const [nameValidation, setNameValidation] = useState("")
-    const [passwordValidation, setPasswordValidation] = useState("")
-    const [emailValidation, setEmailValidation] = useState("")
-    const [ageValidation, setAgeValidation] = useState("")
+    // const [nameValidation, setNameValidation] = useState("")
+    // const [passwordValidation, setPasswordValidation] = useState("")
+    // const [emailValidation, setEmailValidation] = useState("")
+    // const [ageValidation, setAgeValidation] = useState("")
+    // const [imageListValidation, setImageListValidation] = useState("")
 
     const data = [
         { label: 'Taxi', value: 'Taxi' },
@@ -70,170 +62,225 @@ const BusinessAccountSignup = ({ route }) => {
         { label: 'Hotel Reservation', value: 'Hotel Reservation' },
         { label: 'Business Advertisement', value: 'Business Advertisement' },
     ]
+    const Images = [
+        { id: 1, image: Taxi },
+        { id: 2, image: Hotel },
+        { id: 3, image: Car },
 
-    const Amenities = [
-        { label: 'Cable TV', value: 'Cable Tv' },
-        { label: 'Internet', value: 'Internet' },
-        { label: 'Wi-Fi', value: 'Wi-Fi' },
-        { label: 'Air Conditioning', value: 'Air Conditioning' },
-        { label: 'Pool', value: 'Pool' },
-        { label: 'Resturant', value: 'Resturant' },
-        { label: 'Laundry', value: 'Laundry' },
-        { label: 'Free Parking on premises', value: 'Free Parking on premises' },
-        { label: 'Heating', value: 'Heating' },
     ]
 
-    // Taxi
+    // const Amenities = [
+    //     { label: 'Cable TV', value: 'Cable Tv' },
+    //     { label: 'Internet', value: 'Internet' },
+    //     { label: 'Wi-Fi', value: 'Wi-Fi' },
+    //     { label: 'Air Conditioning', value: 'Air Conditioning' },
+    //     { label: 'Pool', value: 'Pool' },
+    //     { label: 'Resturant', value: 'Resturant' },
+    //     { label: 'Laundry', value: 'Laundry' },
+    //     { label: 'Free Parking on premises', value: 'Free Parking on premises' },
+    //     { label: 'Heating', value: 'Heating' },
+    // ]
 
-    const [taxiModel, setTaxiModel] = useState(userData?.taxi_model_name ?? "")
-    const [taxihireRate, setTaxiHireRate] = useState(userData?.hire_rate?.toString() ?? "")
-    const [taxiPlateNumber, settaxiPlateNumber] = useState(userData?.plate_no ?? "")
-    const [taxiIntroduction, setTaxiIntroduction] = useState(userData?.brief_introduction ?? "")
-    const [taxiModelValidation, setTaxiModelValidation] = useState("")
-    const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
-    const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
-    const [currencyValidation, setCurrencyValidation] = useState("");
-    const [taxiImageValidation, setTaxiImageValidation] = useState("");
+    // // Taxi
 
-    //*Hotel Reservation*/
-    const [hotelName, setHotelName] = useState('')
-    const [hotelAddress, setHotelAddress] = useState('')
-    const [hotelRooms, setHotelRooms] = useState('')
-    const [showDate, setShowDate] = useState(false)
-    const [hotelDate, setHotelDate] = useState(new Date())
-    const [showHotelPlaceholder, setShowHotelPlaceholder] = useState(true)
-    const [amenitiesOpen, setAmenitiesOpen] = useState(false)
-    const [amenities, setamenities] = useState([])
-    const [hotelDescription, setHotelDescription] = useState('')
-    const [hotelImages, setHotelImages] = useState({ showHotelImage: false, hotelImagesList: [], hotelImage: "", hotelImageValue: "" })
+    // const [taxiModel, setTaxiModel] = useState("")
+    // const [taxihireRate, setTaxiHireRate] = useState("")
+    // const [taxiPlateNumber, settaxiPlateNumber] = useState("")
+    // const [taxiIntroduction, setTaxiIntroduction] = useState("")
+    // const [taxiModelValidation, setTaxiModelValidation] = useState("")
+    // const [taxiPlateNumberValidation, setTaxiPlateNumberValidation] = useState("")
+    // const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
+    // const [currencyValidation, setCurrencyValidation] = useState("");
+    // const [taxiImageValidation, setTaxiImageValidation] = useState("");
 
-    const [hotelNameValidation, setHotelNameValidation] = useState("")
-    const [hotelAddressValidation, setHotelAddressValidation] = useState("")
+    // //*Hotel Reservation*/
+    // const [hotelName, setHotelName] = useState('')
+    // const [hotelAddress, setHotelAddress] = useState('')
+    // const [hotelRooms, setHotelRooms] = useState('')
+    // const [showDate, setShowDate] = useState(false)
+    // const [hotelDate, setHotelDate] = useState(new Date())
+    // const [showHotelPlaceholder, setShowHotelPlaceholder] = useState(true)
+    // const [amenitiesOpen, setAmenitiesOpen] = useState(false)
+    // const [amenities, setamenities] = useState([])
+    // const [hotelDescription, setHotelDescription] = useState('')
+    // const [hotelImages, setHotelImages] = useState({ showHotelImage: false, hotelImagesList: [], hotelImage: "", hotelImageValue: "" })
 
-    const handleDate = (event, selectedDate) => {
-        if (selectedDate) {
-            const currentDate = selectedDate;
-            setShowDate(false)
-            setHotelDate(currentDate);
-            setShowHotelPlaceholder(false)
-            console.log("Date ==", currentDate)
-        }
-        else {
-            setShowDate(false)
-            setShowHotelPlaceholder(true)
-            setHotelDate(new Date())
-        }
+    // const [hotelNameValidation, setHotelNameValidation] = useState("")
+    // const [hotelAddressValidation, setHotelAddressValidation] = useState("")
+
+    // const handleDate = (event, selectedDate) => {
+    //     if (selectedDate) {
+    //         const currentDate = selectedDate;
+    //         setShowDate(false)
+    //         setHotelDate(currentDate);
+    //         setShowHotelPlaceholder(false)
+    //         console.log("Date ==", currentDate)
+    //     }
+    //     else {
+    //         setShowDate(false)
+    //         setShowHotelPlaceholder(true)
+    //         setHotelDate(new Date())
+    //     }
+    // }
+
+
+    // const Submit = async () => {
+    //     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    //     if (value == null) setCategoryValidation("Select Category*")
+    //     else if (name == "") setNameValidation("Required*")
+    //     else if (email == "") setEmailValidation("Required*")
+    //     else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
+    //     else if (country == "") setCountryValidation("Required*")
+    //     else if (value == "Taxi" && image == "") setTaxiImageValidation("Required*")
+    //     else if (value == "Tour Guide" && image == "") setTaxiImageValidation("Required*")
+    //     else if (value == "Taxi" && taxiModel == "") setTaxiModelValidation("Required*")
+    //     else if (value == "Taxi" && currency == "") setCurrencyValidation("Required*")
+    //     else if (value == "Taxi" && taxihireRate == "") setTaxiHireRateValidation("Required*")
+    //     else if (value == "Taxi" && taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
+    //     else if (value == "Hotel Reservation" && hotelName == "") setHotelNameValidation("Required*")
+    //     else if (value == "Hotel Reservation" && hotelAddress == "") setHotelAddressValidation("Required*")
+    //     else if (value == "Hotel Reservation" && !hotelImages?.hotelImagesList.length > 1) setImageListValidation("Required*")
+    //     else if (value == "Tour Guide" && !hotelImages?.hotelImagesList.length > 1) setImageListValidation("Required*")
+    //     else if (password == "") setPasswordValidation("Required*")
+    //     else {
+    //         const taxi_body = {
+    //             taxi_driver_code: new Date().toDateString(),
+    //             driver_name: name,
+    //             taxi_model_name: taxiModel,
+    //             taxi_image_url: image,
+    //             brief_introduction: taxiIntroduction,
+    //             currency: currency,
+    //             hire_rate: taxihireRate,
+    //             plate_no: taxiPlateNumber,
+    //             country: country,
+    //             country_code: countryCode,
+    //             city: city,
+    //             phone: phone,
+    //             email: email,
+    //             password: password,
+    //             status_ready: false,
+    //             registration_date: new Date(),
+    //             admin_approved: false,
+    //             admin_remarks: "Administration remarks if any...",
+    //             log_last_login: new Date(),
+    //         }
+    //         const hotelMangersBody = {
+    //             "manager_code": new Date(),
+    //             "manager_name": name,
+    //             "hotel_name": hotelName,
+    //             "hotel_image_url": hotelImages?.hotelImagesList[0],
+    //             "hotel_view_url": hotelImages?.hotelImagesList,
+    //             "country": country,
+    //             "country_code": countryCode,
+    //             "city": city,
+    //             "foundation_date": hotelDate,
+    //             "brief_introduction": hotelDescription,
+    //             "number_of_rooms": hotelRooms,
+    //             "hotel_address": hotelAddress,
+    //             "phone": phone,
+    //             "email": email,
+    //             "password": password,
+    //             "registration_date": new Date(),
+    //             "amenities": amenities,
+    //             "admin_approved": false,
+    //             "admin_remarks": "Administration remarks if any...",
+    //             "log_last_login": new Date()
+    //         }
+
+    //         const guide = {
+    //             "guide_code": "TG-101",
+    //             "guide_name": name,
+    //             "profile_image_url": image,
+    //             "trips_view_url": hotelImages?.hotelImagesList,
+    //             "age_years": age,
+    //             "country": country,
+    //             "country_code": countryCode,
+    //             "city": city,
+    //             "phone": phone,
+    //             "email": email,
+    //             "password": password,
+    //             "registration_date": new Date(),
+    //             "admin_approved": false,
+    //             "admin_remarks": "",
+    //             "log_last_login": new Date(),
+    //         }
+
+    //         const carRentalBody = {
+    //             "car_agent_code": "CA-101",
+    //             "agent_name": "MUSAIB XELEF",
+    //             "agency_name": "RentA Car Co",
+    //             "agency_image_url": "https://www.historyhit.com/app/uploads/fly-images/5161222/Van-Castle-1-1576x1074.jpg",
+    //             "agency_start_date": { "$date": { "$numberLong": "1670371200000" } },
+    //             "brief_introduction": "Slogan for the Agency…",
+    //             "number_of_cars": 15,
+    //             "country": "Turkey",
+    //             "city": "Van",
+    //             "agency_address": "477-GG, Street main, Beşyol/İpekyolu/Van",
+    //             "phone": "3218833722",
+    //             "email": "abcd@gmail.com",
+    //             "password": "$2b$12$UREFwsRUoyF0CRqGNK0LzO0H",
+    //             "registration_date": { "$date": { "$numberLong": "1670371200000" } },
+    //             "admin_approved": true,
+    //             "admin_remarks": "Administration remarks if any...",
+    //             "log_last_login": { "$date": { "$numberLong": "1670491200000 " } }
+    //         }
+
+    //         console.log("Hotel Mangers Body", hotelMangersBody)
+
+    //         try {
+    //             if (value == "Taxi") {
+    //                 setLoading(true)
+    //                 const taxiResponse = await TaxiServices.TaxiRegistration(taxi_body)
+    //                 if (taxiResponse) {
+    //                     console.log("Taxi response: ", taxiResponse)
+    //                     setLoading(false)
+    //                     alert("Taxi Driver Registered Successfully")
+    //                     navigation.replace("BusinessAccount")
+    //                 }
+    //             }
+    //             else if (value == "Hotel Reservation") {
+    //                 setLoading(true)
+    //                 const hotelManagersResponse = await AuthServices.HM_Register(hotelMangersBody)
+    //                 if (hotelManagersResponse) {
+    //                     console.log("Hotel Manager response: ", hotelManagersResponse)
+    //                     setLoading(false)
+    //                     alert("Hotel Manager Registered Successfully")
+    //                     navigation.replace("BusinessAccount")
+    //                 }
+    //             }
+
+    //         } catch (error) {
+    //             setLoading(false)
+    //             alert(error?.response?.data)
+    //             console.log(error?.response?.data)
+
+    //         }
+    //     }
+
+
+    // }
+
+
+    // const AddHotelImages = () => {
+    //     if (!hotelImages?.hotelImage == "") {
+    //         setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" })
+    //     }
+
+
+    // }
+
+    // const RemoveHotelImage = (item) => {
+    //     const filterImages = hotelImages?.hotelImagesList?.filter(image => image?.id != item?.id)
+    //     setHotelImages({ ...hotelImages, hotelImagesList: filterImages })
+    // }
+
+    const Submit = (item) => {
+        if (item.id == 1) navigation.navigate("TaxiSignup")
+        else if (item.id == 2) navigation.navigate("HotelSignup")
+        else if (item.id == 3) navigation.navigate("CarRentalSignup")
     }
 
-
-    const Submit = async () => {
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if (value == null) setCategoryValidation("Select Category*")
-        else if (name == "") setNameValidation("Required*")
-        else if (email == "") setEmailValidation("Required*")
-        else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
-        else if (country == "") setCountryValidation("Required*")
-        else if (value == "Taxi" && image == "") setTaxiImageValidation("Required*")
-        else if (value == "Taxi" && taxiModel == "") setTaxiModelValidation("Required*")
-        else if (value == "Taxi" && currency == "") setCurrencyValidation("Required*")
-        else if (value == "Taxi" && taxihireRate == "") setTaxiHireRateValidation("Required*")
-        else if (value == "Taxi" && taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
-        else if (value == "Hotel Reservation" && hotelName == "") setHotelNameValidation("Required*")
-        else if (value == "Hotel Reservation" && hotelAddress == "") setHotelAddressValidation("Required*")
-        else if (password == "") setPasswordValidation("Required*")
-        else {
-            const taxi_body = {
-                taxi_driver_code: new Date().toDateString(),
-                driver_name: name,
-                taxi_model_name: taxiModel,
-                taxi_image_url: image,
-                brief_introduction: taxiIntroduction,
-                currency: currency,
-                hire_rate: taxihireRate,
-                plate_no: taxiPlateNumber,
-                country: country,
-                country_code: countryCode,
-                city: city,
-                phone: phone,
-                email: email,
-                password: password,
-                status_ready: false,
-                registration_date: new Date(),
-                admin_approved: false,
-                admin_remarks: "Administration remarks if any...",
-                log_last_login: new Date(),
-            }
-            const hotelMangersBody = {
-                "manager_code": new Date(),
-                "manager_name": name,
-                "hotel_name": hotelName,
-                "hotel_image_url": hotelImages?.hotelImagesList[0],
-                "hotel_view_url": hotelImages?.hotelImagesList,
-                "country": country,
-                "country_code": countryCode,
-                "city": city,
-                "foundation_date": hotelDate,
-                "brief_introduction": hotelDescription,
-                "number_of_rooms": hotelRooms,
-                "hotel_address": hotelAddress,
-                "phone": phone,
-                "email": email,
-                "password": password,
-                "registration_date": new Date(),
-                "amenities": amenities,
-                "admin_approved": false,
-                "admin_remarks": "Administration remarks if any...",
-                "log_last_login": new Date()
-            }
-
-            console.log("Hotel Mangers Body", hotelMangersBody)
-
-            try {
-                if (value == "Taxi") {
-                    setLoading(true)
-                    const taxiResponse = await TaxiServices.TaxiRegistration(taxi_body)
-                    if (taxiResponse) {
-                        console.log("Taxi response: ", taxiResponse)
-                        setLoading(false)
-                        alert("Taxi Driver Registered Successfully")
-                        navigation.replace("BusinessAccount")
-                    }
-                }
-                else if (value == "Hotel Reservation") {
-                    setLoading(true)
-                    const hotelManagersResponse = await AuthServices.HM_Register(hotelMangersBody)
-                    if (hotelManagersResponse) {
-                        console.log("Hotel Manager response: ", hotelManagersResponse)
-                        setLoading(false)
-                        alert("Hotel Manager Registered Successfully")
-                        navigation.replace("BusinessAccount")
-                    }
-                }
-
-            } catch (error) {
-                setLoading(false)
-                alert(error?.response?.data)
-                console.log(error?.response?.data)
-
-            }
-        }
-
-
-    }
-
-
-    const AddHotelImages = () => {
-        if (!hotelImages?.hotelImage == "") {
-            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: hotelImages?.hotelImage }], hotelImageValue: "" })
-        }
-
-
-    }
-
-    const RemoveHotelImage = (item) => {
-        const filterImages = hotelImages?.hotelImagesList?.filter(image => image?.id != item?.id)
-        setHotelImages({ ...hotelImages, hotelImagesList: filterImages })
-    }
+    const SubContainerStyle = useMemo(() => [value == null ? styles.subcontainer : styles.subContainerHeight], [value])
 
     return (
         <SafeAreaView style={styles.maincontainer}>
@@ -241,9 +288,20 @@ const BusinessAccountSignup = ({ route }) => {
             <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
-                    <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
-                        <View style={styles.dropdowncontainer}>
+                    <View style={styles.subMainContainer}>
+                        <View style={styles.subcontainer}>
+                            <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
+                            <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
+                                {
+                                    Images.map((item, index) => (
+                                        <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={{ margin: 5 }}>
+                                            <Image source={item.image} resizeMode="contain" style={{ width: 100, height: 100 }} />
+                                        </TouchableOpacity>
+                                    ))
+                                }
+                            </View>
+
+                            {/* <View style={styles.dropdowncontainer}>
                             <DropdownPicker
                                 listMode={"SCROLLVIEW"}
                                 placeholder={Languages.ba_signup_category}
@@ -254,326 +312,21 @@ const BusinessAccountSignup = ({ route }) => {
                                 setValue={(value) => { setValue(value), setCategoryValidation("") }}
                             />
                         </View>
-                        {categoryValidation && <ErrorMessage error={categoryValidation} />}
-
-                        {/* To add Headings on profile edit */}
-                        {/* <Text style={{ textAlign: "left", width: "100%", left: 10, color: Colors.PrimaryColor }}>Name</Text> */}
+                        {categoryValidation && <ErrorMessage error={categoryValidation} />} */}
 
 
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_name}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={name}
-                                onChangeText={(text) => { setName(text), setNameValidation("") }}
-                            />
-                        </View>
-                        {nameValidation && <ErrorMessage error={nameValidation} />}
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_email}
-                                keyboardType={"email-address"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={email}
-                                autoCapitalize='none'
-                                onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
-
-                            />
-                        </View>
-                        {emailValidation && <ErrorMessage error={emailValidation} />}
-
-
-                        <View style={styles.rowcontainer}>
-                            <View style={{ flex: 1 }}>
-                                <CountryPickerModal
-                                    countryCode={countryCode}
-                                    setCountryCode={setCountryCode}
-                                    country={country}
-                                    setCountry={setCountry}
-                                    setCountryValidation={setCountryValidation}
-                                />
-                                {countryValidation && <ErrorMessage error={countryValidation} />}
-                            </View>
-
-                            <View style={{ flex: 1 }}>
-                                <View style={{ ...styles.rowinputcontainer, marginLeft: 5, flex: 0, height: 50 }}>
-                                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
-                                    <TextInput
-                                        style={styles.rowtextInput}
-                                        placeholder={Languages.ba_signup_city}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={city}
-                                        onChangeText={(text) => { setCity(text) }}
-
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.rowcontainer}>
-                            <View style={{ ...styles.rowinputcontainer, marginRight: 10 }}>
-                                <FontAwesome5 name={"phone-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
-                                <TextInput
-                                    style={styles.rowtextInput}
-                                    placeholder={Languages.ba_signup_phone}
-                                    keyboardType={"numeric"}
-                                    placeholderTextColor={Colors.PrimaryColor}
-                                    value={phone}
-                                    onChangeText={(text) => { setPhone(text) }}
-
-                                />
-                            </View>
-                            {value != 'Hotel Reservation' &&
-                                <View style={styles.rowinputcontainer}>
-                                    <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
-                                    <TextInput
-                                        style={styles.rowtextInput}
-                                        placeholder={Languages.ba_signup_age}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={age}
-                                        keyboardType={"numeric"}
-                                        onChangeText={(text) => { setAge(text) }}
-                                    />
-                                </View>
-                            }
-                            {value != null && value == 'Hotel Reservation' &&
-                                <View style={styles.rowinputcontainer}>
-                                    <Fontisto name={"room"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
-                                    <TextInput
-                                        style={styles.rowtextInput}
-                                        placeholder={Languages.ba_signup_hotel_rooms}
-                                        keyboardType='numeric'
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={hotelRooms}
-                                        onChangeText={(text) => { setHotelRooms(text) }}
-
-                                    />
-                                </View>
+                            {
+                                value == "Taxi" ?
+                                    <TaxiSignup /> :
+                                    value == "Hotel Reservation" ?
+                                        <HotelSignup /> : value == "Car Rent" ?
+                                            <CarRentalSignup /> : null
                             }
 
-
-                        </View>
-
-                        {/************************Taxi*******************/}
-
-                        {value != null && value == "Taxi" &&
-                            <>
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={"Enter Image Url"}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={image}
-                                        onChangeText={(text) => { setImage(text), setTaxiImageValidation("") }}
-
-                                    />
-                                </View>
-                                {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
-
-                                <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
-                                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
-                                </TouchableOpacity>
-                                {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}
-
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={Languages.ba_signup_taxi_model}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={taxiModel}
-                                        onChangeText={(text) => { setTaxiModel(text), setTaxiModelValidation("") }}
-
-                                    />
-                                </View>
-                                {taxiModelValidation && <ErrorMessage error={taxiModelValidation} />}
-
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={"Currency"}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={currency}
-                                        onChangeText={(text) => { setCurrency(text), setCurrencyValidation("") }}
-
-                                    />
-                                </View>
-                                {currencyValidation && <ErrorMessage error={currencyValidation} />}
-
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={Languages.ba_signup_taxi_hire_rate}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={taxihireRate}
-                                        keyboardType={'numeric'}
-                                        onChangeText={(text) => { setTaxiHireRate(text), setTaxiHireRateValidation("") }}
-
-                                    />
-                                </View>
-                                {taxiHireRateValidation && <ErrorMessage error={taxiHireRateValidation} />}
-
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={Languages.ba_signup_taxi_plate_number}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={taxiPlateNumber}
-                                        onChangeText={(text) => { settaxiPlateNumber(text), setTaxiPlateNumberValidation("") }}
-
-                                    />
-                                </View>
-                                {taxiPlateNumberValidation && <ErrorMessage error={taxiPlateNumberValidation} />}
-
-                                <View style={styles.descriptionbox}>
-                                    <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
-                                    <TextInput
-                                        style={styles.textbox}
-                                        placeholder={Languages.ba_signup_taxi_introduction}
-                                        underlineColorAndroid="transparent"
-                                        multiline={true}
-                                        numberOfLines={8}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={taxiIntroduction}
-                                        onChangeText={(text) => { setTaxiIntroduction(text) }}
-
-                                    />
-                                </View>
-                            </>
-                        }
-
-                        {/************************Hotel Reservation*******************/}
-
-
-                        {value != null && value == 'Hotel Reservation' &&
-                            <>
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"building"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={Languages.ba_signup_hotel_name}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={hotelName}
-                                        onChangeText={(text) => { setHotelName(text), setHotelNameValidation("") }}
-                                    />
-                                </View>
-                                {hotelNameValidation && <ErrorMessage error={hotelNameValidation} />}
-
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={Languages.ba_signup_hotel_address}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={hotelAddress}
-                                        onChangeText={(text) => { setHotelAddress(text), setHotelAddressValidation("") }}
-                                    />
-                                </View>
-                                {hotelAddressValidation && <ErrorMessage error={hotelAddressValidation} />}
-
-                                {/* ==================Hotel Image=================== */}
-                                <View style={styles.inputContainer}>
-                                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder={"Enter Image Url"}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={hotelImages?.hotelImageValue}
-                                        onChangeText={(text) => { setHotelImages({ ...hotelImages, hotelImage: text, hotelImageValue: text }) }}
-
-                                    />
-                                </View>
-                                <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
-                                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
-                                </TouchableOpacity>
-                                <View style={styles.imageContainer}>
-                                    {hotelImages?.hotelImagesList?.length > 0 &&
-                                        hotelImages?.hotelImagesList?.map((item, index) => (
-                                            <View key={isIndexSignatureDeclaration}>
-                                                <TouchableOpacity onPress={() => { RemoveHotelImage(item) }} style={styles.removeImageIcon}>
-                                                    <Ionicons name={"close"} size={15} style={styles.closeIcon} />
-                                                </TouchableOpacity>
-                                                <Image source={{ uri: item?.url }} style={styles.hotelImages} />
-                                            </View>
-
-                                        ))
-                                    }
-                                </View>
-                                <View style={{ ...styles.dropdowncontainer, marginTop: 5 }}>
-                                    <DropdownPicker
-                                        multiple={true}
-                                        placeholder={Languages.ba_signup_hotel_ameneties}
-                                        listMode="MODAL"
-                                        open={amenitiesOpen}
-                                        value={amenities}
-                                        data={Amenities}
-                                        setOpen={setAmenitiesOpen}
-                                        setValue={setamenities}
-                                    />
-                                </View>
-                                <View style={styles.datecontainer}>
-                                    <FontAwesome5 name={"calendar-alt"} size={15} color={Colors.PrimaryColor} />
-                                    <TouchableOpacity style={styles.datebtn} onPress={() => { setShowDate(true) }}>
-                                        {showHotelPlaceholder == true ? <Text style={styles.datetext}>{Languages.ba_signup_hotel_foundation_date}</Text> : <Text style={styles.datetext}>{moment(hotelDate).format('ll')}</Text>}
-                                        {showDate && <DateTimePicker
-                                            value={hotelDate}
-                                            onChange={handleDate}
-                                        />
-                                        }
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.descriptionbox}>
-                                    <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
-                                    <TextInput
-                                        style={styles.textbox}
-                                        placeholder={Languages.ba_signup_hotel_breif_introduction}
-                                        underlineColorAndroid="transparent"
-                                        multiline={true}
-                                        numberOfLines={8}
-                                        placeholderTextColor={Colors.PrimaryColor}
-                                        value={hotelDescription}
-                                        onChangeText={(text) => { setHotelDescription(text) }}
-
-                                    />
-                                </View>
-                            </>
-                        }
-
-                        <View style={{ ...styles.inputContainer, marginHorizontal: 20 }}>
-                            <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_password}
-                                secureTextEntry={passwordVisible}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={password}
-                                onChangeText={(text) => { setPassword(text), setPasswordValidation("") }}
-
-                            />
-                            <TouchableOpacity onPress={() => { setPasswordVisible(!passwordVisible) }}>
-                                <FontAwesome5 name={passwordVisible ? "eye-slash" : "eye"} color={Colors.PrimaryColor} />
-                            </TouchableOpacity>
-
-                        </View>
-                        {passwordValidation && <ErrorMessage error={passwordValidation} />}
-
-
-
-
-                        <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
-                            <Text style={styles.btntext}>{Languages.ba_signup_btn_txt}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
+                            {/* <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.ba_signup_pa_btn_txt}</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        </View>
                     </View>
                 </View>
             </ScrollView>

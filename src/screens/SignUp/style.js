@@ -42,7 +42,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 20,
         paddingVertical: 15,
-        alignItems: "center"
+        alignItems: "center",
+
 
     },
     loginHeading: {
@@ -190,5 +191,21 @@ export const styles = StyleSheet.create({
         height: 50,
         margin: 10,
         borderRadius: 10
+    },
+    subContainerHeight: {
+        width: "100%",
+        backgroundColor: Colors.WhiteColor,
+        paddingHorizontal: 10,
+        borderRadius: 20,
+        paddingVertical: 15,
+        alignItems: "center"
+    },
+    subMainContainer: {
+        flex: 1,
+        flexGrow: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 20,
+        paddingBottom: 20
     }
 })

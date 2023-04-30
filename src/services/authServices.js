@@ -12,5 +12,9 @@ export const AuthServices = {
     },
     HM_Login(body) {
         return axios.post("https://eu-central-1.aws.data.mongodb-api.com/app/data_lookup-emecl/endpoint/LoginHoteManager", body)
+    },
+    CR_Register(body) {
+        return axios.post("https://eu-central-1.aws.data.mongodb-api.com/app/data_lookup-emecl/endpoint/carRentalAgents", body)
+
     }
 }
