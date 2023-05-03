@@ -10,13 +10,14 @@ import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
+import DraggableFlatList, { ScaleDecorator } from "react-native-draggable-flatlist";
 
 const CarRentalSignup = () => {
 
@@ -61,7 +62,7 @@ const CarRentalSignup = () => {
 
     const AddAgencyImages = () => {
         if (!agencyImages?.AgencyImage == "") {
-            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: agencyImages?.AgencyImage }], agencyImageValue: "" })
+            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: agencyImages?.AgencyImage }], AgencyImageValue: "" })
         }
     }
 
@@ -129,208 +130,239 @@ const CarRentalSignup = () => {
 
     }
 
+    const renderItem = ({ item, drag, isActive }) => {
+        return (
+
+            <TouchableOpacity onLongPress={drag} style={styles.carRentalImgContainer} >
+                <TouchableOpacity onPress={() => { RemoveAgencyImage(item) }} style={styles.carRemoveImageIcon}>
+                    <Ionicons name={"close"} size={15} style={styles.closeIcon} />
+                </TouchableOpacity>
+                <Image source={{ uri: item?.url }} style={styles.carRentalImage} />
+            </TouchableOpacity>
+
+
+        );
+    };
+
     return (
-        <SafeAreaView style={styles.maincontainer}>
-            <Loader loading={loading} setLoading={setLoading} />
-            <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
-                <View style={styles.container}>
-                    <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
-                    <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Car Rental Agency</Text>
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_name}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={name}
-                                onChangeText={(text) => { setName(text), setNameValidation("") }}
-                            />
-                        </View>
-                        {nameValidation && <ErrorMessage error={nameValidation} />}
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_email}
-                                keyboardType={"email-address"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={email}
-                                autoCapitalize='none'
-                                onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
-
-                            />
-                        </View>
-                        {emailValidation && <ErrorMessage error={emailValidation} />}
-
-
-                        <View style={styles.rowcontainer}>
-                            <View style={{ flex: 1 }}>
-                                <CountryPickerModal
-                                    countryCode={countryCode}
-                                    setCountryCode={setCountryCode}
-                                    country={country}
-                                    setCountry={setCountry}
-                                    setCountryValidation={setCountryValidation}
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaView style={styles.maincontainer}>
+                <Loader loading={loading} setLoading={setLoading} />
+                <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
+                    <View style={styles.container}>
+                        <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
+                        <View style={styles.subcontainer}>
+                            <Text style={styles.loginHeading}>Car Rental Agency</Text>
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={Languages.ba_signup_name}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={name}
+                                    onChangeText={(text) => { setName(text), setNameValidation("") }}
                                 />
-                                {countryValidation && <ErrorMessage error={countryValidation} />}
+                            </View>
+                            {nameValidation && <ErrorMessage error={nameValidation} />}
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={Languages.ba_signup_email}
+                                    keyboardType={"email-address"}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={email}
+                                    autoCapitalize='none'
+                                    onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
+
+                                />
+                            </View>
+                            {emailValidation && <ErrorMessage error={emailValidation} />}
+
+
+                            <View style={styles.rowcontainer}>
+                                <View style={{ flex: 1 }}>
+                                    <CountryPickerModal
+                                        countryCode={countryCode}
+                                        setCountryCode={setCountryCode}
+                                        country={country}
+                                        setCountry={setCountry}
+                                        setCountryValidation={setCountryValidation}
+                                    />
+                                    {countryValidation && <ErrorMessage error={countryValidation} />}
+                                </View>
+
+                                <View style={{ flex: 1 }}>
+                                    <View style={{ ...styles.rowinputcontainer, marginLeft: 5, flex: 0, height: 50 }}>
+                                        <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
+                                        <TextInput
+                                            style={styles.rowtextInput}
+                                            placeholder={Languages.ba_signup_city}
+                                            placeholderTextColor={Colors.PrimaryColor}
+                                            value={city}
+                                            onChangeText={(text) => { setCity(text) }}
+
+                                        />
+                                    </View>
+                                </View>
                             </View>
 
-                            <View style={{ flex: 1 }}>
-                                <View style={{ ...styles.rowinputcontainer, marginLeft: 5, flex: 0, height: 50 }}>
-                                    <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
+                            <View style={styles.rowcontainer}>
+                                <View style={{ ...styles.rowinputcontainer, marginRight: 10 }}>
+                                    <FontAwesome5 name={"phone-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                     <TextInput
                                         style={styles.rowtextInput}
-                                        placeholder={Languages.ba_signup_city}
+                                        placeholder={Languages.ba_signup_phone}
+                                        keyboardType={"numeric"}
                                         placeholderTextColor={Colors.PrimaryColor}
-                                        value={city}
-                                        onChangeText={(text) => { setCity(text) }}
+                                        value={phone}
+                                        onChangeText={(text) => { setPhone(text) }}
 
                                     />
                                 </View>
+                                <View style={styles.rowinputcontainer}>
+                                    <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
+                                    <TextInput
+                                        style={styles.rowtextInput}
+                                        placeholder={Languages.ba_signup_age}
+                                        placeholderTextColor={Colors.PrimaryColor}
+                                        value={age}
+                                        keyboardType={"numeric"}
+                                        onChangeText={(text) => { setAge(text) }}
+                                    />
+                                </View>
                             </View>
-                        </View>
-
-                        <View style={styles.rowcontainer}>
-                            <View style={{ ...styles.rowinputcontainer, marginRight: 10 }}>
-                                <FontAwesome5 name={"phone-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"user"} color={Colors.PrimaryColor} />
                                 <TextInput
-                                    style={styles.rowtextInput}
-                                    placeholder={Languages.ba_signup_phone}
-                                    keyboardType={"numeric"}
+                                    style={styles.textInput}
+                                    placeholder={"Enter Profile Picture Url"}
                                     placeholderTextColor={Colors.PrimaryColor}
-                                    value={phone}
-                                    onChangeText={(text) => { setPhone(text) }}
+                                    value={profilePicture}
+                                    onChangeText={(text) => { setProfilePicture(text) }}
 
                                 />
                             </View>
-                            <View style={styles.rowinputcontainer}>
-                                <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
+                            {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />}
+
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
-                                    style={styles.rowtextInput}
-                                    placeholder={Languages.ba_signup_age}
+                                    style={styles.textInput}
+                                    placeholder={"Agency Name"}
                                     placeholderTextColor={Colors.PrimaryColor}
-                                    value={age}
-                                    keyboardType={"numeric"}
-                                    onChangeText={(text) => { setAge(text) }}
+                                    value={agencyName}
+                                    onChangeText={(text) => { setAgencyName(text) }}
                                 />
                             </View>
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"user"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={"Enter Profile Picture Url"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={profilePicture}
-                                onChangeText={(text) => { setProfilePicture(text) }}
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={"Agency Address"}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={agencyAddress}
+                                    onChangeText={(text) => { setAgencyAddress(text) }}
+                                />
+                            </View>
 
-                            />
-                        </View>
-                        {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />}
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={"Number of Cars"}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={numberOfCars}
+                                    onChangeText={(text) => { setNumberOfCars(text) }}
+                                />
+                            </View>
 
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={"Agency Name"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={agencyName}
-                                onChangeText={(text) => { setAgencyName(text) }}
-                            />
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={"Agency Address"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={agencyAddress}
-                                onChangeText={(text) => { setAgencyAddress(text) }}
-                            />
-                        </View>
+                            <View style={styles.descriptionbox}>
+                                <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
+                                <TextInput
+                                    style={styles.textbox}
+                                    placeholder={"Brief Introduction"}
+                                    underlineColorAndroid="transparent"
+                                    multiline={true}
+                                    numberOfLines={8}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={agencyIntroduction}
+                                    onChangeText={(text) => { setAgencyIntroduction(text) }}
 
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={"Number of Cars"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={numberOfCars}
-                                onChangeText={(text) => { setNumberOfCars(text) }}
-                            />
-                        </View>
+                                />
+                            </View>
+                            {/* ==================Car Rent Image=================== */}
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={"Enter Images Url"}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={agencyImages?.AgencyImageValue}
+                                    onChangeText={(text) => { setAgencyImages({ ...agencyImages, AgencyImage: text, AgencyImageValue: text }) }}
 
-                        <View style={styles.descriptionbox}>
-                            <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
-                            <TextInput
-                                style={styles.textbox}
-                                placeholder={"Brief Introduction"}
-                                underlineColorAndroid="transparent"
-                                multiline={true}
-                                numberOfLines={8}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={agencyIntroduction}
-                                onChangeText={(text) => { setAgencyIntroduction(text) }}
+                                />
+                            </View>
 
-                            />
-                        </View>
-                        {/* ==================Car Rent Image=================== */}
-                        <View style={styles.inputContainer}>
-                            <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={"Enter Images Url"}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={agencyImages?.AgencyImageValue}
-                                onChangeText={(text) => { setAgencyImages({ ...agencyImages, AgencyImage: text, AgencyImageValue: text }) }}
-
-                            />
-                        </View>
-
-                        <TouchableOpacity disabled={agencyImages?.AgencyImageValue == "" ? true : false} onPress={() => { AddAgencyImages() }} style={styles.loadImageBtn}>
-                            <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
-                        </TouchableOpacity>
-
-                        <View style={styles.imageContainer}>
-                            {agencyImages?.AgencyImagesList?.length > 0 &&
-                                agencyImages?.AgencyImagesList?.map((item, index) => {
-                                    console.log(item?.url)
-                                    return (
-                                        <View key={index}>
-                                            <TouchableOpacity onPress={() => { RemoveAgencyImage(item) }} style={styles.removeImageIcon}>
-                                                <Ionicons name={"close"} size={15} style={styles.closeIcon} />
-                                            </TouchableOpacity>
-                                            <Image source={{ uri: item?.url }} style={styles.hotelImages} />
-                                        </View>)
-
-                                })
-                            }
-                        </View >
-                        <View style={{ ...styles.inputContainer, marginHorizontal: 20 }}>
-                            <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder={Languages.ba_signup_password}
-                                secureTextEntry={passwordVisible}
-                                placeholderTextColor={Colors.PrimaryColor}
-                                value={password}
-                                onChangeText={(text) => { setPassword(text), setPasswordValidation("") }}
-
-                            />
-                            <TouchableOpacity onPress={() => { setPasswordVisible(!passwordVisible) }}>
-                                <FontAwesome5 name={passwordVisible ? "eye-slash" : "eye"} color={Colors.PrimaryColor} />
+                            <TouchableOpacity disabled={agencyImages?.AgencyImageValue == "" ? true : false} onPress={() => { AddAgencyImages() }} style={styles.loadImageBtn}>
+                                <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                             </TouchableOpacity>
 
+                            {/* <View style={styles.imageContainer}>
+                        {agencyImages?.AgencyImagesList?.length > 0 &&
+                            agencyImages?.AgencyImagesList?.map((item, index) => {
+                                console.log(item?.url)
+                                return (
+                                    <View key={index}>
+                                        <TouchableOpacity onPress={() => { RemoveAgencyImage(item) }} style={styles.removeImageIcon}>
+                                            <Ionicons name={"close"} size={15} style={styles.closeIcon} />
+                                        </TouchableOpacity>
+                                        <Image source={{ uri: item?.url }} style={styles.hotelImages} />
+                                    </View>)
+
+                            })
+                        }
+                    </View > */}
+                            <View style={{ flex: 1 }}>
+
+
+                                <DraggableFlatList
+
+                                    data={agencyImages?.AgencyImagesList}
+                                    onDragEnd={({ data }) => setAgencyImages({ ...agencyImages, AgencyImagesList: data })}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={renderItem}
+                                />
+
+
+
+                            </View>
+
+                            <View style={{ ...styles.inputContainer, marginHorizontal: 20 }}>
+                                <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={Languages.ba_signup_password}
+                                    secureTextEntry={passwordVisible}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={password}
+                                    onChangeText={(text) => { setPassword(text), setPasswordValidation("") }}
+
+                                />
+                                <TouchableOpacity onPress={() => { setPasswordVisible(!passwordVisible) }}>
+                                    <FontAwesome5 name={passwordVisible ? "eye-slash" : "eye"} color={Colors.PrimaryColor} />
+                                </TouchableOpacity>
+
+                            </View>
+                            {passwordValidation && <ErrorMessage error={passwordValidation} />}
+                            <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
+                                <Text style={styles.btntext}>{Languages.ba_signup_btn_txt}</Text>
+                            </TouchableOpacity>
                         </View>
-                        {passwordValidation && <ErrorMessage error={passwordValidation} />}
-                        <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
-                            <Text style={styles.btntext}>{Languages.ba_signup_btn_txt}</Text>
-                        </TouchableOpacity>
                     </View>
-                </View>
-            </ScrollView>
-        </SafeAreaView >
+                </ScrollView>
+            </SafeAreaView >
+        </GestureHandlerRootView>
     )
 }
 

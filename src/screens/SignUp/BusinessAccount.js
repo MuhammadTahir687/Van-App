@@ -288,20 +288,20 @@ const BusinessAccountSignup = ({ route }) => {
             <ScrollView nestedScrollEnabled={true} style={{ flexGrow: 1 }} contentContainerStyle={styles.maincontent}>
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
-                    <View style={styles.subMainContainer}>
-                        <View style={styles.subcontainer}>
-                            <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
-                            <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
-                                {
-                                    Images.map((item, index) => (
-                                        <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={{ margin: 5 }}>
-                                            <Image source={item.image} resizeMode="contain" style={{ width: 100, height: 100 }} />
-                                        </TouchableOpacity>
-                                    ))
-                                }
-                            </View>
 
-                            {/* <View style={styles.dropdowncontainer}>
+                    <View style={styles.subcontainer}>
+                        <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
+                        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
+                            {
+                                Images.map((item, index) => (
+                                    <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={{ margin: 5 }}>
+                                        <Image source={item.image} resizeMode="contain" style={{ width: 100, height: 100 }} />
+                                    </TouchableOpacity>
+                                ))
+                            }
+                        </View>
+
+                        {/* <View style={styles.dropdowncontainer}>
                             <DropdownPicker
                                 listMode={"SCROLLVIEW"}
                                 placeholder={Languages.ba_signup_category}
@@ -315,20 +315,20 @@ const BusinessAccountSignup = ({ route }) => {
                         {categoryValidation && <ErrorMessage error={categoryValidation} />} */}
 
 
-                            {
-                                value == "Taxi" ?
-                                    <TaxiSignup /> :
-                                    value == "Hotel Reservation" ?
-                                        <HotelSignup /> : value == "Car Rent" ?
-                                            <CarRentalSignup /> : null
-                            }
+                        {
+                            value == "Taxi" ?
+                                <TaxiSignup /> :
+                                value == "Hotel Reservation" ?
+                                    <HotelSignup /> : value == "Car Rent" ?
+                                        <CarRentalSignup /> : null
+                        }
 
-                            {/* <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
+                        {/* <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages.ba_signup_pa_btn_txt}</Text>
                         </TouchableOpacity> */}
-                        </View>
                     </View>
                 </View>
+
             </ScrollView>
         </SafeAreaView >
     )

@@ -207,5 +207,22 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         marginHorizontal: 20,
         paddingBottom: 20
+    },
+    carRentalImgContainer: {
+        marginVertical: 5,
+        width: "100%",
+    },
+    carRentalImage: {
+        width: 200,
+        height: 100,
+        borderRadius: 5
+    },
+    carRemoveImageIcon: {
+        borderRadius: 50,
+        backgroundColor: "red",
+        alignSelf: "flex-end",
+        position: "absolute",
+        top: -5,
+        zIndex: 10
     }
 })
