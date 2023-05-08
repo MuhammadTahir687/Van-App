@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
@@ -20,9 +20,10 @@ import { AuthServices } from '../../services/authServices';
 import TaxiSignup from './TaxiSignup';
 import HotelSignup from './HotelSignup';
 import CarRentalSignup from './CarRentalSignup';
-import Car from '../../assets/car.png';
-import Hotel from '../../assets/hotel.png';
-import Taxi from '../../assets/taxi.png'
+import Hotel from '../../assets/hotel.jpeg';
+import Taxi from '../../assets/taxi.jpeg';
+import Car from '../../assets/carrental.jpeg';
+import Tour from '../../assets/tour.jpeg';
 
 
 const BusinessAccountSignup = ({ route }) => {
@@ -66,6 +67,7 @@ const BusinessAccountSignup = ({ route }) => {
         { id: 1, image: Taxi },
         { id: 2, image: Hotel },
         { id: 3, image: Car },
+        { id: 4, image: Tour },
 
     ]
 
@@ -291,14 +293,17 @@ const BusinessAccountSignup = ({ route }) => {
 
                     <View style={styles.subcontainer}>
                         <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
-                        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
-                            {
-                                Images.map((item, index) => (
-                                    <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={{ margin: 5 }}>
-                                        <Image source={item.image} resizeMode="contain" style={{ width: 100, height: 100 }} />
+                        <View style={styles.signupImagesContainer}>
+                            <FlatList
+                                data={Images}
+                                numColumns={2}
+                                keyExtractor={(item) => item.id}
+                                renderItem={({ item, index }) => (
+                                    <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={styles.listBtn}>
+                                        <Image source={item.image} resizeMode="contain" style={styles.listImages} />
                                     </TouchableOpacity>
-                                ))
-                            }
+                                )}
+                            />
                         </View>
 
                         {/* <View style={styles.dropdowncontainer}>

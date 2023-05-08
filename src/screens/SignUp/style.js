@@ -224,5 +224,18 @@ export const styles = StyleSheet.create({
         position: "absolute",
         top: -5,
         zIndex: 10
+    },
+    signupImagesContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    listBtn: {
+        margin: 5
+    },
+    listImages: {
+        width: 100,
+        height: 100,
+        borderRadius: 50
     }
 })
