@@ -31,6 +31,7 @@ const Profile = ({ navigation }) => {
                         size="medium"
                         rounded
                         icon={{ name: 'user', type: 'font-awesome' }}
+                        title={user?.tourist_name?.split(" ")?.map((n) => n[0])?.join("")}
                         activeOpacity={0.7}
                         containerStyle={styles.avatar}
                     />

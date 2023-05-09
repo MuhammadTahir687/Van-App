@@ -42,7 +42,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 20,
         paddingVertical: 15,
-        alignItems: "center"
+        alignItems: "center",
+
 
     },
     loginHeading: {
@@ -190,5 +191,51 @@ export const styles = StyleSheet.create({
         height: 50,
         margin: 10,
         borderRadius: 10
+    },
+    subContainerHeight: {
+        width: "100%",
+        backgroundColor: Colors.WhiteColor,
+        paddingHorizontal: 10,
+        borderRadius: 20,
+        paddingVertical: 15,
+        alignItems: "center"
+    },
+    subMainContainer: {
+        flex: 1,
+        flexGrow: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 20,
+        paddingBottom: 20
+    },
+    carRentalImgContainer: {
+        marginVertical: 5,
+        width: "100%",
+    },
+    carRentalImage: {
+        width: 200,
+        height: 100,
+        borderRadius: 5
+    },
+    carRemoveImageIcon: {
+        borderRadius: 50,
+        backgroundColor: "red",
+        alignSelf: "flex-end",
+        position: "absolute",
+        top: -5,
+        zIndex: 10
+    },
+    signupImagesContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    listBtn: {
+        margin: 5
+    },
+    listImages: {
+        width: 100,
+        height: 100,
+        borderRadius: 50
     }
 })

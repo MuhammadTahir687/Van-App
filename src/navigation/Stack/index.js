@@ -19,6 +19,9 @@ import EditTaxiDriverProfile from "../../screens/Profile/EditTaxiDriverProfile";
 import HotelTabScreens from "../Tab/Hotel";
 import EditHotelManagerProfile from "../../screens/Profile/EditHotelManagerProfile";
 import AddHotelRooms from "../../screens/Hotel/AddHotelRooms";
+import TaxiSignup from "../../screens/SignUp/TaxiSignup";
+import HotelSignup from "../../screens/SignUp/HotelSignup";
+import CarRentalSignup from "../../screens/SignUp/CarRentalSignup";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +36,9 @@ const StackNavigation = () => {
         <Stack.Screen name="BusinessAccount" component={BusinessAccount} />
         <Stack.Screen name="PersonelAccountSignup" component={PersonelAccountSignup} />
         <Stack.Screen name="BusinessAccountSignup" component={BusinessAccountSignup} />
+        <Stack.Screen name="TaxiSignup" component={TaxiSignup} />
+        <Stack.Screen name="HotelSignup" component={HotelSignup} />
+        <Stack.Screen name="CarRentalSignup" component={CarRentalSignup} />
         <Stack.Screen name="TabScreens" component={TabScreens} />
         <Stack.Screen name="HotelDetail" component={HotelDetail} />
         <Stack.Screen name="HotelRoomDetail" component={HotelRoomDetail} />
