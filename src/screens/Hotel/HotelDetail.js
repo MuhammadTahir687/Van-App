@@ -7,6 +7,7 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import HotelRoom1 from '../../assets/HotelRoom1.jpeg';
 import HotelRoom2 from '../../assets/HotelRoom2.jpeg';
 import HotelRoom3 from '../../assets/HotelRoom3.jpg';
+import Hotel from '../../assets/hotel.jpeg'
 
 const HotelDetail = ({ route, navigation }) => {
 
@@ -21,7 +22,7 @@ const HotelDetail = ({ route, navigation }) => {
         <SafeAreaView style={styles.hotelDetailContainer}>
             <ScrollView style={{ flexGrow: 1 }}>
                 <View style={styles.swiperContainer}>
-                    <SwiperFlatList
+                    {data?.hotel_view_url?.length > 0 ? <SwiperFlatList
                         showPagination
                         paginationActiveColor={Colors.PrimaryColor}
                         data={data?.hotel_view_url}
@@ -29,6 +30,9 @@ const HotelDetail = ({ route, navigation }) => {
                             <Image source={{ uri: item?.url }} style={{ width: width, height: 250 }} />
                         )}
                     />
+                        :
+                        <Image source={Hotel} style={{ width: width, height: 250 }} />
+                    }
                 </View>
                 {/* <ImageBackground source={data?.image} style={styles.image}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

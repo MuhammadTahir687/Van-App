@@ -71,7 +71,7 @@ const EditTaxiDriverProfile = ({ route }) => {
         else if (currency == "") setCurrencyValidation("Required*")
         else if (taxihireRate == "") setTaxiHireRateValidation("Required*")
         else if (taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
-        else if (image == "") setImageValidation("Required*")
+        // else if (image == "") setImageValidation("Required*")
         else {
             const taxi_body = {
                 taxi_driver_code: userData?.taxi_driver_code,

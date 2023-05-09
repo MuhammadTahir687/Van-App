@@ -115,7 +115,7 @@ const EditHotelManagerProfile = ({ route }) => {
         if (name == "") setNameValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else if (country == "") setCountryValidation("Required*")
-        else if (!hotelImages?.hotelImagesList?.length > 0) setHotelImagesValidation("Required*")
+        // else if (!hotelImages?.hotelImagesList?.length > 0) setHotelImagesValidation("Required*")
         else {
 
             const managerCode = user?.manager_code;

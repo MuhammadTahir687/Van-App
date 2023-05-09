@@ -64,10 +64,10 @@ const BusinessAccountSignup = ({ route }) => {
         { label: 'Business Advertisement', value: 'Business Advertisement' },
     ]
     const Images = [
-        { id: 1, image: Taxi },
-        { id: 2, image: Hotel },
-        { id: 3, image: Car },
-        { id: 4, image: Tour },
+        { id: 1, image: Taxi, name: "Taxi Drivers" },
+        { id: 2, image: Hotel, name: "Hotel Managers" },
+        { id: 3, image: Car, name: "Car Rnetal" },
+        { id: 4, image: Tour, name: "Tour Guide" },
 
     ]
 
@@ -282,8 +282,6 @@ const BusinessAccountSignup = ({ route }) => {
         else if (item.id == 3) navigation.navigate("CarRentalSignup")
     }
 
-    const SubContainerStyle = useMemo(() => [value == null ? styles.subcontainer : styles.subContainerHeight], [value])
-
     return (
         <SafeAreaView style={styles.maincontainer}>
             <Loader loading={loading} setLoading={setLoading} />
@@ -301,6 +299,7 @@ const BusinessAccountSignup = ({ route }) => {
                                 renderItem={({ item, index }) => (
                                     <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={styles.listBtn}>
                                         <Image source={item.image} resizeMode="contain" style={styles.listImages} />
+                                        <Text style={styles.listText}>{item?.name}</Text>
                                     </TouchableOpacity>
                                 )}
                             />
@@ -328,9 +327,9 @@ const BusinessAccountSignup = ({ route }) => {
                                         <CarRentalSignup /> : null
                         }
 
-                        {/* <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
-                            <Text style={styles.btntext}>{Languages.ba_signup_pa_btn_txt}</Text>
-                        </TouchableOpacity> */}
+                        <TouchableOpacity style={styles.btn}>
+                            <Text style={styles.btntext}>Business Advertiser</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 

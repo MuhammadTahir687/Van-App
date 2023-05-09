@@ -231,11 +231,17 @@ export const styles = StyleSheet.create({
         justifyContent: "center"
     },
     listBtn: {
-        margin: 5
+        margin: 5,
+        alignItems: "center"
     },
     listImages: {
         width: 100,
         height: 100,
         borderRadius: 50
+    },
+    listText: {
+        color: Colors.PrimaryColor,
+        marginTop: 5,
+        fontWeight: "bold",
     }
 })

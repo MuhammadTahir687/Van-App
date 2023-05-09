@@ -99,7 +99,7 @@ const HotelSignup = () => {
         else if (country == "") setCountryValidation("Required*")
         else if (hotelName == "") setHotelNameValidation("Required*")
         else if (hotelAddress == "") setHotelAddressValidation("Required*")
-        else if (!hotelImages?.hotelImagesList.length > 1) setImageListValidation("Required*")
+        // else if (!hotelImages?.hotelImagesList.length > 1) setImageListValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
 

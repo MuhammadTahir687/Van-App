@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { Text, View, TouchableOpacity, FlatList, StyleSheet, RefreshControl, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Colors';
 import { Avatar } from "react-native-elements";
@@ -8,6 +8,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import MeIcon from '../../assets/me-icon.png';
 import { UserServices } from '../../services/userServices';
+import Taxi from '../../assets/taxi.jpeg';
+
 
 
 const TouristTaxiBooking = () => {
@@ -92,20 +94,19 @@ const TouristTaxiBooking = () => {
             <ScrollView refreshControl={<RefreshControl progressBackgroundColor={Colors.PrimaryColor} colors={[Colors.WhiteColor]} refreshing={refreshing} onRefresh={() => { setRefreshing(true), GetData() }} />} style={styles.scrollcontainer}>
                 {data?.filter((item) => item.status_ready == true)?.map((item, index) => (
                     <View style={styles.listcontainer} key={index}>
-                        {item?.taxi_image_url !== "" && item?.taxi_image_url !== undefined ? <Avatar
-                            size="large"
-                            rounded
-                            icon={{ name: 'user', type: 'font-awesome' }}
-                            source={{
-                                uri: item?.taxi_image_url,
-                            }}
-                            containerStyle={styles.avatar}
-                        /> :
+                        {item?.taxi_image_url !== "" && item?.taxi_image_url !== undefined ?
                             <Avatar
                                 size="large"
                                 rounded
                                 icon={{ name: 'user', type: 'font-awesome' }}
-                                title={item?.driver_name.split(" ").map((n) => n[0]).join("")}
+                                source={{ uri: item?.taxi_image_url }}
+                                containerStyle={styles.avatar}
+                            /> :
+                            <Avatar
+                                size="large"
+                                rounded
+                                icon={{ name: 'user', type: 'font-awesome' }}
+                                source={Taxi}
                                 containerStyle={styles.avatar}
                             />
                         }

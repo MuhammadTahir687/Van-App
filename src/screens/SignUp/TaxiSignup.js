@@ -64,7 +64,7 @@ const TaxiSignup = () => {
         else if (email == "") setEmailValidation("Required*")
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
-        else if (image == "") setTaxiImageValidation("Required*")
+        // else if (image == "") setTaxiImageValidation("Required*")
         else if (taxiModel == "") setTaxiModelValidation("Required*")
         else if (currency == "") setCurrencyValidation("Required*")
         else if (taxihireRate == "") setTaxiHireRateValidation("Required*")
