@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, FlatList, ImageBackground, useWindowDimensions } from 'react-native'
 import { Colors } from '../../constants/Colors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-
+import { RootContext } from '../../components/ContextApi/ContextApi';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const CarFleetDetail = ({ route, navigation }) => {
 
     const { width, height } = useWindowDimensions()
+    const { user } = useContext(RootContext)
     const data = route?.params?.data
 
     const images = [{ id: 1, image: data?.car_image_url }]
@@ -14,6 +16,11 @@ const CarFleetDetail = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.HotelRoomDetailContainer}>
             <ScrollView style={{ flexGrow: 1 }}>
+                {user?.car_agent_code == data?.car_agent_code &&
+                    <TouchableOpacity onPress={() => { navigation.navigate("AddCarRentalFleet", { data: data }) }} style={{ position: "absolute", zIndex: 10, alignSelf: "flex-end", marginTop: 10, backgroundColor: Colors.PrimaryColor, borderRadius: 5, padding: 10, right: 10 }}>
+                        <FontAwesome name='edit' size={20} color={Colors.WhiteColor} />
+                    </TouchableOpacity>
+                }
                 <View style={styles.swiperContainer}>
                     <SwiperFlatList
                         // showPagination
@@ -51,11 +58,13 @@ const CarFleetDetail = ({ route, navigation }) => {
                     <Text style={styles.aboutText}>{data?.brief_introduction_model}</Text>
                 </View>
             </ScrollView>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => { alert("Fleet Booked") }} style={styles.bookingBtn}>
-                    <Text style={styles.btnText}>Book Now</Text>
-                </TouchableOpacity>
-            </View>
+            {user?.car_agent_code != data?.car_agent_code &&
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => { alert("Fleet Booked") }} style={styles.bookingBtn}>
+                        <Text style={styles.btnText}>Book Now</Text>
+                    </TouchableOpacity>
+                </View>
+            }
 
 
 

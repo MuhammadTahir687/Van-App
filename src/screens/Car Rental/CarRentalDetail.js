@@ -1,12 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, FlatList, ImageBackground, useWindowDimensions } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Colors } from '../../constants/Colors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import CarRental1 from '../../assets/CarRental1.jpg';
-import CarRental2 from '../../assets/CarRental2.jpg';
-import CarRental3 from '../../assets/CarRental3.jpg';
 
 const CarRentalDetail = ({ route, navigation }) => {
 
@@ -20,6 +17,7 @@ const CarRentalDetail = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.carRentalDetailContainer}>
             <ScrollView>
+
                 <View style={styles.swiperContainer}>
                     <SwiperFlatList
                         showPagination

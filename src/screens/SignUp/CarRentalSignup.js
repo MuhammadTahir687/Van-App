@@ -78,12 +78,10 @@ const CarRentalSignup = () => {
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
-        else if (profilePicture == "") setProfilePictureValidation("Required*")
         else if (agencyName == "") setAgencyNameValidation("Required*")
         else if (agencyAddress == "") setAgencyAddressValidation("Required*")
         else if (numberOfCars == "") setNumberOfCarsValidation("Required*")
         else if (agencyIntroduction == "") setAgencyIntroductionValidation("Required*")
-        else if (!agencyImages?.AgencyImagesList?.length > 1) setAgencyImageValidation("Required*")
         else {
             const carRentalBody = {
                 "car_agent_code": "CA-110",
