@@ -84,12 +84,12 @@ const CarRentalSignup = () => {
         else if (agencyIntroduction == "") setAgencyIntroductionValidation("Required*")
         else {
             const carRentalBody = {
-                "car_agent_code": "CA-110",
+                "car_agent_code": new Date(),
                 "agent_name": name,
                 "agency_name": agencyName,
                 "agency_image_url": agencyImages?.AgencyImagesList[0],
                 "fleet_image_url": agencyImages?.AgencyImagesList,
-                "agency_start_date": new Date(),
+                "agency_start_date": agencyDate,
                 "brief_introduction": agencyIntroduction,
                 "number_of_cars": numberOfCars,
                 "country": country,
@@ -102,7 +102,8 @@ const CarRentalSignup = () => {
                 "registration_date": new Date(),
                 "admin_approved": false,
                 "admin_remarks": "",
-                "log_last_login": new Date()
+                "log_last_login": new Date(),
+                "age": age
             }
             console.log(carRentalBody)
 
@@ -126,6 +127,25 @@ const CarRentalSignup = () => {
         }
 
 
+    }
+
+    const [agencyDate, setAgencyDate] = useState(new Date())
+    const [showDate, setShowDate] = useState(false)
+    const [showAgencyPlaceholder, setShowAgencyPlaceholder] = useState(false)
+
+    const handleDate = (event, selectedDate) => {
+        if (selectedDate) {
+            const currentDate = selectedDate;
+            setShowDate(false)
+            setAgencyDate(currentDate);
+            setShowAgencyPlaceholder(false)
+            console.log("Date ==", currentDate)
+        }
+        else {
+            setShowDate(false)
+            setShowAgencyPlaceholder(true)
+            setAgencyDate(new Date())
+        }
     }
 
     const renderItem = ({ item, drag, isActive }) => {
@@ -230,7 +250,7 @@ const CarRentalSignup = () => {
                                     />
                                 </View>
                             </View>
-                            <View style={styles.inputContainer}>
+                            {/* <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"user"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
@@ -241,7 +261,7 @@ const CarRentalSignup = () => {
 
                                 />
                             </View>
-                            {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />}
+                            {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />} */}
 
                             <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
@@ -306,21 +326,7 @@ const CarRentalSignup = () => {
                                 <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                             </TouchableOpacity>
 
-                            {/* <View style={styles.imageContainer}>
-                        {agencyImages?.AgencyImagesList?.length > 0 &&
-                            agencyImages?.AgencyImagesList?.map((item, index) => {
-                                console.log(item?.url)
-                                return (
-                                    <View key={index}>
-                                        <TouchableOpacity onPress={() => { RemoveAgencyImage(item) }} style={styles.removeImageIcon}>
-                                            <Ionicons name={"close"} size={15} style={styles.closeIcon} />
-                                        </TouchableOpacity>
-                                        <Image source={{ uri: item?.url }} style={styles.hotelImages} />
-                                    </View>)
 
-                            })
-                        }
-                    </View > */}
                             <View style={{ flex: 1 }}>
 
 
@@ -334,6 +340,18 @@ const CarRentalSignup = () => {
 
 
 
+                            </View>
+
+                            <View style={styles.datecontainer}>
+                                <FontAwesome5 name={"calendar-alt"} size={15} color={Colors.PrimaryColor} />
+                                <TouchableOpacity style={styles.datebtn} onPress={() => { setShowDate(true) }}>
+                                    {showAgencyPlaceholder == true ? <Text style={styles.datetext}>Agency Start Date</Text> : <Text style={styles.datetext}>{moment(agencyDate).format('ll')}</Text>}
+                                    {showDate && <DateTimePicker
+                                        value={agencyDate}
+                                        onChange={handleDate}
+                                    />
+                                    }
+                                </TouchableOpacity>
                             </View>
 
                             <View style={{ ...styles.inputContainer, marginHorizontal: 20 }}>

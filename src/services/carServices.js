@@ -7,5 +7,8 @@ export const CarServices = {
     Edit_CarFleet(body) {
         return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/edit/carRentalFleetProfileSave", body)
 
+    },
+    Edit_Profile(body) {
+        return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/edit/carAgentProfileSave", body)
     }
 }

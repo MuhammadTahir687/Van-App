@@ -14,9 +14,9 @@ const CarRentalTabScreens = () => {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
-                    if (route.name === 'CarRentalFleets') { iconName = focused ? 'ios-business' : 'ios-business-outline' }
-                    if (route.name === 'CarRentalBookings') { iconName = focused ? 'ios-business' : 'ios-business-outline' }
-                    if (route.name === 'CarRentalPreviousBusiness') { iconName = focused ? 'ios-business' : 'ios-business-outline' }
+                    if (route.name === 'CarRentalFleets') { iconName = focused ? 'car-sport' : 'car-sport-outline' }
+                    if (route.name === 'CarRentalBookings') { iconName = focused ? 'bookmarks' : 'bookmarks-outline' }
+                    if (route.name === 'CarRentalPreviousBusiness') { iconName = focused ? 'cash' : 'cash-outline' }
                     if (route.name === 'Profile') { iconName = focused ? 'person-circle' : 'person-circle-outline' }
 
                     return <Ionicons name={iconName} size={size} color={color} />;

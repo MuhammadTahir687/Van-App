@@ -29,12 +29,12 @@ const CarRentalProfile = ({ navigation }) => {
 
                 <View style={styles.profileCard}>
                     <View style={styles.avatarContainer}>
-                        {user?.hotel_image_url?.url ? <Avatar
+                        {user?.agency_image_url?.url ? <Avatar
                             size="large"
                             rounded
                             icon={{ name: 'user', type: 'font-awesome' }}
                             source={{
-                                uri: user?.hotel_image_url?.url,
+                                uri: user?.agency_image_url?.url,
                             }}
                             activeOpacity={0.7}
                             containerStyle={styles.avatar}
@@ -44,12 +44,12 @@ const CarRentalProfile = ({ navigation }) => {
                                 size="large"
                                 rounded
                                 icon={{ name: 'user', type: 'font-awesome' }}
-                                title={user?.manager_name?.split(" ")?.map((n) => n[0])?.join("")}
+                                title={user?.agent_name?.split(" ")?.map((n) => n[0])?.join("")}
                                 activeOpacity={0.7}
                                 containerStyle={styles.avatar}
                             />}
                     </View>
-                    <Text style={styles.profileName}>{user?.manager_name}</Text>
+                    <Text style={styles.profileName}>{user?.agent_name}</Text>
                     <Text style={styles.profileName}>Admin Approved: {user?.admin_approved == true ? "Yes" : "No"}</Text>
 
                     <Text style={styles.profileDetailHeading}>Profile Detail</Text>
@@ -67,22 +67,22 @@ const CarRentalProfile = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={styles.profileCard}>
-                    <Text style={styles.profileDetailHeading}>Hotel Detail</Text>
+                    <Text style={styles.profileDetailHeading}>Agency Detail</Text>
                     <View style={styles.profileDetail}>
                         <Ionicons name='ios-business' size={20} color={Colors.PrimaryColor} />
-                        <Text style={styles.profileText}>Hotel: {user?.hotel_name}</Text>
+                        <Text style={styles.profileText}>Name: {user?.agency_name}</Text>
                     </View>
                     <View style={styles.profileDetail}>
                         <Ionicons name='location' size={20} color={Colors.PrimaryColor} />
-                        <Text style={styles.profileText}>Address: {user?.hotel_address}</Text>
+                        <Text style={styles.profileText}>Address: {user?.agency_address}</Text>
                     </View>
                     <View style={styles.profileDetail}>
-                        <Ionicons name='earth' size={20} color={Colors.PrimaryColor} />
-                        <Text style={styles.profileText}>Rooms: {user?.number_of_rooms}</Text>
+                        <Ionicons name='car' size={20} color={Colors.PrimaryColor} />
+                        <Text style={styles.profileText}>Cars: {user?.number_of_cars}</Text>
                     </View>
                 </View>
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditHotelManagerProfile", { userData: user }) }}>
+                    <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditCarRentalProfile", { userData: user }) }}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                         <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
                     </TouchableOpacity>

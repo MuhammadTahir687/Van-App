@@ -192,10 +192,10 @@ export const styles = StyleSheet.create({
         flexWrap: "wrap"
     },
     loadImageBtn: {
-        alignItems:"center",
+        alignItems: "center",
         backgroundColor: Colors.PrimaryColor,
         paddingHorizontal: 40,
-        marginHorizontal:20,
+        marginHorizontal: 20,
         marginVertical: 10,
         paddingVertical: 10,
         borderRadius: 10
@@ -210,11 +210,31 @@ export const styles = StyleSheet.create({
     },
     closeIcon: {
         color: "white",
+
     },
     hotelImages: {
         width: 50,
         height: 50,
         margin: 10,
         borderRadius: 10
-    }
+    },
+    carRentalImgContainer: {
+        marginVertical: 5,
+        width: "100%",
+        alignItems: "center"
+    },
+    carRentalImage: {
+        width: 200,
+        height: 100,
+        borderRadius: 5
+    },
+    carRemoveImageIcon: {
+        borderRadius: 50,
+        backgroundColor: "red",
+        alignSelf: "center",
+        position: "absolute",
+        top: -5,
+        right: 75,
+        zIndex: 10
+    },
 })

@@ -42,8 +42,6 @@ const AddCarRentalFleet = ({ navigation, route }) => {
     const [loading, setLoading] = useState(false)
 
 
-
-
     const Submit = async () => {
         if (carName == "") setCarNameValidation("Required*")
         else if (image == "") setImageValidation("Required*")
@@ -56,7 +54,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
 
             const body = {
                 "car_agent_code": user?.car_agent_code,
-                "car_code": data ? data?.car_code : new Date(),
+                "car_code": data ? data?.car_code : user?.car_agent_code + "-" + new Date().getTime(),
                 "car_name": carName,
                 "car_image_url": image,
                 "brief_introduction_model": briefIntroduction,
