@@ -74,7 +74,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
             setLoading(true)
             try {
 
-                const response = data ? await CarServices?.Edit_CarFleet(carCode, body) : await CarServices?.Add_CarFleet(body)
+                const response = data ? await CarServices?.Edit_CarFleet(data?.car_code, body) : await CarServices?.Add_CarFleet(body)
                 if (response) {
                     console.log("Response==============", response?.data)
                     setLoading(false)
