@@ -59,7 +59,7 @@ const CarRentalFleets = () => {
 
             </ScrollView>
             <TouchableOpacity onPress={() => { navigation.navigate("AddCarRentalFleet") }} style={styles.addRoomsBtn}>
-                <Text style={styles.addRoomsBtnText}>Add Car Fleets</Text>
+                <Text style={styles.addRoomsBtnText}>Add Car Fleet</Text>
             </TouchableOpacity>
 
         </SafeAreaView>

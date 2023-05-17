@@ -228,7 +228,7 @@ export const styles = StyleSheet.create({
     signupImagesContainer: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
     },
     listBtn: {
         margin: 5,

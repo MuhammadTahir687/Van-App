@@ -64,8 +64,8 @@ const BusinessAccountSignup = ({ route }) => {
         { label: 'Business Advertisement', value: 'Business Advertisement' },
     ]
     const Images = [
-        { id: 1, image: Taxi, name: "Taxi Drivers" },
-        { id: 2, image: Hotel, name: "Hotel Managers" },
+        { id: 1, image: Taxi, name: "Taxi Driver" },
+        { id: 2, image: Hotel, name: "Hotel Manager" },
         { id: 3, image: Car, name: "Car Rnetal" },
         { id: 4, image: Tour, name: "Tour Guide" },
 

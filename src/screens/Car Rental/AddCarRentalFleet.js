@@ -24,6 +24,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
     const { user } = useContext(RootContext)
     const data = route?.params?.data;
     console.log(data)
+    const [carCode, setCarCode] = useState(data?.car_code ?? "")
     const [carName, setCarName] = useState(data?.car_name ?? "")
     const [image, setImage] = useState(data?.car_image_url ?? "")
     const [showImage, setShowImage] = useState(true)
@@ -32,6 +33,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
     const [plateNo, setPlateNo] = useState(data?.plate_no ?? "")
     const [hireRate, setHireRate] = useState(data?.hire_rate ?? "")
 
+    const [carCodeValidation, setCarCodeValidation] = useState("")
     const [carNameValidation, setCarNameValidation] = useState("")
     const [imageValidation, setImageValidation] = useState("")
     const [currencyValidation, setCurrencyValidation] = useState("")
@@ -43,6 +45,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
 
 
     const Submit = async () => {
+        if (data && carCode == "") setCarCodeValidation("Required*")
         if (carName == "") setCarNameValidation("Required*")
         else if (image == "") setImageValidation("Required*")
         else if (plateNo == "") setPlateNoValidation("Required*")
@@ -54,7 +57,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
 
             const body = {
                 "car_agent_code": user?.car_agent_code,
-                "car_code": data ? data?.car_code : user?.car_agent_code + "-" + new Date().getTime(),
+                "car_code": data ? carCode : user?.car_agent_code + "-" + new Date().getTime(),
                 "car_name": carName,
                 "car_image_url": image,
                 "brief_introduction_model": briefIntroduction,
@@ -71,7 +74,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
             setLoading(true)
             try {
 
-                const response = data ? await CarServices?.Edit_CarFleet(body) : await CarServices?.Add_CarFleet(body)
+                const response = data ? await CarServices?.Edit_CarFleet(carCode, body) : await CarServices?.Add_CarFleet(body)
                 if (response) {
                     console.log("Response==============", response?.data)
                     setLoading(false)
@@ -91,6 +94,21 @@ const AddCarRentalFleet = ({ navigation, route }) => {
             <ScrollView contentContainerStyle={{ marginVertical: 20 }}>
                 <Text style={styles.loginHeading}>{data ? "Edit Car Fleet" : "Add Car Fleet"}</Text>
 
+                {data &&
+                    <>
+                        <View style={styles.inputContainer}>
+                            <MaterialIcons name={"meeting-room"} color={Colors.PrimaryColor} />
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder={"Car Code"}
+                                placeholderTextColor={Colors.PrimaryColor}
+                                value={carCode}
+                                onChangeText={(text) => { setCarCode(text), setCarCodeValidation("") }}
+                            />
+                        </View>
+                        {carCodeValidation && <ErrorMessage margin={10} error={carCodeValidation} />}
+                    </>
+                }
                 <View style={styles.inputContainer}>
                     <MaterialIcons name={"meeting-room"} color={Colors.PrimaryColor} />
                     <TextInput

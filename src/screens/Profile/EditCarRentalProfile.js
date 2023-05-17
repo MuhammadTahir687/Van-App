@@ -26,6 +26,7 @@ const EditCarRentalProfile = ({ route }) => {
     const navigation = useNavigation()
     const { user, setUser } = useContext(RootContext)
     const data = route?.params?.userData;
+
     const [loading, setLoading] = useState(false)
 
     const [name, setName] = useState(data?.agent_name ?? "")
@@ -71,6 +72,7 @@ const EditCarRentalProfile = ({ route }) => {
         setAgencyImages({ ...agencyImages, AgencyImagesList: filterImages })
     }
 
+
     const Submit = async () => {
         if (name == "") setNameValidation("Required*")
         else if (country == "") setCountryValidation("Required*")
@@ -110,7 +112,6 @@ const EditCarRentalProfile = ({ route }) => {
                 if (response) {
                     console.log("Taxi response: ", response)
                     setLoading(false)
-                    alert("Taxi Driver Registered Successfully")
                     setUser(response?.data)
                     navigation.goBack()
                 }
@@ -118,7 +119,7 @@ const EditCarRentalProfile = ({ route }) => {
             } catch (error) {
                 setLoading(false)
                 alert(error?.response?.data)
-                console.log(error?.response?.data)
+                console.log(error)
 
             }
         }

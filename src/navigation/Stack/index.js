@@ -25,6 +25,7 @@ import CarRentalSignup from "../../screens/SignUp/CarRentalSignup";
 import CarRentalTabScreens from "../Tab/CarRental";
 import AddCarRentalFleet from "../../screens/Car Rental/AddCarRentalFleet";
 import EditCarRentalProfile from "../../screens/Profile/EditCarRentalProfile";
+import BusinessAdvertiser from "../../screens/SignUp/BusinessAdvertiser";
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +59,7 @@ const StackNavigation = () => {
         <Stack.Screen name="CarRentalTabScreens" component={CarRentalTabScreens} />
         <Stack.Screen name="AddCarRentalFleet" component={AddCarRentalFleet} />
         <Stack.Screen name="EditCarRentalProfile" component={EditCarRentalProfile} />
+        <Stack.Screen name="BusinessAdvrtiser" component={BusinessAdvertiser} />
       </Stack.Navigator>
 
     </NavigationContainer>

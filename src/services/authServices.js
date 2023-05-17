@@ -18,5 +18,9 @@ export const AuthServices = {
     },
     CR_Login(body) {
         return axios.post('https://eu-central-1.aws.data.mongodb-api.com/app/data_lookup-emecl/endpoint/LoginCarAgent', body)
+    },
+    BA_Register(body) {
+        return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/insert/one_all?NameCollection=businessAdvertisers", body)
+
     }
 }
