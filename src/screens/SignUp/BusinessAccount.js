@@ -327,8 +327,8 @@ const BusinessAccountSignup = ({ route }) => {
                                         <CarRentalSignup /> : null
                         }
 
-                        <TouchableOpacity style={styles.btn}>
-                            <Text style={styles.btntext}>Business Advertiser</Text>
+                        <TouchableOpacity onPress={() => { navigation.navigate('BusinessAdvrtiser') }} style={styles.btn}>
+                            <Text style={styles.btntext}>Advertise with us!</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

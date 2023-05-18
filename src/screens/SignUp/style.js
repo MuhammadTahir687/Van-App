@@ -226,6 +226,7 @@ export const styles = StyleSheet.create({
         zIndex: 10
     },
     signupImagesContainer: {
+        width: "100%",
         flex: 1,
         alignItems: "center",
         justifyContent: "center",

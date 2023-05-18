@@ -82,6 +82,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                 "admin_remarks": "",
                 "log_last_login": new Date()
             }
+            console.log(body)
 
             try {
 
@@ -129,7 +130,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Taxi Drivers</Text>
+                        <Text style={styles.loginHeading}>Business Advertiser</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput

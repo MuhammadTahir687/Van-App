@@ -33,7 +33,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
+      <Stack.Navigator initialRouteName="TabScreens" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="PersonelAccount" component={PersonelAccount} />

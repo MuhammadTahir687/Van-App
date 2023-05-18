@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Colors } from '../../constants/Colors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import Car from '../../assets/carrental.jpeg';
 
 const CarRentalDetail = ({ route, navigation }) => {
 
@@ -19,14 +20,18 @@ const CarRentalDetail = ({ route, navigation }) => {
             <ScrollView>
 
                 <View style={styles.swiperContainer}>
-                    <SwiperFlatList
-                        showPagination
-                        paginationActiveColor={Colors.PrimaryColor}
-                        data={data?.fleet_image_url}
-                        renderItem={({ item }) => (
-                            <Image source={{ uri: item }} style={{ width: width, height: 250 }} />
-                        )}
-                    />
+                    {data?.fleet_image_url?.length > 0 ?
+                        <SwiperFlatList
+                            showPagination
+                            paginationActiveColor={Colors.PrimaryColor}
+                            data={data?.fleet_image_url}
+                            renderItem={({ item }) => (
+                                <Image source={{ uri: item?.url }} style={{ width: width, height: 250 }} />
+                            )}
+                        />
+                        :
+                        <Image source={Car} style={{ width: width, height: 250 }} />
+                    }
                 </View>
                 {/* <ImageBackground source={data?.image} style={styles.image}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
