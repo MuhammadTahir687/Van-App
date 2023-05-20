@@ -22,5 +22,8 @@ export const AuthServices = {
     BA_Register(body) {
         return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/insert/one_all?NameCollection=businessAdvertisers", body)
 
+    },
+    TG_Register(body) {
+        return axios.post("https://asia-south1.gcp.data.mongodb-api.com/app/registerapp-kvgyw/endpoint/insert/one_all?NameCollection=guides", body)
     }
 }

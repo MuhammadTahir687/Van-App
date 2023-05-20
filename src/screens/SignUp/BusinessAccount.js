@@ -280,6 +280,7 @@ const BusinessAccountSignup = ({ route }) => {
         if (item.id == 1) navigation.navigate("TaxiSignup")
         else if (item.id == 2) navigation.navigate("HotelSignup")
         else if (item.id == 3) navigation.navigate("CarRentalSignup")
+        else if (item.id == 4) navigation.navigate("TourGuideSignup")
     }
 
     return (
@@ -327,7 +328,8 @@ const BusinessAccountSignup = ({ route }) => {
                                         <CarRentalSignup /> : null
                         }
 
-                        <TouchableOpacity onPress={() => { navigation.navigate('BusinessAdvrtiser') }} style={styles.btn}>
+
+                        <TouchableOpacity style={styles.btn}>
                             <Text style={styles.btntext}>Advertise with us!</Text>
                         </TouchableOpacity>
                     </View>
