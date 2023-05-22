@@ -27,6 +27,9 @@ import AddCarRentalFleet from "../../screens/Car Rental/AddCarRentalFleet";
 import EditCarRentalProfile from "../../screens/Profile/EditCarRentalProfile";
 import BusinessAdvertiser from "../../screens/SignUp/BusinessAdvertiser";
 import TourGuideSignup from "../../screens/SignUp/TourGuideSignup";
+import EditTourGuideProfile from "../../screens/Profile/EditTourGuideProfile";
+import TourGuideTabScreens from "../Tab/TourGuide";
+import AddTripPlans from "../../screens/TourGuide/AddTripPlans";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +37,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
+      <Stack.Navigator initialRouteName="TourGuideTabScreens" screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="PersonelAccount" component={PersonelAccount} />
@@ -62,6 +65,9 @@ const StackNavigation = () => {
         <Stack.Screen name="EditCarRentalProfile" component={EditCarRentalProfile} />
         <Stack.Screen name="BusinessAdvrtiser" component={BusinessAdvertiser} />
         <Stack.Screen name="TourGuideSignup" component={TourGuideSignup} />
+        <Stack.Screen name="TourGuideTabScreens" component={TourGuideTabScreens} />
+        <Stack.Screen name="EditTourGuideProfile" component={EditTourGuideProfile} />
+        <Stack.Screen name="AddTripPlans" component={AddTripPlans} />
       </Stack.Navigator>
 
     </NavigationContainer>
