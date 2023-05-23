@@ -60,7 +60,7 @@ const TourGuideSignup = () => {
                 "guide_code": new Date().getTime(),
                 "guide_name": name,
                 "profile_image_url": tripImages?.tripImagesList[0],
-                "trips_view_url": tripImages,
+                "trips_view_url": tripImages?.tripImagesList,
                 "age_years": age,
                 "country": country,
                 "country_code": countryCode,

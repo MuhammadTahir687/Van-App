@@ -100,6 +100,17 @@ const BusinessAccount = () => {
                         navigation.reset({ index: 0, routes: [{ name: 'CarRentalTabScreens' }] });
                     }
                 }
+                if (value == "Tour Guide") {
+                    setLoading(true)
+                    const resp = await AuthServices.TG_Login(body)
+                    if (resp.data) {
+                        console.log(resp.data)
+                        setLoading(false)
+                        await save_data("user", resp.data[0])
+                        setUser(resp.data[0])
+                        navigation.reset({ index: 0, routes: [{ name: 'TourGuideTabScreens' }] });
+                    }
+                }
             } catch (error) {
                 setShowAlert(true)
                 setLoading(false)

@@ -16,25 +16,28 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const EditTourGuideProfile = () => {
+const EditTourGuideProfile = ({ route }) => {
+
     const navigation = useNavigation()
+    const data = route?.params?.userData;
 
     const [loading, setLoading] = useState(false)
 
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [city, setCity] = useState("")
-    const [age, setAge] = useState("")
-    const [phone, setPhone] = useState("")
-    const [password, setPassword] = useState("")
-    const [image, setImage] = useState("")
-    const [showImage, setShowImage] = useState(false)
+    const [name, setName] = useState(data?.guide_name ?? "")
+    const [email, setEmail] = useState(data?.email ?? "")
+    const [city, setCity] = useState(data?.city ?? "")
+    const [age, setAge] = useState(data?.age ?? "")
+    const [phone, setPhone] = useState(data?.phone ?? "")
+    const [password, setPassword] = useState(data?.password ?? "")
+    const [image, setImage] = useState(data?.profile_image_url ?? "")
+    const [showImage, setShowImage] = useState(data?.profile_image_url ? true : false)
     const [currency, setCurrency] = useState("")
 
-    const [country, setCountry] = useState("")
-    const [countryCode, setCountryCode] = useState('')
+    const [country, setCountry] = useState(data?.country ?? "")
+    const [countryCode, setCountryCode] = useState(data?.country_code ?? '')
     const [passwordVisible, setPasswordVisible] = useState(true)
     const [countryValidation, setCountryValidation] = useState("")
     const [categoryValidation, setCategoryValidation] = useState("")
@@ -45,7 +48,7 @@ const EditTourGuideProfile = () => {
     const [ageValidation, setAgeValidation] = useState("")
     const [imageListValidation, setImageListValidation] = useState("")
 
-    const [tripImages, setTripImages] = useState({ showTripImage: false, tripImagesList: [], tripImage: "", tripImageValue: "" })
+    const [tripImages, setTripImages] = useState({ showTripImage: data?.trips_view_url?.length > 0 ? true : false, tripImagesList: data?.trips_view_url ?? [], tripImage: "", tripImageValue: "" })
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (name == "") setNameValidation("Required*")

@@ -188,6 +188,8 @@ export const styles = StyleSheet.create({
         borderRadius: 10
     },
     imageContainer: {
+        alignItems: "center",
+        justifyContent: "center",
         flexDirection: "row",
         flexWrap: "wrap"
     },
@@ -198,7 +200,8 @@ export const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 10,
         paddingVertical: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        height: 50
     },
     removeImageIcon: {
         borderRadius: 50,

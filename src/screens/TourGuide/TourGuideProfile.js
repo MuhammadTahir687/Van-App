@@ -29,12 +29,12 @@ const TourGuideProfile = ({ navigation }) => {
 
                 <View style={styles.profileCard}>
                     <View style={styles.avatarContainer}>
-                        {user?.hotel_image_url?.url ? <Avatar
+                        {user?.profile_image_url?.url ? <Avatar
                             size="large"
                             rounded
                             icon={{ name: 'user', type: 'font-awesome' }}
                             source={{
-                                uri: user?.hotel_image_url?.url,
+                                uri: user?.profile_image_url?.url,
                             }}
                             activeOpacity={0.7}
                             containerStyle={styles.avatar}
@@ -44,12 +44,12 @@ const TourGuideProfile = ({ navigation }) => {
                                 size="large"
                                 rounded
                                 icon={{ name: 'user', type: 'font-awesome' }}
-                                title={user?.manager_name?.split(" ")?.map((n) => n[0])?.join("")}
+                                title={user?.guide_name?.split(" ")?.map((n) => n[0])?.join("")}
                                 activeOpacity={0.7}
                                 containerStyle={styles.avatar}
                             />}
                     </View>
-                    <Text style={styles.profileName}>{user?.manager_name}</Text>
+                    <Text style={styles.profileName}>{user?.guide_name}</Text>
                     <Text style={styles.profileName}>Admin Approved: {user?.admin_approved == true ? "Yes" : "No"}</Text>
 
                     <Text style={styles.profileDetailHeading}>Profile Detail</Text>
@@ -66,7 +66,7 @@ const TourGuideProfile = ({ navigation }) => {
                         <Text style={styles.profileText}>{user?.country}</Text>
                     </View>
                 </View>
-                <View style={styles.profileCard}>
+                {/* <View style={styles.profileCard}>
                     <Text style={styles.profileDetailHeading}>Hotel Detail</Text>
                     <View style={styles.profileDetail}>
                         <Ionicons name='ios-business' size={20} color={Colors.PrimaryColor} />
@@ -80,9 +80,9 @@ const TourGuideProfile = ({ navigation }) => {
                         <Ionicons name='earth' size={20} color={Colors.PrimaryColor} />
                         <Text style={styles.profileText}>Rooms: {user?.number_of_rooms}</Text>
                     </View>
-                </View>
+                </View> */}
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditHotelManagerProfile", { userData: user }) }}>
+                    <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate("EditTourGuideProfile", { userData: user }) }}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                         <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
                     </TouchableOpacity>
