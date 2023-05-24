@@ -100,7 +100,7 @@ const TaxiSignup = () => {
                 if (response) {
                     console.log("Taxi response: ", response)
                     setLoading(false)
-                    alert("Taxi Driver Registered Successfully")
+                    alert(`Dear ${name}, your car agency registered successfully`)
                     navigation.replace("BusinessAccount")
                 }
 
@@ -123,7 +123,7 @@ const TaxiSignup = () => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Taxi Drivers</Text>
+                        <Text style={styles.loginHeading}>{Languages?.ba_signup_taxi_heading}</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -207,7 +207,7 @@ const TaxiSignup = () => {
                             <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Enter Image Url"}
+                                placeholder={Languages?.ba_signup_image}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={image}
                                 onChangeText={(text) => { setImage(text), setTaxiImageValidation("") }}
@@ -217,7 +217,7 @@ const TaxiSignup = () => {
                         {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
 
                         <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
-                            <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                            <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
                         {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}
 
@@ -238,7 +238,7 @@ const TaxiSignup = () => {
                             <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Currency"}
+                                placeholder={Languages?.ba_signup_currency}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={currency}
                                 onChangeText={(text) => { setCurrency(text), setCurrencyValidation("") }}

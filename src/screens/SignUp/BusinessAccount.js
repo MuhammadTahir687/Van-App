@@ -64,10 +64,10 @@ const BusinessAccountSignup = ({ route }) => {
         { label: 'Business Advertisement', value: 'Business Advertisement' },
     ]
     const Images = [
-        { id: 1, image: Taxi, name: "Taxi Driver" },
-        { id: 2, image: Hotel, name: "Hotel Manager" },
-        { id: 3, image: Car, name: "Car Rnetal" },
-        { id: 4, image: Tour, name: "Tour Guide" },
+        { id: 1, image: Taxi, name: Languages?.ba_signup_taxiBtn },
+        { id: 2, image: Hotel, name: Languages?.ba_signup_hotelBtn },
+        { id: 3, image: Car, name: Languages?.ba_signup_carBtn },
+        { id: 4, image: Tour, name: Languages?.ba_signup_tourBtn },
 
     ]
 
@@ -330,7 +330,7 @@ const BusinessAccountSignup = ({ route }) => {
 
 
                         <TouchableOpacity style={styles.btn}>
-                            <Text style={styles.btntext}>Advertise with us!</Text>
+                            <Text style={styles.btntext}>{Languages?.ba_signup_advertisemntBtn}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

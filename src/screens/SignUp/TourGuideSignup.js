@@ -114,7 +114,7 @@ const TourGuideSignup = () => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Tour Guide</Text>
+                        <Text style={styles.loginHeading}>{Languages?.ba_signup_TG_heading}</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -188,7 +188,7 @@ const TourGuideSignup = () => {
                                 <Fontisto name={"room"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
                                 <TextInput
                                     style={styles.rowtextInput}
-                                    placeholder="Age"
+                                    placeholder={Languages?.ba_signup_age}
                                     keyboardType='numeric'
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={age}
@@ -205,7 +205,7 @@ const TourGuideSignup = () => {
                             <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Enter Image Url"}
+                                placeholder={Languages?.ba_signup_image}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={tripImages?.tripImageValue}
                                 onChangeText={(text) => { setTripImages({ ...tripImages, tripImage: text, tripImageValue: text }) }}
@@ -215,7 +215,7 @@ const TourGuideSignup = () => {
                         {imageListValidation && <ErrorMessage error={imageListValidation} />}
 
                         <TouchableOpacity disabled={tripImages?.tripImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
-                            <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                            <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
 
                         <View style={styles.imageContainer}>

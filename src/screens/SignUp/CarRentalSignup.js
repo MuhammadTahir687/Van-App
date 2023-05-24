@@ -170,7 +170,7 @@ const CarRentalSignup = () => {
                     <View style={styles.container}>
                         <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                         <View style={styles.subcontainer}>
-                            <Text style={styles.loginHeading}>Car Rental Agency</Text>
+                            <Text style={styles.loginHeading}>{Languages?.ba_signup_CR_heading}</Text>
                             <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                                 <TextInput
@@ -267,7 +267,7 @@ const CarRentalSignup = () => {
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Agency Name"}
+                                    placeholder={Languages?.ba_signup_CR_agencyName}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={agencyName}
                                     onChangeText={(text) => { setAgencyName(text) }}
@@ -277,7 +277,7 @@ const CarRentalSignup = () => {
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Agency Address"}
+                                    placeholder={Languages?.ba_signup_CR_agencyAddress}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={agencyAddress}
                                     onChangeText={(text) => { setAgencyAddress(text) }}
@@ -288,7 +288,7 @@ const CarRentalSignup = () => {
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Number of Cars"}
+                                    placeholder={Languages?.ba_signup_CR_cars}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={numberOfCars}
                                     onChangeText={(text) => { setNumberOfCars(text) }}
@@ -299,7 +299,7 @@ const CarRentalSignup = () => {
                                 <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
                                 <TextInput
                                     style={styles.textbox}
-                                    placeholder={"Brief Introduction"}
+                                    placeholder={Languages?.ba_signup_breif_introduction}
                                     underlineColorAndroid="transparent"
                                     multiline={true}
                                     numberOfLines={8}
@@ -314,7 +314,7 @@ const CarRentalSignup = () => {
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Enter Images Url"}
+                                    placeholder={Languages?.ba_signup_image}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={agencyImages?.AgencyImageValue}
                                     onChangeText={(text) => { setAgencyImages({ ...agencyImages, AgencyImage: text, AgencyImageValue: text }) }}
@@ -323,7 +323,7 @@ const CarRentalSignup = () => {
                             </View>
 
                             <TouchableOpacity disabled={agencyImages?.AgencyImageValue == "" ? true : false} onPress={() => { AddAgencyImages() }} style={styles.loadImageBtn}>
-                                <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                                <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                             </TouchableOpacity>
 
 
@@ -337,15 +337,12 @@ const CarRentalSignup = () => {
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={renderItem}
                                 />
-
-
-
                             </View>
 
                             <View style={styles.datecontainer}>
                                 <FontAwesome5 name={"calendar-alt"} size={15} color={Colors.PrimaryColor} />
                                 <TouchableOpacity style={styles.datebtn} onPress={() => { setShowDate(true) }}>
-                                    {showAgencyPlaceholder == true ? <Text style={styles.datetext}>Agency Start Date</Text> : <Text style={styles.datetext}>{moment(agencyDate).format('ll')}</Text>}
+                                    {showAgencyPlaceholder == true ? <Text style={styles.datetext}>{Languages?.ba_signup_CR_agencyStartDate}</Text> : <Text style={styles.datetext}>{moment(agencyDate).format('ll')}</Text>}
                                     {showDate && <DateTimePicker
                                         value={agencyDate}
                                         onChange={handleDate}

@@ -130,7 +130,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Business Advertiser</Text>
+                        <Text style={styles.loginHeading}>{Languages?.ba_signup_BA_heading}</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -204,7 +204,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                             <FontAwesome5 name={"building"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder="Business Name"
+                                placeholder={Languages?.ba_signup_BA_name}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={businessName}
                                 onChangeText={(text) => { setBusinessName(text), setBusinessNameValidation("") }}
@@ -217,7 +217,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                             <FontAwesome5 name={"globe"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder="Business Address"
+                                placeholder={Languages?.ba_signup_BA_address}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={businessAddress}
                                 onChangeText={(text) => { setBusinessAddress(text) }}
@@ -241,7 +241,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                             <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
                             <TextInput
                                 style={styles.textbox}
-                                placeholder="Introduction"
+                                placeholder={Languages?.ba_signup_breif_introduction}
                                 underlineColorAndroid="transparent"
                                 multiline={true}
                                 numberOfLines={8}
@@ -257,7 +257,7 @@ const BusinessAdvertiser = ({ navigation }) => {
                             <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
                             <TextInput
                                 style={styles.textbox}
-                                placeholder="Message"
+                                placeholder={Languages?.ba_signup_BA_message}
                                 underlineColorAndroid="transparent"
                                 multiline={true}
                                 numberOfLines={8}

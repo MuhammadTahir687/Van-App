@@ -172,7 +172,7 @@ const HotelSignup = () => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Hotel Reservation</Text>
+                        <Text style={styles.loginHeading}>{Languages?.ba_signup_hotel_heading}</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -285,7 +285,7 @@ const HotelSignup = () => {
                             <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Enter Image Url"}
+                                placeholder={Languages?.ba_signup_image}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={hotelImages?.hotelImageValue}
                                 onChangeText={(text) => { setHotelImages({ ...hotelImages, hotelImage: text, hotelImageValue: text }) }}
@@ -295,7 +295,7 @@ const HotelSignup = () => {
                         {imageListValidation && <ErrorMessage error={imageListValidation} />}
 
                         <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
-                            <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                            <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
 
                         <View style={styles.imageContainer}>
