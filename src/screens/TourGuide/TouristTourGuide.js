@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Trip1 from '../../assets/Trip1.jpg';
 import Trip2 from '../../assets/Trip2.jpg';
@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserServices } from '../../services/userServices';
 import axios from 'axios';
+import Tour from '../../assets/tour.jpeg'
 
 const TouristTourGuide = () => {
 
@@ -19,6 +20,7 @@ const TouristTourGuide = () => {
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         GetData()
@@ -31,10 +33,13 @@ const TouristTourGuide = () => {
             const resp = await UserServices.UserData('guides')
             const placesResponse = await UserServices.UserData("guidesTripPlans")
             if (resp) {
-                setData(resp.data)
-                setGuideTripPlans(placesResponse.data)
+                setRefreshing(false)
+                console.log("Data====", resp?.data)
+                setData(resp?.data)
+                setGuideTripPlans(placesResponse?.data)
             }
         } catch (error) {
+            setRefreshing(false)
             console.log("Error", error)
         }
     }
@@ -75,17 +80,18 @@ const TouristTourGuide = () => {
             } */}
 
             <FlatList
-                // data={countryFilter == "All" ? data?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase())) : filterTourlData?.filter((item) => item?.trip_name.toLowerCase().includes(search.toLowerCase()))}
+                refreshControl={<RefreshControl progressBackgroundColor={Colors.PrimaryColor} colors={[Colors.WhiteColor]} refreshing={refreshing} onRefresh={() => { setRefreshing(true), GetData() }} />}
                 data={data?.filter((item) => item?.guide_name.toLowerCase().includes(search.toLowerCase()) || item?.country.toLowerCase().includes(search.toLowerCase()))}
-
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => {
                     return (
                         <TouchableOpacity onPress={() => { navigation.navigate("TourGuideDetail", { data: item, placesData: guidesTripPlans }) }} style={styles.hotelCardContainer}>
-                            <Image source={{ uri: item?.profile_image_url }} style={styles.image} />
+                            {item?.profile_image_url?.url ? < Image source={{ uri: item?.profile_image_url?.url }} style={styles.image} />
+                                : <Image source={Tour} style={styles.image} />
+                            }
                             <View style={styles.hotelDescriptionContainer}>
                                 <View>
-                                    <Text style={styles.hotelName}>{item?.guide_code}</Text>
+                                    {/* <Text style={styles.hotelName}>{item?.guide_code}</Text> */}
                                     <Text style={styles.hotelName}>{item?.guide_name}</Text>
                                     <Text style={styles.hotelAddress}>{item?.city + ", " + item?.country}</Text>
                                 </View>

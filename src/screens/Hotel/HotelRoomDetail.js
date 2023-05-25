@@ -14,7 +14,6 @@ const HotelRoomDetail = ({ route, navigation }) => {
 
     const images = [{ id: 1, image: data?.room_image_url }]
 
-    console.log(user)
 
     return (
         <SafeAreaView style={styles.HotelRoomDetailContainer}>

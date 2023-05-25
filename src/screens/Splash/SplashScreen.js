@@ -13,7 +13,7 @@ const Splash = () => {
     })
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar animated={true} backgroundColor={Colors.PrimaryColor} barStyle="light-content" />
+            {/* <StatusBar animated={true} backgroundColor={Colors.PrimaryColor} barStyle="light-content" /> */}
             <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
         </SafeAreaView>
     )
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: Colors.PrimaryColor
+        backgroundColor: "#E4aaaa"
     },
     image: {
         width: 200,

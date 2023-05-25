@@ -20,20 +20,23 @@ import { RootContext } from '../../components/ContextApi/ContextApi';
 import { CarServices } from '../../services/carServices';
 import { TripServices } from '../../services/tripServices';
 
-const AddTripPlans = ({ navigation }) => {
+const AddTripPlans = ({ route, navigation }) => {
 
+
+    const data = route?.params?.tripData;
+    console.log(data?._id)
     const [loading, setLoading] = useState(false)
-    const [tripName, setTripName] = useState("")
-    const [image, setImage] = useState("")
-    const [showImage, setShowImage] = useState(false)
-    const [currency, setCurrency] = useState("")
-    const [country, setCountry] = useState("")
-    const [countryCode, setCountryCode] = useState('')
-    const [city, setCity] = useState("")
-    const [tripDescription, setTripDescription] = useState("")
-    const [visitorsLimit, setVisitorsLimit] = useState("")
-    const [meetingPlace, setMeetingPlace] = useState("")
-    const [tripFee, setTripFee] = useState("")
+    const [tripName, setTripName] = useState(data?.trip_name ?? "")
+    const [image, setImage] = useState(data?.place_image_url ?? "")
+    const [showImage, setShowImage] = useState(data?.place_image_url ? true : false)
+    const [currency, setCurrency] = useState(data?.currency ?? "")
+    const [country, setCountry] = useState(data?.country ?? "")
+    const [countryCode, setCountryCode] = useState(data?.country_code ?? '')
+    const [city, setCity] = useState(data?.city ?? "")
+    const [tripDescription, setTripDescription] = useState(data?.trip_description ?? "")
+    const [visitorsLimit, setVisitorsLimit] = useState(data?.visitors_limit ?? "")
+    const [meetingPlace, setMeetingPlace] = useState(data?.meeting_place ?? "")
+    const [tripFee, setTripFee] = useState(data?.trip_fee ?? "")
 
     const [tripNameValidation, setTripNameValidation] = useState("")
     const [tripFeeValidation, setTripFeeValidation] = useState("")
@@ -59,7 +62,7 @@ const AddTripPlans = ({ navigation }) => {
         else {
 
             const body = {
-                "guide_code": new Date()?.getTime(),
+                "guide_code": data ? data?.guide_code : new Date()?.getTime(),
                 "trip_name": tripName,
                 "trip_time": tripDate,
                 "country": country,
@@ -81,7 +84,7 @@ const AddTripPlans = ({ navigation }) => {
             setLoading(true)
             try {
 
-                const response = await TripServices?.Add_TripPlan(body)
+                const response = data ? await TripServices?.Edit_TripPlan(data?._id, body) : await TripServices?.Add_TripPlan(body)
                 if (response) {
                     console.log("Response==============", response?.data)
                     setLoading(false)

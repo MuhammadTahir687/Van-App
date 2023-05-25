@@ -17,14 +17,16 @@ import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TripServices } from '../../services/tripServices';
 
 
 const EditTourGuideProfile = ({ route }) => {
 
+    const { user, setUser } = useContext(RootContext)
+
     const navigation = useNavigation()
     const data = route?.params?.userData;
-
-    const [loading, setLoading] = useState(false)
+    console.log(data?.guide_code)
 
     const [name, setName] = useState(data?.guide_name ?? "")
     const [email, setEmail] = useState(data?.email ?? "")
@@ -58,7 +60,7 @@ const EditTourGuideProfile = ({ route }) => {
         else if (password == "") setPasswordValidation("Required*")
         else {
             const body = {
-                "guide_code": new Date().getTime(),
+                "guide_code": data ? data?.guide_code : new Date().getTime(),
                 "guide_name": name,
                 "profile_image_url": tripImages?.tripImagesList[0],
                 "trips_view_url": tripImages,
@@ -79,18 +81,18 @@ const EditTourGuideProfile = ({ route }) => {
             try {
 
                 setLoading(true)
-                const response = await AuthServices.TG_Register(body)
+                const response = await TripServices.Edit_Profile(body)
                 if (response) {
                     console.log("Tour Guide response: ", response)
                     setLoading(false)
-                    alert("Tour Guide Registered Successfully")
-                    navigation.replace("BusinessAccount")
+                    setUser(response?.data)
+                    navigation.goBack()
                 }
 
             } catch (error) {
                 setLoading(false)
                 alert(error?.response?.data)
-                console.log(error?.response?.data)
+                console.log(error)
 
             }
         }
@@ -128,6 +130,7 @@ const EditTourGuideProfile = ({ route }) => {
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                     <TextInput
+                        editable={false}
                         style={styles.textInput}
                         placeholder={Languages.ba_signup_email}
                         keyboardType={"email-address"}
