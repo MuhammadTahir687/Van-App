@@ -32,7 +32,7 @@ const TourGuideTabScreens = () => {
                 tabBarHideOnKeyboard: true
             })}>
             <Tab.Screen name="TourGuideBookings" options={{ tabBarLabel: "Bookings" }} component={TourGuideBookings} />
-            <Tab.Screen name="TourGuidePlans" options={{ tabBarLabel: "Places" }} component={TourGuidePlans} />
+            <Tab.Screen name="TourGuidePlans" options={{ tabBarLabel: "Trip Plans" }} component={TourGuidePlans} />
             <Tab.Screen name="TourGuideBusiness" options={{ tabBarLabel: "Business" }} component={TourGuideBusiness} />
             <Tab.Screen name="Profile" component={TourGuideProfile} />
         </Tab.Navigator>

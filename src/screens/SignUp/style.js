@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Colors } from "../../constants/Colors";
+import { moderateScale } from "react-native-size-matters";
 
 export const styles = StyleSheet.create({
     maincontainer: {
@@ -244,5 +245,6 @@ export const styles = StyleSheet.create({
         color: Colors.PrimaryColor,
         marginTop: 5,
         fontWeight: "bold",
+        fontSize: moderateScale(12)
     }
 })

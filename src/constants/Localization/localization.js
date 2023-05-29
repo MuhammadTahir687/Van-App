@@ -40,7 +40,7 @@ const Languages = new LocalizedStrings({
 
         //Sign Up Screen For Business Account
         ba_signup_taxiBtn: "Taxi Driver",
-        ba_signup_hotelBtn: "Hotel Mangaers",
+        ba_signup_hotelBtn: "Hotel Mangaer",
         ba_signup_carBtn: "Car Rental",
         ba_signup_tourBtn: "Tour Guide",
         ba_signup_advertisemntBtn: "Advertise with us!",

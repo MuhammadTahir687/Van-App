@@ -57,7 +57,7 @@ const TourGuideSignup = () => {
         else if (password == "") setPasswordValidation("Required*")
         else {
             const body = {
-                "guide_code": new Date().getTime(),
+                "guide_code": "G-" + new Date().getTime(),
                 "guide_name": name,
                 "profile_image_url": tripImages?.tripImagesList[0],
                 "trips_view_url": tripImages?.tripImagesList,

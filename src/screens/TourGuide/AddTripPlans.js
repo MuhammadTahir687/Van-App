@@ -22,7 +22,7 @@ import { TripServices } from '../../services/tripServices';
 
 const AddTripPlans = ({ route, navigation }) => {
 
-
+    const { user } = useContext(RootContext)
     const data = route?.params?.tripData;
     console.log(data?._id)
     const [loading, setLoading] = useState(false)
@@ -62,7 +62,8 @@ const AddTripPlans = ({ route, navigation }) => {
         else {
 
             const body = {
-                "guide_code": data ? data?.guide_code : new Date()?.getTime(),
+                "guide_code": data ? data?.guide_code : user?.guide_code,
+                "trip_code": data ? data?.trip_code : "TP-" + new Date()?.getTime(),
                 "trip_name": tripName,
                 "trip_time": tripDate,
                 "country": country,
@@ -84,7 +85,7 @@ const AddTripPlans = ({ route, navigation }) => {
             setLoading(true)
             try {
 
-                const response = data ? await TripServices?.Edit_TripPlan(data?._id, body) : await TripServices?.Add_TripPlan(body)
+                const response = data ? await TripServices?.Edit_TripPlan(data?.trip_code, body) : await TripServices?.Add_TripPlan(body)
                 if (response) {
                     console.log("Response==============", response?.data)
                     setLoading(false)
@@ -121,7 +122,7 @@ const AddTripPlans = ({ route, navigation }) => {
         <SafeAreaView style={styles.maincontainer}>
             <Loader loading={loading} setLoading={setLoading} />
             <ScrollView contentContainerStyle={{ marginVertical: 20 }}>
-                <Text style={styles.loginHeading}>Add Trip Plan</Text>
+                <Text style={styles.loginHeading}>{data ? "Edit Trip Plan" : "Add Trip Plan"}</Text>
 
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"mountain"} color={Colors.PrimaryColor} />

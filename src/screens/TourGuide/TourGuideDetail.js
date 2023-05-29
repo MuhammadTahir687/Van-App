@@ -7,6 +7,7 @@ import Trip2 from '../../assets/Trip2.jpg';
 import Trip3 from '../../assets/Trip3.jpg';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import TourGuideCardList from '../../components/TourGuideCard/TourGuideCardList';
+import Tour from '../../assets/tour.jpeg'
 
 const TourGuideDetail = ({ route, navigation }) => {
 
@@ -21,14 +22,17 @@ const TourGuideDetail = ({ route, navigation }) => {
         <SafeAreaView style={styles.tourGuideDetailContainer}>
             <ScrollView>
                 <View style={styles.swiperContainer}>
-                    <SwiperFlatList
+                    {data?.trips_view_url?.length > 0 ? <SwiperFlatList
                         showPagination
                         paginationActiveColor={Colors.PrimaryColor}
                         data={data?.trips_view_url}
                         renderItem={({ item }) => (
-                            <Image source={{ uri: item }} style={{ width: width, height: 250 }} />
+                            <Image source={{ uri: item?.url }} style={{ width: width, height: 250 }} />
                         )}
                     />
+                        :
+                        <Image source={Tour} style={{ width: width, height: 250 }} />
+                    }
                 </View>
                 {/* <ImageBackground source={data?.image} style={styles.image}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

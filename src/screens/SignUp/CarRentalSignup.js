@@ -183,6 +183,16 @@ const CarRentalSignup = () => {
                             </View>
                             {nameValidation && <ErrorMessage error={nameValidation} />}
                             <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={Languages?.ba_signup_CR_agencyName}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={agencyName}
+                                    onChangeText={(text) => { setAgencyName(text) }}
+                                />
+                            </View>
+                            <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
@@ -263,16 +273,7 @@ const CarRentalSignup = () => {
                             </View>
                             {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />} */}
 
-                            <View style={styles.inputContainer}>
-                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                <TextInput
-                                    style={styles.textInput}
-                                    placeholder={Languages?.ba_signup_CR_agencyName}
-                                    placeholderTextColor={Colors.PrimaryColor}
-                                    value={agencyName}
-                                    onChangeText={(text) => { setAgencyName(text) }}
-                                />
-                            </View>
+
                             <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput

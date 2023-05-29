@@ -62,11 +62,6 @@ const CarRentalDetail = ({ route, navigation }) => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => { alert("Car is Booked") }} style={styles.bookingBtn}>
-                    <Text style={styles.btnText}>Book Now</Text>
-                </TouchableOpacity>
-            </View>
         </SafeAreaView>
     )
 }

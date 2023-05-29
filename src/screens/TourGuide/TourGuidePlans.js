@@ -18,7 +18,7 @@ const TourGuidePlans = () => {
     const [tourPlansData, setTourPlansData] = useState([])
     const [loading, setLoading] = useState(false)
 
-    console.log(user)
+    console.log("User=============", user)
 
 
     useEffect(() => { GetData() }, [isFocused])
@@ -29,8 +29,9 @@ const TourGuidePlans = () => {
             setLoading(true)
             const plansResponse = await UserServices.UserData('guidesTripPlans')
             if (plansResponse) {
+                console.log(plansResponse?.data)
                 const filterPlans = plansResponse?.data?.filter((item) => item?.guide_code == user?.guide_code)
-                console.log(filterPlans)
+                console.log("Filter Response ===", filterPlans)
                 setTourPlansData(filterPlans)
                 setLoading(false)
             }
