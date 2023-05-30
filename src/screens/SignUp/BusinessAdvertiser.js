@@ -64,7 +64,7 @@ const BusinessAdvertiser = ({ navigation }) => {
         else {
 
             const body = {
-                "biz_code": new Date(),
+                "biz_code": 'BA' + new Date().getTime(),
                 "biz_name": businessName,
                 "manager_name": name,
                 "biz_start_date": businessDate,

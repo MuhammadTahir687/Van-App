@@ -329,7 +329,7 @@ const BusinessAccountSignup = ({ route }) => {
                         }
 
 
-                        <TouchableOpacity style={styles.btn}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('BusinessAdvrtiser') }} style={styles.btn}>
                             <Text style={styles.btntext}>{Languages?.ba_signup_advertisemntBtn}</Text>
                         </TouchableOpacity>
                     </View>

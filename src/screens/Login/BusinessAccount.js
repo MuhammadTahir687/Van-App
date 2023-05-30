@@ -119,7 +119,7 @@ const BusinessAccount = () => {
                         setLoading(false)
                         await save_data("user", resp.data[0])
                         setUser(resp.data[0])
-                        // navigation.reset({ index: 0, routes: [{ name: 'TourGuideTabScreens' }] });
+                        navigation.reset({ index: 0, routes: [{ name: 'AdvertiserTabScreens' }] });
                     }
                 }
             } catch (error) {
