@@ -33,6 +33,7 @@ import AddTripPlans from "../../screens/TourGuide/AddTripPlans";
 import { AdvertiserServices } from "../../services/advertiserServices";
 import EditBAProfile from "../../screens/Profile/EditBAProfile";
 import AdvertiserTabScreens from "../Tab/AdvertiserTab";
+import BAProfile from "../../screens/BusinessAdvertiser/BAProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +73,7 @@ const StackNavigation = () => {
         <Stack.Screen name="EditTourGuideProfile" component={EditTourGuideProfile} />
         <Stack.Screen name="AddTripPlans" component={AddTripPlans} />
         <Stack.Screen name="AdvertiserTabScreens" component={AdvertiserTabScreens} />
+        <Stack.Screen name="BAProfile" component={BAProfile} />
         <Stack.Screen name="EditBAProfile" component={EditBAProfile} />
       </Stack.Navigator>
 
