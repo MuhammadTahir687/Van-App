@@ -12,7 +12,7 @@ import Taxi from '../../assets/taxi.jpeg';
 
 
 
-const TouristTaxiBooking = () => {
+const TouristTaxiBooking = ({ navigation }) => {
 
     const [location, setLocation] = useState("");
     const [data, setData] = useState([])
@@ -115,12 +115,12 @@ const TouristTaxiBooking = () => {
                             <View>
                                 <View style={styles.modelbtncontainer}>
                                     <Text style={{ flex: 1 }}>Model: {item?.taxi_model_name}</Text>
-                                    <TouchableOpacity onPress={() => { alert("Taxi Booked") }} style={styles.listbtn}>
+                                    <TouchableOpacity onPress={() => { navigation.navigate("TouristTaxiBookingDetail", { data: item, location: location }) }} style={styles.listbtn}>
                                         <Text style={styles.btntext}>Book Now</Text>
                                     </TouchableOpacity>
                                 </View>
 
-                                <Text>${item?.hire_rate}</Text>
+                                <Text>{item?.currency} {item?.hire_rate}</Text>
                                 <Text>Plate#: {item?.plate_no}</Text>
                                 {/* <Text>Point: {item.point}</Text>
                                 <Text>Distance: {item.Distance}</Text> */}
