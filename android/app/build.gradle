@@ -90,7 +90,12 @@ def reactNativeArchitectures() {
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
+
 android {
+    
+    dexOptions {
+    javaMaxHeapSize "4g" 
+            }
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -177,4 +182,8 @@ dependencies {
     }
 }
 
+project.ext.react = [
+    entryFile: "index.js",
+    nodeExecutableAndArgs: ["node", "--max-old-space-size=4096"]
+]
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
