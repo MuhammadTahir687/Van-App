@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
@@ -18,6 +18,8 @@ import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
 import DraggableFlatList, { ScaleDecorator } from "react-native-draggable-flatlist";
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const CarRentalSignup = () => {
 
@@ -60,6 +62,17 @@ const CarRentalSignup = () => {
     const [numberOfCarsValidation, setNumberOfCarsValidation] = useState("")
     const [agencyIntroductionValidation, setAgencyIntroductionValidation] = useState("")
 
+
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: path }], AgencyImageValue: "" })
+        });
+    }
+
+
     const AddAgencyImages = () => {
         if (!agencyImages?.AgencyImage == "") {
             setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: agencyImages?.AgencyImage }], AgencyImageValue: "" })
@@ -83,12 +96,25 @@ const CarRentalSignup = () => {
         else if (numberOfCars == "") setNumberOfCarsValidation("Required*")
         else if (agencyIntroduction == "") setAgencyIntroductionValidation("Required*")
         else {
+            const ImageList = []
+            for (let i = 0; i < agencyImages?.AgencyImagesList?.length; i++) {
+                const path = agencyImages?.AgencyImagesList[i]?.url
+                const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                console.log("file", filename)
+                const reference = storage().ref(filename);
+                await reference.putFile(path);
+                const imageUrl = await storage().ref(filename).getDownloadURL();
+                ImageList.push({ id: ImageList?.length + 1, url: imageUrl });
+            }
+
+
+
             const carRentalBody = {
                 "car_agent_code": new Date(),
                 "agent_name": name,
                 "agency_name": agencyName,
-                "agency_image_url": agencyImages?.AgencyImagesList[0],
-                "fleet_image_url": agencyImages?.AgencyImagesList,
+                "agency_image_url": ImageList[0],
+                "fleet_image_url": ImageList,
                 "agency_start_date": agencyDate,
                 "brief_introduction": agencyIntroduction,
                 "number_of_cars": numberOfCars,
@@ -323,7 +349,7 @@ const CarRentalSignup = () => {
                                 />
                             </View>
 
-                            <TouchableOpacity disabled={agencyImages?.AgencyImageValue == "" ? true : false} onPress={() => { AddAgencyImages() }} style={styles.loadImageBtn}>
+                            <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                                 <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                             </TouchableOpacity>
 

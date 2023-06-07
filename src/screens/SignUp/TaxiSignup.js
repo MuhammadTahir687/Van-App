@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -10,14 +10,15 @@ import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const TaxiSignup = () => {
 
@@ -113,6 +114,20 @@ const TaxiSignup = () => {
         }
 
 
+    }
+
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            const filename = new Date()?.getTime() + path.substring(path.lastIndexOf('/') + 1);
+            const reference = storage().ref(filename);
+            await reference.putFile(path);
+            const imageUrl = await storage().ref(filename).getDownloadURL();
+            setImage(imageUrl)
+            console.log(imageUrl)
+        });
     }
 
 
@@ -216,7 +231,7 @@ const TaxiSignup = () => {
                         </View>
                         {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
 
-                        <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => { setShowImage(true), PickImage() }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
                             <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
                         {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}
