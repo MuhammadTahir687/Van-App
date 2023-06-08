@@ -224,7 +224,7 @@ const TourGuideSignup = () => {
 
 
                         {/* ==================Trip Image=================== */}
-                        <View style={styles.inputContainer}>
+                        {/* <View style={styles.inputContainer}>
                             <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
@@ -235,7 +235,7 @@ const TourGuideSignup = () => {
 
                             />
                         </View>
-                        {imageListValidation && <ErrorMessage error={imageListValidation} />}
+                        {imageListValidation && <ErrorMessage error={imageListValidation} />} */}
 
                         <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                             <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>

@@ -337,7 +337,7 @@ const CarRentalSignup = () => {
                                 />
                             </View>
                             {/* ==================Car Rent Image=================== */}
-                            <View style={styles.inputContainer}>
+                            {/* <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
@@ -347,7 +347,7 @@ const CarRentalSignup = () => {
                                     onChangeText={(text) => { setAgencyImages({ ...agencyImages, AgencyImage: text, AgencyImageValue: text }) }}
 
                                 />
-                            </View>
+                            </View> */}
 
                             <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                                 <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>

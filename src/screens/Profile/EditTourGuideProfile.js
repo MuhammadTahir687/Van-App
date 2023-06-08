@@ -18,7 +18,8 @@ import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TripServices } from '../../services/tripServices';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const EditTourGuideProfile = ({ route }) => {
 
@@ -51,6 +52,8 @@ const EditTourGuideProfile = ({ route }) => {
     const [imageListValidation, setImageListValidation] = useState("")
 
     const [tripImages, setTripImages] = useState({ showTripImage: data?.trips_view_url?.length > 0 ? true : false, tripImagesList: data?.trips_view_url ?? [], tripImage: "", tripImageValue: "" })
+
+
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (name == "") setNameValidation("Required*")
@@ -59,11 +62,32 @@ const EditTourGuideProfile = ({ route }) => {
         else if (country == "") setCountryValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
+            setLoading(true)
+
+            const ImageList = tripImages?.tripImagesList
+
+            for (let i = 0; i < ImageList?.length; i++) {
+                const path = ImageList[i]?.url
+                if (path?.includes("http")) {
+                    console.log("Path====", path)
+                }
+                else {
+                    const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                    console.log("file", filename)
+                    const reference = storage().ref(filename);
+                    await reference.putFile(path);
+                    const imageUrl = await storage().ref(filename).getDownloadURL();
+                    console.log("imageUrl", imageUrl)
+                    ImageList[i] = { id: i + 1, url: imageUrl }
+                    console.log("Image List==", ImageList)
+                }
+            }
+
             const body = {
                 "guide_code": data ? data?.guide_code : new Date().getTime(),
                 "guide_name": name,
-                "profile_image_url": tripImages?.tripImagesList[0],
-                "trips_view_url": tripImages,
+                "profile_image_url": ImageList[0],
+                "trips_view_url": ImageList,
                 "age_years": age,
                 "country": country,
                 "country_code": countryCode,
@@ -80,7 +104,7 @@ const EditTourGuideProfile = ({ route }) => {
 
             try {
 
-                setLoading(true)
+
                 const response = await TripServices.Edit_Profile(body)
                 if (response) {
                     console.log("Tour Guide response: ", response)
@@ -98,6 +122,15 @@ const EditTourGuideProfile = ({ route }) => {
         }
 
 
+    }
+
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            setTripImages({ ...tripImages, tripImagesList: [...tripImages?.tripImagesList, { id: tripImages?.tripImagesList?.length + 1, url: path }], tripImageValue: "" })
+        });
     }
 
     const AddHotelImages = () => {
@@ -203,7 +236,7 @@ const EditTourGuideProfile = ({ route }) => {
 
 
                 {/* ==================Trip Image=================== */}
-                <View style={styles.inputContainer}>
+                {/* <View style={styles.inputContainer}>
                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                     <TextInput
                         style={styles.textInput}
@@ -214,10 +247,10 @@ const EditTourGuideProfile = ({ route }) => {
 
                     />
                 </View>
-                {imageListValidation && <ErrorMessage error={imageListValidation} />}
+                {imageListValidation && <ErrorMessage error={imageListValidation} />} */}
 
-                <TouchableOpacity disabled={tripImages?.tripImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
-                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
+                    <Text style={{ color: Colors.WhiteColor }}>Select Image From Gallery</Text>
                 </TouchableOpacity>
 
                 <View style={styles.imageContainer}>

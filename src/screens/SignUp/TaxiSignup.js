@@ -218,7 +218,8 @@ const TaxiSignup = () => {
                                 />
                             </View>
                         </View>
-                        <View style={styles.inputContainer}>
+
+                        {/* <View style={styles.inputContainer}>
                             <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
@@ -229,7 +230,7 @@ const TaxiSignup = () => {
 
                             />
                         </View>
-                        {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
+                        {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />} */}
 
                         <TouchableOpacity onPress={() => { setShowImage(true), PickImage() }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
                             <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>

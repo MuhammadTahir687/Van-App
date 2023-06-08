@@ -18,6 +18,8 @@ import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import { HotelServices } from '../../services/hotelServices';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const EditHotelManagerProfile = ({ route }) => {
 
@@ -95,6 +97,15 @@ const EditHotelManagerProfile = ({ route }) => {
         }
     }
 
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: path }], hotelImageValue: "" })
+        });
+    }
+
 
     const AddHotelImages = () => {
         if (!hotelImages?.hotelImage == "") {
@@ -117,14 +128,38 @@ const EditHotelManagerProfile = ({ route }) => {
         else if (country == "") setCountryValidation("Required*")
         // else if (!hotelImages?.hotelImagesList?.length > 0) setHotelImagesValidation("Required*")
         else {
+            setLoading(true)
+
+            const ImageList = hotelImages?.hotelImagesList
+
+            for (let i = 0; i < ImageList?.length; i++) {
+                const path = ImageList[i]?.url
+                if (path?.includes("http")) {
+                    console.log("Path====", path)
+                }
+                else {
+                    const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                    console.log("file", filename)
+                    const reference = storage().ref(filename);
+                    await reference.putFile(path);
+                    const imageUrl = await storage().ref(filename).getDownloadURL();
+                    console.log("imageUrl", imageUrl)
+                    ImageList[i] = { id: i + 1, url: imageUrl }
+                    console.log("Image List==", ImageList)
+                }
+            }
+
+
+
+
 
             const managerCode = user?.manager_code;
 
             const body = {
                 "manager_name": name,
                 "hotel_name": hotelName,
-                "hotel_image_url": hotelImages?.hotelImagesList[0],
-                "hotel_view_url": hotelImages?.hotelImagesList,
+                "hotel_image_url": ImageList[0],
+                "hotel_view_url": ImageList,
                 "country": country,
                 "country_code": countryCode,
                 "city": city,
@@ -141,7 +176,7 @@ const EditHotelManagerProfile = ({ route }) => {
 
             try {
 
-                setLoading(true)
+
                 const response = await HotelServices.Edit_HotelManagersProfile(managerCode, body)
                 if (response) {
                     console.log("response: ", response?.data)
@@ -158,6 +193,7 @@ const EditHotelManagerProfile = ({ route }) => {
 
 
     }
+
 
     return (
         <SafeAreaView style={styles.maincontainer}>
@@ -287,7 +323,7 @@ const EditHotelManagerProfile = ({ route }) => {
                 {hotelAddressValidation && <ErrorMessage margin={10} error={hotelAddressValidation} />}
 
                 {/* ==================Hotel Image=================== */}
-                <View style={styles.inputContainer}>
+                {/* <View style={styles.inputContainer}>
                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                     <TextInput
                         style={styles.textInput}
@@ -298,9 +334,9 @@ const EditHotelManagerProfile = ({ route }) => {
 
                     />
                 </View>
-                {hotelImagesValidation && <ErrorMessage margin={10} error={hotelImagesValidation} />}
-                <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
-                    <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                {hotelImagesValidation && <ErrorMessage margin={10} error={hotelImagesValidation} />} */}
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
+                    <Text style={{ color: Colors.WhiteColor }}>Select Image from Gallery</Text>
                 </TouchableOpacity>
                 <View style={styles.imageContainer}>
                     {hotelImages?.hotelImagesList?.length > 0 &&

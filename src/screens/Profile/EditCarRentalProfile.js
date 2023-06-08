@@ -20,6 +20,8 @@ import { AuthServices } from '../../services/authServices';
 import DraggableFlatList, { ScaleDecorator } from "react-native-draggable-flatlist";
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import { CarServices } from '../../services/carServices';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const EditCarRentalProfile = ({ route }) => {
 
@@ -61,6 +63,14 @@ const EditCarRentalProfile = ({ route }) => {
     const [numberOfCarsValidation, setNumberOfCarsValidation] = useState("")
     const [agencyIntroductionValidation, setAgencyIntroductionValidation] = useState("")
 
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: path }], AgencyImageValue: "" })
+        });
+    }
     const AddAgencyImages = () => {
         if (!agencyImages?.AgencyImage == "") {
             setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: agencyImages?.AgencyImage }], AgencyImageValue: "" })
@@ -74,6 +84,7 @@ const EditCarRentalProfile = ({ route }) => {
 
 
     const Submit = async () => {
+
         if (name == "") setNameValidation("Required*")
         else if (country == "") setCountryValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
@@ -82,12 +93,32 @@ const EditCarRentalProfile = ({ route }) => {
         else if (numberOfCars == "") setNumberOfCarsValidation("Required*")
         else if (agencyIntroduction == "") setAgencyIntroductionValidation("Required*")
         else {
+            setLoading(true)
+
+            const ImageList = agencyImages?.AgencyImagesList
+
+            for (let i = 0; i < ImageList?.length; i++) {
+                const path = ImageList[i]?.url
+                if (path?.includes("http")) {
+                    console.log("Path====", path)
+                }
+                else {
+                    const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                    console.log("file", filename)
+                    const reference = storage().ref(filename);
+                    await reference.putFile(path);
+                    const imageUrl = await storage().ref(filename).getDownloadURL();
+                    console.log("imageUrl", imageUrl)
+                    ImageList[i] = { id: i + 1, url: imageUrl }
+                    console.log("Image List==", ImageList)
+                }
+            }
             const carRentalBody = {
                 "car_agent_code": data?.car_agent_code,
                 "agent_name": name,
                 "agency_name": agencyName,
-                "agency_image_url": agencyImages?.AgencyImagesList[0],
-                "fleet_image_url": agencyImages?.AgencyImagesList,
+                "agency_image_url": ImageList[0],
+                "fleet_image_url": ImageList,
                 "agency_start_date": new Date(),
                 "brief_introduction": agencyIntroduction,
                 "number_of_cars": numberOfCars,
@@ -107,7 +138,7 @@ const EditCarRentalProfile = ({ route }) => {
 
             try {
 
-                setLoading(true)
+
                 const response = await CarServices.Edit_Profile(carRentalBody)
                 if (response) {
                     console.log("Taxi response: ", response)
@@ -268,7 +299,7 @@ const EditCarRentalProfile = ({ route }) => {
                         />
                     </View>
                     {/* ==================Car Rent Image=================== */}
-                    <View style={styles.inputContainer}>
+                    {/* <View style={styles.inputContainer}>
                         <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                         <TextInput
                             style={styles.textInput}
@@ -278,10 +309,10 @@ const EditCarRentalProfile = ({ route }) => {
                             onChangeText={(text) => { setAgencyImages({ ...agencyImages, AgencyImage: text, AgencyImageValue: text }) }}
 
                         />
-                    </View>
+                    </View> */}
 
-                    <TouchableOpacity disabled={agencyImages?.AgencyImageValue == "" ? true : false} onPress={() => { AddAgencyImages() }} style={styles.loadImageBtn}>
-                        <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                    <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
+                        <Text style={{ color: Colors.WhiteColor }}>Select Image from Gallery</Text>
                     </TouchableOpacity>
 
                     <View style={{ flex: 1 }}>

@@ -59,7 +59,7 @@ const Languages = new LocalizedStrings({
         ba_signup_password: "Enter Password",
         ba_signup_image: "Enter Image",
         ba_signup_currency: "Enter Currency",
-        ba_signup_load_image: "Load Image",
+        ba_signup_load_image: "Select Image from Gallery",
         ba_signup_breif_introduction: "Breif introduction",
 
         //Taxi Signup
