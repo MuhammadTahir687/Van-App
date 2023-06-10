@@ -120,7 +120,7 @@ const HotelSignup = () => {
                 "manager_code": new Date(),
                 "manager_name": name,
                 "hotel_name": hotelName,
-                "hotel_image_url": ImageList[0],
+                "hotel_image_url": ImageList[0] ?? [],
                 "hotel_view_url": ImageList,
                 "country": country,
                 "country_code": countryCode,

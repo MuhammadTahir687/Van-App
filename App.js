@@ -7,16 +7,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
 
-  useEffect(() => {
-    GetDeviceData()
-  }, [
+  // useEffect(() => {
+  //   GetDeviceData()
+  // }, [
 
-  ])
+  // ])
 
-  const GetDeviceData = async () => {
-    const data = await OneSignal.getDeviceState();
+  // const GetDeviceData = async () => {
+  //   const data = await OneSignal.getDeviceState();
 
-  }
+  // }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

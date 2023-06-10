@@ -59,7 +59,7 @@ const TouristTaxiBookingDetail = ({ navigation, route }) => {
 
             </View>
             <View style={styles.btnContainer}>
-                <TouchableOpacity onPress={() => { Confirm() }} style={styles.btn}>
+                <TouchableOpacity style={styles.btn}>
                     <Text style={styles.btnText}>Confirm</Text>
                 </TouchableOpacity>
             </View>

@@ -28,6 +28,7 @@ const EditTourGuideProfile = ({ route }) => {
     const navigation = useNavigation()
     const data = route?.params?.userData;
     console.log(data?.guide_code)
+    const [loading, setLoading] = useState(false)
 
     const [name, setName] = useState(data?.guide_name ?? "")
     const [email, setEmail] = useState(data?.email ?? "")

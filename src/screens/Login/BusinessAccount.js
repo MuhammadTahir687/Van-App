@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
@@ -15,6 +15,7 @@ import Loader from '../../components/Loader/Loader';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { AuthServices } from '../../services/authServices';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import Geolocation from 'react-native-geolocation-service';
 
 const BusinessAccount = () => {
 
@@ -23,6 +24,8 @@ const BusinessAccount = () => {
     const navigation = useNavigation();
 
     const { user, setUser } = useContext(RootContext)
+    const [location, setLocation] = useState("");
+
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -47,6 +50,24 @@ const BusinessAccount = () => {
         { label: 'Business Advertisement', value: 'Business Advertisement' },
     ]
 
+    useEffect(() => { GetLocation() }, [])
+
+    const GetLocation = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                console.log("Position ====", position);
+                setLocation(position);
+            },
+            error => {
+                // See error code charts below.
+                console.log("error ===", error.code, error.message);
+                setLocation(false);
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+        );
+        console.log("Location ====", location);
+    };
+
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (value == null) {
@@ -64,8 +85,10 @@ const BusinessAccount = () => {
         else {
             const body = {
                 email: email,
-                password: password
+                password: password,
+                ...(value == "Taxi" && { latitude: location?.coords?.latitude, longitude: location?.coords?.longitude })
             }
+            console.log(body)
             try {
                 if (value == "Taxi") {
                     setLoading(true)

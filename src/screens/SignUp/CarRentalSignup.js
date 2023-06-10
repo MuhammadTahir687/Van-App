@@ -113,7 +113,7 @@ const CarRentalSignup = () => {
                 "car_agent_code": new Date(),
                 "agent_name": name,
                 "agency_name": agencyName,
-                "agency_image_url": ImageList[0],
+                "agency_image_url": ImageList[0] ?? [],
                 "fleet_image_url": ImageList,
                 "agency_start_date": agencyDate,
                 "brief_introduction": agencyIntroduction,

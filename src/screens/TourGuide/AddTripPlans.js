@@ -19,6 +19,8 @@ import { HotelServices } from '../../services/hotelServices';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import { CarServices } from '../../services/carServices';
 import { TripServices } from '../../services/tripServices';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const AddTripPlans = ({ route, navigation }) => {
 
@@ -118,6 +120,20 @@ const AddTripPlans = ({ route, navigation }) => {
         }
     }
 
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            const filename = new Date()?.getTime() + path.substring(path.lastIndexOf('/') + 1);
+            const reference = storage().ref(filename);
+            await reference.putFile(path);
+            const imageUrl = await storage().ref(filename).getDownloadURL();
+            setImage(imageUrl)
+            console.log(imageUrl)
+        });
+    }
+
     return (
         <SafeAreaView style={styles.maincontainer}>
             <Loader loading={loading} setLoading={setLoading} />
@@ -138,7 +154,7 @@ const AddTripPlans = ({ route, navigation }) => {
 
 
 
-                <View style={styles.inputContainer}>
+                {/* <View style={styles.inputContainer}>
                     <FontAwesome5 name={"image"} color={Colors.PrimaryColor} />
                     <TextInput
                         style={{ ...styles.textInput, paddingRight: 12 }}
@@ -149,12 +165,12 @@ const AddTripPlans = ({ route, navigation }) => {
 
                     />
                 </View>
-                {imageValidation && <ErrorMessage error={imageValidation} />}
+                {imageValidation && <ErrorMessage error={imageValidation} />} */}
 
-                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.loadImageBtn}>
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                 </TouchableOpacity>
-                {showImage == true && image != "" &&
+                {image != "" &&
                     <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.roomImage} />
                     </View>}

@@ -19,11 +19,13 @@ import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import Geolocation from 'react-native-geolocation-service';
 
 const TaxiSignup = () => {
 
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
+    const [location, setLocation] = useState("");
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -58,6 +60,8 @@ const TaxiSignup = () => {
     const [taxiHireRateValidation, setTaxiHireRateValidation] = useState("");
     const [currencyValidation, setCurrencyValidation] = useState("");
     const [taxiImageValidation, setTaxiImageValidation] = useState("");
+
+
 
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;

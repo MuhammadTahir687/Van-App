@@ -58,7 +58,7 @@ const TourGuideSignup = () => {
         else if (country == "") setCountryValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
-
+            setLoading(true)
             const ImageList = []
             for (let i = 0; i < tripImages?.tripImagesList?.length; i++) {
                 const path = tripImages?.tripImagesList[i]?.url
@@ -73,7 +73,7 @@ const TourGuideSignup = () => {
             const body = {
                 "guide_code": "G-" + new Date().getTime(),
                 "guide_name": name,
-                "profile_image_url": ImageList[0],
+                "profile_image_url": ImageList[0] ?? [],
                 "trips_view_url": ImageList,
                 "age_years": age,
                 "country": country,
@@ -91,7 +91,7 @@ const TourGuideSignup = () => {
 
             try {
 
-                setLoading(true)
+
                 const response = await AuthServices.TG_Register(body)
                 if (response) {
                     console.log("Tour Guide response: ", response)
