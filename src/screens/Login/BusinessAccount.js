@@ -86,7 +86,7 @@ const BusinessAccount = () => {
             const body = {
                 email: email,
                 password: password,
-                ...(value == "Taxi" && { latitude: location?.coords?.latitude, longitude: location?.coords?.longitude })
+                ...(value == "Taxi" && { latitude: location?.coords?.latitude ?? "", longitude: location?.coords?.longitude ?? "" })
             }
             console.log(body)
             try {

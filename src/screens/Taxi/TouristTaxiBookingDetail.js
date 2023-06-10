@@ -52,7 +52,7 @@ const TouristTaxiBookingDetail = ({ navigation, route }) => {
                 <Text style={styles.text}>Country: {data?.country}</Text>
                 <Text style={styles.text}>Phone: {data?.phone}</Text>
                 <Text style={styles.text}>Email: {data?.email}</Text>
-                <Text style={styles.text}>Distance: {data?.longitude && data?.latitude ? Distance / 1000 + " km" : "N/A"} </Text>
+                <Text style={styles.text}>Distance: {data?.longitude != "" && data?.latitude != "" ? Distance / 1000 + " km" : "N/A"} </Text>
                 <Text style={styles.text}>Breif Introduction:</Text>
                 <Text style={styles.introduction}>{data?.brief_introduction}</Text>
 
