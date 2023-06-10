@@ -29,8 +29,8 @@ const HotelProfile = ({ navigation }) => {
 
                 <View style={styles.profileCard}>
                     <View style={styles.avatarContainer}>
-                        <Avatar
-                            size="medium"
+                        {user?.hotel_image_url?.url ? <Avatar
+                            size="large"
                             rounded
                             icon={{ name: 'user', type: 'font-awesome' }}
                             source={{
@@ -39,6 +39,15 @@ const HotelProfile = ({ navigation }) => {
                             activeOpacity={0.7}
                             containerStyle={styles.avatar}
                         />
+                            :
+                            <Avatar
+                                size="large"
+                                rounded
+                                icon={{ name: 'user', type: 'font-awesome' }}
+                                title={user?.manager_name?.split(" ")?.map((n) => n[0])?.join("")}
+                                activeOpacity={0.7}
+                                containerStyle={styles.avatar}
+                            />}
                     </View>
                     <Text style={styles.profileName}>{user?.manager_name}</Text>
                     <Text style={styles.profileName}>Admin Approved: {user?.admin_approved == true ? "Yes" : "No"}</Text>

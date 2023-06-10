@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserServices } from '../../services/userServices';
 import { RefreshControl } from 'react-native-gesture-handler';
+import Hotel from '../../assets/hotel.jpeg'
 
 
 const TouristHotelReservation = () => {
@@ -93,7 +94,7 @@ const TouristHotelReservation = () => {
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => { navigation.navigate("HotelDetail", { data: item, hotelRooms: hotelRoomsData }) }} style={styles.hotelCardContainer}>
-                        <Image source={{ uri: item?.hotel_image_url?.url }} style={styles.image} />
+                        <Image source={item?.hotel_image_url?.url ? { uri: item?.hotel_image_url?.url } : Hotel} style={styles.image} />
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
                                 <Text style={styles.hotelName}>{item?.hotel_name}</Text>

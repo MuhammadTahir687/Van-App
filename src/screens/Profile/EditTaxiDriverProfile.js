@@ -16,6 +16,8 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const EditTaxiDriverProfile = ({ route }) => {
 
@@ -71,7 +73,7 @@ const EditTaxiDriverProfile = ({ route }) => {
         else if (currency == "") setCurrencyValidation("Required*")
         else if (taxihireRate == "") setTaxiHireRateValidation("Required*")
         else if (taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
-        else if (image == "") setImageValidation("Required*")
+        // else if (image == "") setImageValidation("Required*")
         else {
             const taxi_body = {
                 taxi_driver_code: userData?.taxi_driver_code,
@@ -112,6 +114,21 @@ const EditTaxiDriverProfile = ({ route }) => {
 
 
     }
+
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            const filename = new Date()?.getTime() + path.substring(path.lastIndexOf('/') + 1);
+            const reference = storage().ref(filename);
+            await reference.putFile(path);
+            const imageUrl = await storage().ref(filename).getDownloadURL();
+            setImage(imageUrl)
+            console.log(imageUrl)
+        });
+    }
+
 
     return (
         <SafeAreaView style={styles.maincontainer}>
@@ -220,7 +237,7 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                 </View>
 
-                <View style={styles.inputContainer}>
+                {/* <View style={styles.inputContainer}>
                     <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                     <TextInput
                         style={{ ...styles.textInput, paddingRight: 12 }}
@@ -231,12 +248,12 @@ const EditTaxiDriverProfile = ({ route }) => {
 
                     />
                 </View>
-                {imageValidation && <ErrorMessage margin={10} error={imageValidation} />}
+                {imageValidation && <ErrorMessage margin={10} error={imageValidation} />} */}
 
-                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.imageBtn}>
-                    <Text style={styles.imageBtnText}>Load Image</Text>
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.imageBtn}>
+                    <Text style={styles.imageBtnText}>Select Image from Gallery</Text>
                 </TouchableOpacity>
-                {showImage == true && image != "" &&
+                {image != "" &&
                     <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.taxiImage} />
                     </View>}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -10,19 +10,22 @@ import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
+import Geolocation from 'react-native-geolocation-service';
 
 const TaxiSignup = () => {
 
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
+    const [location, setLocation] = useState("");
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -58,13 +61,15 @@ const TaxiSignup = () => {
     const [currencyValidation, setCurrencyValidation] = useState("");
     const [taxiImageValidation, setTaxiImageValidation] = useState("");
 
+
+
     const Submit = async () => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         if (name == "") setNameValidation("Required*")
         else if (email == "") setEmailValidation("Required*")
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
-        else if (image == "") setTaxiImageValidation("Required*")
+        // else if (image == "") setTaxiImageValidation("Required*")
         else if (taxiModel == "") setTaxiModelValidation("Required*")
         else if (currency == "") setCurrencyValidation("Required*")
         else if (taxihireRate == "") setTaxiHireRateValidation("Required*")
@@ -100,7 +105,7 @@ const TaxiSignup = () => {
                 if (response) {
                     console.log("Taxi response: ", response)
                     setLoading(false)
-                    alert("Taxi Driver Registered Successfully")
+                    alert(`Dear ${name}, your car agency registered successfully`)
                     navigation.replace("BusinessAccount")
                 }
 
@@ -115,6 +120,20 @@ const TaxiSignup = () => {
 
     }
 
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            const filename = new Date()?.getTime() + path.substring(path.lastIndexOf('/') + 1);
+            const reference = storage().ref(filename);
+            await reference.putFile(path);
+            const imageUrl = await storage().ref(filename).getDownloadURL();
+            setImage(imageUrl)
+            console.log(imageUrl)
+        });
+    }
+
 
     return (
         <SafeAreaView style={styles.maincontainer}>
@@ -123,7 +142,7 @@ const TaxiSignup = () => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Taxi Drivers</Text>
+                        <Text style={styles.loginHeading}>{Languages?.ba_signup_taxi_heading}</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -203,21 +222,22 @@ const TaxiSignup = () => {
                                 />
                             </View>
                         </View>
-                        <View style={styles.inputContainer}>
+
+                        {/* <View style={styles.inputContainer}>
                             <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Enter Image Url"}
+                                placeholder={Languages?.ba_signup_image}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={image}
                                 onChangeText={(text) => { setImage(text), setTaxiImageValidation("") }}
 
                             />
                         </View>
-                        {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
+                        {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />} */}
 
-                        <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
-                            <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                        <TouchableOpacity onPress={() => { setShowImage(true), PickImage() }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
+                            <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
                         {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}
 
@@ -238,7 +258,7 @@ const TaxiSignup = () => {
                             <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Currency"}
+                                placeholder={Languages?.ba_signup_currency}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={currency}
                                 onChangeText={(text) => { setCurrency(text), setCurrencyValidation("") }}

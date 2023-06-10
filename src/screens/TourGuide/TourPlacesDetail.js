@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, FlatList, ImageBackground, useWindowDimensions } from 'react-native'
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { Colors } from '../../constants/Colors';
 import Trip1 from '../../assets/Trip1.jpg';
 import Trip2 from '../../assets/Trip2.jpg';
 import Trip3 from '../../assets/Trip3.jpg';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TourGuideCardList from '../../components/TourGuideCard/TourGuideCardList';
+import { RootContext } from '../../components/ContextApi/ContextApi';
 
-const TourPlacesDetail = ({ route }) => {
+const TourPlacesDetail = ({ route, navigation }) => {
+
+    const { user, setUser } = useContext(RootContext)
 
     const { width, height } = useWindowDimensions()
     const data = route?.params?.data
@@ -17,6 +20,11 @@ const TourPlacesDetail = ({ route }) => {
     return (
         <SafeAreaView style={styles.tourGuideDetailContainer}>
             <ScrollView>
+                {user?.guide_code == data?.guide_code &&
+                    <TouchableOpacity onPress={() => { navigation.navigate("AddTripPlans", { tripData: data }) }} style={{ position: "absolute", zIndex: 10, alignSelf: "flex-end", marginTop: 10, backgroundColor: Colors.PrimaryColor, borderRadius: 5, padding: 10, right: 10 }}>
+                        <FontAwesome name='edit' size={20} color={Colors.WhiteColor} />
+                    </TouchableOpacity>
+                }
                 <View style={styles.swiperContainer}>
                     <SwiperFlatList
                         // showPagination
@@ -48,11 +56,11 @@ const TourPlacesDetail = ({ route }) => {
                 </View>
 
             </ScrollView>
-            <View style={styles.buttonContainer}>
+            {user?.guide_code != data?.guide_code && <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => { alert("Trip Booked") }} style={styles.bookingBtn}>
                     <Text style={styles.btnText}>Book Now</Text>
                 </TouchableOpacity>
-            </View>
+            </View>}
         </SafeAreaView>
     )
 }

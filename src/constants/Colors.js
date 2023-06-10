@@ -1,7 +1,6 @@
 export const Colors = {
-    PrimaryColor: "#5980c2",
-    // PrimaryColor:"#1CAE81",
-    // PrimaryColor:"#b82828",
-    //  PrimaryColor: "#161144",
+    // PrimaryColor: "#5980c2",
+    PrimaryColor: "#83FFD2",
+    // PrimaryColor: "#82FF97",
     WhiteColor: "#fff"
 }

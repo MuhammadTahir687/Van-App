@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { FlatList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CarRental1 from '../../assets/CarRental1.jpg';
 import CarRental2 from '../../assets/CarRental2.jpg';
@@ -9,6 +9,7 @@ import { Colors } from '../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserServices } from '../../services/userServices';
+import Car from '../../assets/carrental.jpeg';
 
 
 const TouristCarRental = () => {
@@ -19,6 +20,8 @@ const TouristCarRental = () => {
     const [countryFilter, setCountryFilter] = useState("All")
     const [filterbtn, setFilterbtn] = useState(0)
     const [search, setSearch] = useState("")
+    const [refreshing, setRefreshing] = useState(false);
+
 
     useEffect(() => {
         GetData()
@@ -29,6 +32,8 @@ const TouristCarRental = () => {
             const resp = await UserServices.UserData('carRentalAgents')
             const fleetResponse = await UserServices.UserData('carRentalFleet')
             if (resp) {
+                console.log("Response===========", resp?.data)
+                setRefreshing(false)
                 setData(resp.data)
                 setFleetData(fleetResponse.data)
             }
@@ -59,8 +64,6 @@ const TouristCarRental = () => {
             setSelectedCountry([...newSelectedCountry])
         }
     }
-
-    const filterHotelData = HotelData.filter((item) => item.country.includes(countryFilter));
 
     return (
         <SafeAreaView style={styles.container}>
@@ -93,12 +96,13 @@ const TouristCarRental = () => {
             </View> */}
 
             <FlatList
-                // data={countryFilter == "All" ? HotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : filterHotelData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))}
+                refreshControl={<RefreshControl progressBackgroundColor={Colors.PrimaryColor} colors={[Colors.WhiteColor]} refreshing={refreshing} onRefresh={() => { setRefreshing(true), GetData() }} />}
                 data={data.filter((item) => item?.agency_name.toLowerCase().includes(search.toLowerCase()))}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => { navigation.navigate("CarRentalDetail", { data: item, fleetData: fleetData }) }} style={styles.hotelCardContainer}>
-                        <Image source={{ uri: item?.agency_image_url }} style={styles.image} />
+                        {item?.agency_image_url?.url ? <Image source={{ uri: item?.agency_image_url?.url }} style={styles.image} />
+                            : <Image source={Car} style={styles.image} />}
                         <View style={styles.hotelDescriptionContainer}>
                             <View>
                                 <Text style={styles.hotelName}>{item?.agency_name}</Text>

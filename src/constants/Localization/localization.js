@@ -39,6 +39,12 @@ const Languages = new LocalizedStrings({
         pa_signup_password: "Enter Password",
 
         //Sign Up Screen For Business Account
+        ba_signup_taxiBtn: "Taxi Driver",
+        ba_signup_hotelBtn: "Hotel Mangaer",
+        ba_signup_carBtn: "Car Rental",
+        ba_signup_tourBtn: "Tour Guide",
+        ba_signup_advertisemntBtn: "Advertise with us!",
+
         ba_signup_screen_h: "Business Account",
         ba_signup_btn_txt: "Sign Up",
         ba_signup_pa_btn_txt: "Personal Account",
@@ -51,14 +57,20 @@ const Languages = new LocalizedStrings({
         ba_signup_age: "Enter Age",
         ba_signup_phone: "Enter Phone",
         ba_signup_password: "Enter Password",
+        ba_signup_image: "Enter Image",
+        ba_signup_currency: "Enter Currency",
+        ba_signup_load_image: "Select Image from Gallery",
+        ba_signup_breif_introduction: "Breif introduction",
 
         //Taxi Signup
+        ba_signup_taxi_heading: "Taxi Driver",
         ba_signup_taxi_model: "Enter Taxi Model",
         ba_signup_taxi_hire_rate: "Enter Taxi Hire Rate",
         ba_signup_taxi_plate_number: "Enter Taxi Plate Number",
         ba_signup_taxi_introduction: "Enter Breif Introduction",
 
         //Hotel Reservation Signup
+        ba_signup_hotel_heading: "Hotel Reservation",
         ba_signup_hotel_rooms: "Enter Hotel Rooms",
         ba_signup_hotel_name: "Enter Hotel Name",
         ba_signup_hotel_address: "Enter Hotel Address",
@@ -66,6 +78,21 @@ const Languages = new LocalizedStrings({
         ba_signup_hotel_foundation_date: "Enter Hotel Foundation Date",
         ba_signup_hotel_breif_introduction: "Enter Breif Introduction",
 
+        // Car Rental SignUp
+        ba_signup_CR_heading: "Car Rental",
+        ba_signup_CR_agencyName: "Agency Name",
+        ba_signup_CR_agencyAddress: "Agency Address",
+        ba_signup_CR_cars: "Number of cars",
+        ba_signup_CR_agencyStartDate: "Agency Start Date",
+
+        // Tour Guide Signup
+        ba_signup_TG_heading: "Tour Guide",
+
+        // Business Advertisers
+        ba_signup_BA_heading: "Business Advertisers",
+        ba_signup_BA_name: "Business Name",
+        ba_signup_BA_address: "Business Address",
+        ba_signup_BA_message: "Message",
 
     },
     'per': {

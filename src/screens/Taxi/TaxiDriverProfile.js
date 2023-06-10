@@ -25,8 +25,8 @@ const TaxiDriverProfile = ({ navigation }) => {
 
                 <View style={styles.profileCard}>
                     <View style={styles.avatarContainer}>
-                        <Avatar
-                            size="medium"
+                        {user?.taxi_image_url ? <Avatar
+                            size="large"
                             rounded
                             icon={{ name: 'user', type: 'font-awesome' }}
                             source={{
@@ -35,6 +35,15 @@ const TaxiDriverProfile = ({ navigation }) => {
                             activeOpacity={0.7}
                             containerStyle={styles.avatar}
                         />
+                            :
+                            <Avatar
+                                size="large"
+                                rounded
+                                icon={{ name: 'user', type: 'font-awesome' }}
+                                title={user?.driver_name?.split(" ")?.map((n) => n[0])?.join("")}
+                                activeOpacity={0.7}
+                                containerStyle={styles.avatar}
+                            />}
                     </View>
                     <Text style={styles.profileName}>{user?.driver_name}</Text>
                     <Text style={styles.profileAdminText}>Admin Approved: {user?.admin_approved == true ? "Yes" : "No"}</Text>

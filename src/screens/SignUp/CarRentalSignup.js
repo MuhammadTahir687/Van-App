@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Languages from '../../constants/Localization/localization';
@@ -18,6 +18,8 @@ import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
 import DraggableFlatList, { ScaleDecorator } from "react-native-draggable-flatlist";
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const CarRentalSignup = () => {
 
@@ -60,6 +62,17 @@ const CarRentalSignup = () => {
     const [numberOfCarsValidation, setNumberOfCarsValidation] = useState("")
     const [agencyIntroductionValidation, setAgencyIntroductionValidation] = useState("")
 
+
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: path }], AgencyImageValue: "" })
+        });
+    }
+
+
     const AddAgencyImages = () => {
         if (!agencyImages?.AgencyImage == "") {
             setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: agencyImages?.AgencyImage }], AgencyImageValue: "" })
@@ -78,20 +91,31 @@ const CarRentalSignup = () => {
         else if (reg.test(email) == false) setEmailValidation("Enter a valid email address")
         else if (country == "") setCountryValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
-        else if (profilePicture == "") setProfilePictureValidation("Required*")
         else if (agencyName == "") setAgencyNameValidation("Required*")
         else if (agencyAddress == "") setAgencyAddressValidation("Required*")
         else if (numberOfCars == "") setNumberOfCarsValidation("Required*")
         else if (agencyIntroduction == "") setAgencyIntroductionValidation("Required*")
-        else if (!agencyImages?.AgencyImagesList?.length > 1) setAgencyImageValidation("Required*")
         else {
+            const ImageList = []
+            for (let i = 0; i < agencyImages?.AgencyImagesList?.length; i++) {
+                const path = agencyImages?.AgencyImagesList[i]?.url
+                const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                console.log("file", filename)
+                const reference = storage().ref(filename);
+                await reference.putFile(path);
+                const imageUrl = await storage().ref(filename).getDownloadURL();
+                ImageList.push({ id: ImageList?.length + 1, url: imageUrl });
+            }
+
+
+
             const carRentalBody = {
-                "car_agent_code": "CA-110",
+                "car_agent_code": new Date(),
                 "agent_name": name,
                 "agency_name": agencyName,
-                "agency_image_url": agencyImages?.AgencyImagesList[0],
-                "fleet_image_url": agencyImages?.AgencyImagesList,
-                "agency_start_date": new Date(),
+                "agency_image_url": ImageList[0] ?? [],
+                "fleet_image_url": ImageList,
+                "agency_start_date": agencyDate,
                 "brief_introduction": agencyIntroduction,
                 "number_of_cars": numberOfCars,
                 "country": country,
@@ -104,7 +128,8 @@ const CarRentalSignup = () => {
                 "registration_date": new Date(),
                 "admin_approved": false,
                 "admin_remarks": "",
-                "log_last_login": new Date()
+                "log_last_login": new Date(),
+                "age": age
             }
             console.log(carRentalBody)
 
@@ -130,6 +155,25 @@ const CarRentalSignup = () => {
 
     }
 
+    const [agencyDate, setAgencyDate] = useState(new Date())
+    const [showDate, setShowDate] = useState(false)
+    const [showAgencyPlaceholder, setShowAgencyPlaceholder] = useState(false)
+
+    const handleDate = (event, selectedDate) => {
+        if (selectedDate) {
+            const currentDate = selectedDate;
+            setShowDate(false)
+            setAgencyDate(currentDate);
+            setShowAgencyPlaceholder(false)
+            console.log("Date ==", currentDate)
+        }
+        else {
+            setShowDate(false)
+            setShowAgencyPlaceholder(true)
+            setAgencyDate(new Date())
+        }
+    }
+
     const renderItem = ({ item, drag, isActive }) => {
         return (
 
@@ -152,7 +196,7 @@ const CarRentalSignup = () => {
                     <View style={styles.container}>
                         <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                         <View style={styles.subcontainer}>
-                            <Text style={styles.loginHeading}>Car Rental Agency</Text>
+                            <Text style={styles.loginHeading}>{Languages?.ba_signup_CR_heading}</Text>
                             <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                                 <TextInput
@@ -164,6 +208,16 @@ const CarRentalSignup = () => {
                                 />
                             </View>
                             {nameValidation && <ErrorMessage error={nameValidation} />}
+                            <View style={styles.inputContainer}>
+                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={Languages?.ba_signup_CR_agencyName}
+                                    placeholderTextColor={Colors.PrimaryColor}
+                                    value={agencyName}
+                                    onChangeText={(text) => { setAgencyName(text) }}
+                                />
+                            </View>
                             <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
                                 <TextInput
@@ -232,7 +286,7 @@ const CarRentalSignup = () => {
                                     />
                                 </View>
                             </View>
-                            <View style={styles.inputContainer}>
+                            {/* <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"user"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
@@ -243,23 +297,14 @@ const CarRentalSignup = () => {
 
                                 />
                             </View>
-                            {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />}
+                            {profilePicture != "" && <Image source={{ uri: profilePicture }} style={styles.image} />} */}
+
 
                             <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Agency Name"}
-                                    placeholderTextColor={Colors.PrimaryColor}
-                                    value={agencyName}
-                                    onChangeText={(text) => { setAgencyName(text) }}
-                                />
-                            </View>
-                            <View style={styles.inputContainer}>
-                                <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                                <TextInput
-                                    style={styles.textInput}
-                                    placeholder={"Agency Address"}
+                                    placeholder={Languages?.ba_signup_CR_agencyAddress}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={agencyAddress}
                                     onChangeText={(text) => { setAgencyAddress(text) }}
@@ -270,7 +315,7 @@ const CarRentalSignup = () => {
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Number of Cars"}
+                                    placeholder={Languages?.ba_signup_CR_cars}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={numberOfCars}
                                     onChangeText={(text) => { setNumberOfCars(text) }}
@@ -281,7 +326,7 @@ const CarRentalSignup = () => {
                                 <MaterialIcons name={"description"} size={15} color={Colors.PrimaryColor} style={styles.descriptionicon} />
                                 <TextInput
                                     style={styles.textbox}
-                                    placeholder={"Brief Introduction"}
+                                    placeholder={Languages?.ba_signup_breif_introduction}
                                     underlineColorAndroid="transparent"
                                     multiline={true}
                                     numberOfLines={8}
@@ -292,37 +337,23 @@ const CarRentalSignup = () => {
                                 />
                             </View>
                             {/* ==================Car Rent Image=================== */}
-                            <View style={styles.inputContainer}>
+                            {/* <View style={styles.inputContainer}>
                                 <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder={"Enter Images Url"}
+                                    placeholder={Languages?.ba_signup_image}
                                     placeholderTextColor={Colors.PrimaryColor}
                                     value={agencyImages?.AgencyImageValue}
                                     onChangeText={(text) => { setAgencyImages({ ...agencyImages, AgencyImage: text, AgencyImageValue: text }) }}
 
                                 />
-                            </View>
+                            </View> */}
 
-                            <TouchableOpacity disabled={agencyImages?.AgencyImageValue == "" ? true : false} onPress={() => { AddAgencyImages() }} style={styles.loadImageBtn}>
-                                <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                            <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
+                                <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                             </TouchableOpacity>
 
-                            {/* <View style={styles.imageContainer}>
-                        {agencyImages?.AgencyImagesList?.length > 0 &&
-                            agencyImages?.AgencyImagesList?.map((item, index) => {
-                                console.log(item?.url)
-                                return (
-                                    <View key={index}>
-                                        <TouchableOpacity onPress={() => { RemoveAgencyImage(item) }} style={styles.removeImageIcon}>
-                                            <Ionicons name={"close"} size={15} style={styles.closeIcon} />
-                                        </TouchableOpacity>
-                                        <Image source={{ uri: item?.url }} style={styles.hotelImages} />
-                                    </View>)
 
-                            })
-                        }
-                    </View > */}
                             <View style={{ flex: 1 }}>
 
 
@@ -333,9 +364,18 @@ const CarRentalSignup = () => {
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={renderItem}
                                 />
+                            </View>
 
-
-
+                            <View style={styles.datecontainer}>
+                                <FontAwesome5 name={"calendar-alt"} size={15} color={Colors.PrimaryColor} />
+                                <TouchableOpacity style={styles.datebtn} onPress={() => { setShowDate(true) }}>
+                                    {showAgencyPlaceholder == true ? <Text style={styles.datetext}>{Languages?.ba_signup_CR_agencyStartDate}</Text> : <Text style={styles.datetext}>{moment(agencyDate).format('ll')}</Text>}
+                                    {showDate && <DateTimePicker
+                                        value={agencyDate}
+                                        onChange={handleDate}
+                                    />
+                                    }
+                                </TouchableOpacity>
                             </View>
 
                             <View style={{ ...styles.inputContainer, marginHorizontal: 20 }}>

@@ -64,10 +64,10 @@ const BusinessAccountSignup = ({ route }) => {
         { label: 'Business Advertisement', value: 'Business Advertisement' },
     ]
     const Images = [
-        { id: 1, image: Taxi },
-        { id: 2, image: Hotel },
-        { id: 3, image: Car },
-        { id: 4, image: Tour },
+        { id: 1, image: Taxi, name: Languages?.ba_signup_taxiBtn },
+        { id: 2, image: Hotel, name: Languages?.ba_signup_hotelBtn },
+        { id: 3, image: Car, name: Languages?.ba_signup_carBtn },
+        { id: 4, image: Tour, name: Languages?.ba_signup_tourBtn },
 
     ]
 
@@ -280,9 +280,8 @@ const BusinessAccountSignup = ({ route }) => {
         if (item.id == 1) navigation.navigate("TaxiSignup")
         else if (item.id == 2) navigation.navigate("HotelSignup")
         else if (item.id == 3) navigation.navigate("CarRentalSignup")
+        else if (item.id == 4) navigation.navigate("TourGuideSignup")
     }
-
-    const SubContainerStyle = useMemo(() => [value == null ? styles.subcontainer : styles.subContainerHeight], [value])
 
     return (
         <SafeAreaView style={styles.maincontainer}>
@@ -301,6 +300,7 @@ const BusinessAccountSignup = ({ route }) => {
                                 renderItem={({ item, index }) => (
                                     <TouchableOpacity onPress={() => { Submit(item) }} key={index} style={styles.listBtn}>
                                         <Image source={item.image} resizeMode="contain" style={styles.listImages} />
+                                        <Text style={styles.listText}>{item?.name}</Text>
                                     </TouchableOpacity>
                                 )}
                             />
@@ -328,9 +328,10 @@ const BusinessAccountSignup = ({ route }) => {
                                         <CarRentalSignup /> : null
                         }
 
-                        {/* <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.btn}>
-                            <Text style={styles.btntext}>{Languages.ba_signup_pa_btn_txt}</Text>
-                        </TouchableOpacity> */}
+
+                        <TouchableOpacity onPress={() => { navigation.navigate('BusinessAdvrtiser') }} style={styles.btn}>
+                            <Text style={styles.btntext}>{Languages?.ba_signup_advertisemntBtn}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 

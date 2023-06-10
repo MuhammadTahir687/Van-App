@@ -17,7 +17,8 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 
 const HotelSignup = () => {
@@ -99,16 +100,28 @@ const HotelSignup = () => {
         else if (country == "") setCountryValidation("Required*")
         else if (hotelName == "") setHotelNameValidation("Required*")
         else if (hotelAddress == "") setHotelAddressValidation("Required*")
-        else if (!hotelImages?.hotelImagesList.length > 1) setImageListValidation("Required*")
+        // else if (!hotelImages?.hotelImagesList.length > 1) setImageListValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
+
+            const ImageList = []
+            for (let i = 0; i < hotelImages?.hotelImagesList?.length; i++) {
+                const path = hotelImages?.hotelImagesList[i]?.url
+                const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                console.log("file", filename)
+                const reference = storage().ref(filename);
+                await reference.putFile(path);
+                const imageUrl = await storage().ref(filename).getDownloadURL();
+                ImageList.push({ id: ImageList?.length + 1, url: imageUrl });
+            }
+
 
             const hotelMangersBody = {
                 "manager_code": new Date(),
                 "manager_name": name,
                 "hotel_name": hotelName,
-                "hotel_image_url": hotelImages?.hotelImagesList[0],
-                "hotel_view_url": hotelImages?.hotelImagesList,
+                "hotel_image_url": ImageList[0] ?? [],
+                "hotel_view_url": ImageList,
                 "country": country,
                 "country_code": countryCode,
                 "city": city,
@@ -149,6 +162,17 @@ const HotelSignup = () => {
         }
 
 
+
+    }
+
+
+    const PickImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(async image => {
+            const { path } = image;
+            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: path }], hotelImageValue: "" })
+        });
     }
 
     const AddHotelImages = () => {
@@ -172,7 +196,7 @@ const HotelSignup = () => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
                     <View style={styles.subcontainer}>
-                        <Text style={styles.loginHeading}>Hotel Reservation</Text>
+                        <Text style={styles.loginHeading}>{Languages?.ba_signup_hotel_heading}</Text>
                         <View style={styles.inputContainer}>
                             <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} />
                             <TextInput
@@ -281,21 +305,21 @@ const HotelSignup = () => {
                         {hotelAddressValidation && <ErrorMessage error={hotelAddressValidation} />}
 
                         {/* ==================Hotel Image=================== */}
-                        <View style={styles.inputContainer}>
+                        {/* <View style={styles.inputContainer}>
                             <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
-                                placeholder={"Enter Image Url"}
+                                placeholder={Languages?.ba_signup_image}
                                 placeholderTextColor={Colors.PrimaryColor}
                                 value={hotelImages?.hotelImageValue}
                                 onChangeText={(text) => { setHotelImages({ ...hotelImages, hotelImage: text, hotelImageValue: text }) }}
 
                             />
                         </View>
-                        {imageListValidation && <ErrorMessage error={imageListValidation} />}
+                        {imageListValidation && <ErrorMessage error={imageListValidation} />} */}
 
-                        <TouchableOpacity disabled={hotelImages?.hotelImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
-                            <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
+                        <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
+                            <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
 
                         <View style={styles.imageContainer}>

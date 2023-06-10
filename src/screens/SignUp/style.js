@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Colors } from "../../constants/Colors";
+import { moderateScale } from "react-native-size-matters";
 
 export const styles = StyleSheet.create({
     maincontainer: {
@@ -226,16 +227,24 @@ export const styles = StyleSheet.create({
         zIndex: 10
     },
     signupImagesContainer: {
+        width: "100%",
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
     },
     listBtn: {
-        margin: 5
+        margin: 5,
+        alignItems: "center"
     },
     listImages: {
         width: 100,
         height: 100,
         borderRadius: 50
+    },
+    listText: {
+        color: Colors.PrimaryColor,
+        marginTop: 5,
+        fontWeight: "bold",
+        fontSize: moderateScale(12)
     }
 })
