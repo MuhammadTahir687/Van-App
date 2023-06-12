@@ -64,7 +64,6 @@ const CarRentalProfile = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <Loader loading={loading} setLoading={setLoading} />
-
             <ScrollView style={{ flexGrow: 1 }}>
                 <View style={styles.headerContainer}>
                     {/* <TouchableOpacity onPress={() => { navigation.goBack() }}>
