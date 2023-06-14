@@ -20,9 +20,11 @@ export const styles = StyleSheet.create({
         paddingBottom: 20
     },
     image: {
-        width: 200,
+        width: 100,
         height: 100,
-        marginVertical: 20
+        marginVertical: 20,
+        borderRadius: 5,
+        resizeMode: "contain"
     },
     authtext: {
         color: Colors.PrimaryColor,
