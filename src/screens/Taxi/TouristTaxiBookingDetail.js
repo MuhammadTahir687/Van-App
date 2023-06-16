@@ -5,25 +5,28 @@ import { Colors } from '../../constants/Colors';
 import { getDistance } from 'geolib';
 import { NotificationServices } from '../../services/notificationServices';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import { ONESIGNAL_APP_ID } from "@env"
 
 const TouristTaxiBookingDetail = ({ navigation, route }) => {
     const { user } = useContext(RootContext)
     const { data, location } = route?.params;
-    console.log(user);
+    console.log("Route Data", data);
+
     const Distance = data?.latitude && data?.longitude && getDistance(
         { latitude: location?.coords?.latitude, longitude: location?.coords?.longitude },
         { latitude: data?.latitude, longitude: data?.longitude }
     );
+
     const Confirm = async () => {
         try {
             const body = {
-                "include_player_ids": ["2c4a259d-25b6-4e61-8ed2-ad11a3c11729", "e759e581-85e6-4ac1-a019-c8bb8cc862ed"],
-                "app_id": "d0153995-074e-40ea-b7e6-0f6c687a3e5f",
-                "contents": {
-                    "en": user?.tourist_name + "Book a taxi"
-                },
+                "include_player_ids": [data?.player_id],
+                "app_id": ONESIGNAL_APP_ID,
                 "headings": {
                     "en": "Hello, " + data?.driver_name
+                },
+                "contents": {
+                    "en": user?.tourist_name + "Book a taxi"
                 },
                 "isIos": false
             }
@@ -59,7 +62,7 @@ const TouristTaxiBookingDetail = ({ navigation, route }) => {
 
             </View>
             <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity onPress={() => Confirm()} style={styles.btn}>
                     <Text style={styles.btnText}>Confirm</Text>
                 </TouchableOpacity>
             </View>
