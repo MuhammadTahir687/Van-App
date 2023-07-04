@@ -16,6 +16,8 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const EditTaxiDriverProfile = ({ route }) => {
 
@@ -113,6 +115,9 @@ const EditTaxiDriverProfile = ({ route }) => {
 
     }
 
+
+
+
     return (
         <SafeAreaView style={styles.maincontainer}>
             <Loader loading={loading} setLoading={setLoading} />
@@ -130,21 +135,6 @@ const EditTaxiDriverProfile = ({ route }) => {
                     />
                 </View>
                 {nameValidation && <ErrorMessage margin={10} error={nameValidation} />}
-                {/* <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"mail-bulk"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        autoCapitalize='none'
-                        editable={false}
-                        style={styles.textInput}
-                        placeholder={Languages.ba_signup_email}
-                        keyboardType={"email-address"}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={email}
-                        onChangeText={(text) => { setEmail(text), setEmailValidation("") }}
-
-                    />
-                </View>
-                {emailValidation && <ErrorMessage error={emailValidation} />} */}
 
                 <View style={{ ...styles.inputContainer }}>
                     <FontAwesome5 name={"lock"} color={Colors.PrimaryColor} />
@@ -206,37 +196,14 @@ const EditTaxiDriverProfile = ({ route }) => {
                         />
                     </View>
 
-                    {/* <View style={styles.rowinputcontainer}>
-                        <FontAwesome5 name={"user-alt"} color={Colors.PrimaryColor} style={{ marginLeft: 5 }} />
-                        <TextInput
-                            style={styles.rowtextInput}
-                            placeholder={Languages.ba_signup_age}
-                            placeholderTextColor={Colors.PrimaryColor}
-                            value={age}
-                            keyboardType={"numeric"}
-                            onChangeText={(text) => { setAge(text) }}
-                        />
-                    </View> */}
+
 
                 </View>
 
-                <View style={styles.inputContainer}>
-                    <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
-                    <TextInput
-                        style={{ ...styles.textInput, paddingRight: 12 }}
-                        placeholder={"Enter Image Url"}
-                        placeholderTextColor={Colors.PrimaryColor}
-                        value={image}
-                        onChangeText={(text) => { setImage(text), setImageValidation("") }}
-
-                    />
-                </View>
-                {imageValidation && <ErrorMessage margin={10} error={imageValidation} />}
-
-                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.imageBtn}>
-                    <Text style={styles.imageBtnText}>Load Image</Text>
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.imageBtn}>
+                    <Text style={styles.imageBtnText}>Select Image from Gallery</Text>
                 </TouchableOpacity>
-                {showImage == true && image != "" &&
+                {image != "" &&
                     <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.taxiImage} />
                     </View>}

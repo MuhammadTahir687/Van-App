@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "730046452688",
+    "project_id": "one-app-73cfb",
+    "storage_bucket": "one-app-73cfb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730046452688:android:a7ca2c244631bd9ade5fd5",
+        "android_client_info": {
+          "package_name": "com.van_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "730046452688-3urv0sebki84s0ue3av2lr2urcd0374q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkRJlJV5XD5WQoE-VQ_IGBGecLIuxQNrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "730046452688-3urv0sebki84s0ue3av2lr2urcd0374q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

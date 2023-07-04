@@ -17,6 +17,8 @@ import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { AuthServices } from '../../services/authServices';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 
 const TourGuideSignup = () => {
@@ -56,11 +58,23 @@ const TourGuideSignup = () => {
         else if (country == "") setCountryValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
+            setLoading(true)
+            const ImageList = []
+            for (let i = 0; i < tripImages?.tripImagesList?.length; i++) {
+                const path = tripImages?.tripImagesList[i]?.url
+                const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
+                console.log("file", filename)
+                const reference = storage().ref(filename);
+                await reference.putFile(path);
+                const imageUrl = await storage().ref(filename).getDownloadURL();
+                ImageList.push({ id: ImageList?.length + 1, url: imageUrl });
+            }
+
             const body = {
                 "guide_code": "G-" + new Date().getTime(),
                 "guide_name": name,
-                "profile_image_url": tripImages?.tripImagesList[0],
-                "trips_view_url": tripImages?.tripImagesList,
+                "profile_image_url": ImageList[0] ?? [],
+                "trips_view_url": ImageList,
                 "age_years": age,
                 "country": country,
                 "country_code": countryCode,
@@ -77,7 +91,7 @@ const TourGuideSignup = () => {
 
             try {
 
-                setLoading(true)
+
                 const response = await AuthServices.TG_Register(body)
                 if (response) {
                     console.log("Tour Guide response: ", response)
@@ -96,6 +110,8 @@ const TourGuideSignup = () => {
 
 
     }
+
+
 
     const AddHotelImages = () => {
         if (!tripImages?.tripImage == "") {
@@ -201,7 +217,7 @@ const TourGuideSignup = () => {
 
 
                         {/* ==================Trip Image=================== */}
-                        <View style={styles.inputContainer}>
+                        {/* <View style={styles.inputContainer}>
                             <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
@@ -212,9 +228,9 @@ const TourGuideSignup = () => {
 
                             />
                         </View>
-                        {imageListValidation && <ErrorMessage error={imageListValidation} />}
+                        {imageListValidation && <ErrorMessage error={imageListValidation} />} */}
 
-                        <TouchableOpacity disabled={tripImages?.tripImageValue == "" ? true : false} onPress={() => { AddHotelImages() }} style={styles.loadImageBtn}>
+                        <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                             <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
 

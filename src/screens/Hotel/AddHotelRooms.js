@@ -17,6 +17,8 @@ import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
 import { HotelServices } from '../../services/hotelServices';
 import { RootContext } from '../../components/ContextApi/ContextApi';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 
 const AddHotelRooms = ({ route, navigation }) => {
@@ -110,6 +112,9 @@ const AddHotelRooms = ({ route, navigation }) => {
 
 
 
+
+
+
     return (
         <SafeAreaView style={styles.maincontainer}>
             <Loader loading={loading} setLoading={setLoading} />
@@ -139,7 +144,7 @@ const AddHotelRooms = ({ route, navigation }) => {
                     />
                 </View>
                 {roomTypeValidation && <ErrorMessage margin={10} error={roomTypeValidation} />}
-
+                {/* 
                 <View style={styles.inputContainer}>
                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                     <TextInput
@@ -151,12 +156,12 @@ const AddHotelRooms = ({ route, navigation }) => {
 
                     />
                 </View>
-                {roomImageValidation && <ErrorMessage error={roomImageValidation} />}
+                {roomImageValidation && <ErrorMessage error={roomImageValidation} />} */}
 
-                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.loadImageBtn}>
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                 </TouchableOpacity>
-                {showImage == true && image != "" &&
+                {image != "" &&
                     <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.roomImage} />
                     </View>}

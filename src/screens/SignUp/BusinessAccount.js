@@ -290,7 +290,7 @@ const BusinessAccountSignup = ({ route }) => {
                 <View style={styles.container}>
                     <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
 
-                    <View style={styles.subcontainer}>
+                    <View style={{ ...styles.subcontainer }}>
                         <Text style={styles.loginHeading}>{Languages.ba_signup_screen_h}</Text>
                         <View style={styles.signupImagesContainer}>
                             <FlatList

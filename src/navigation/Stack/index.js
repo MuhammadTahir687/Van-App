@@ -34,6 +34,7 @@ import { AdvertiserServices } from "../../services/advertiserServices";
 import EditBAProfile from "../../screens/Profile/EditBAProfile";
 import AdvertiserTabScreens from "../Tab/AdvertiserTab";
 import BAProfile from "../../screens/BusinessAdvertiser/BAProfile";
+import TouristTaxiBookingDetail from "../../screens/Taxi/TouristTaxiBookingDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -52,29 +53,6 @@ const StackNavigation = () => {
         <Stack.Screen name="HotelSignup" component={HotelSignup} />
         <Stack.Screen name="CarRentalSignup" component={CarRentalSignup} />
         <Stack.Screen name="TabScreens" component={TabScreens} />
-        <Stack.Screen name="HotelDetail" component={HotelDetail} />
-        <Stack.Screen name="HotelRoomDetail" component={HotelRoomDetail} />
-        <Stack.Screen name="CarRentalDetail" component={CarRentalDetail} />
-        <Stack.Screen name="CarFleetDetail" component={CarFleetDetail} />
-        <Stack.Screen name="TourGuideDetail" component={TourGuideDetail} />
-        <Stack.Screen name="TourPlacesDetail" component={TourPlacesDetail} />
-        <Stack.Screen name="TaxiDriverTabScreens" component={TaxiDriverTabScreens} />
-        <Stack.Screen name="EditTouristProfile" component={EditTouristProfile} />
-        <Stack.Screen name="EditTaxiDriverProfile" component={EditTaxiDriverProfile} />
-        <Stack.Screen name="EditHotelManagerProfile" component={EditHotelManagerProfile} />
-        <Stack.Screen name="HotelTabScreens" component={HotelTabScreens} />
-        <Stack.Screen name="AddHotelRooms" component={AddHotelRooms} />
-        <Stack.Screen name="CarRentalTabScreens" component={CarRentalTabScreens} />
-        <Stack.Screen name="AddCarRentalFleet" component={AddCarRentalFleet} />
-        <Stack.Screen name="EditCarRentalProfile" component={EditCarRentalProfile} />
-        <Stack.Screen name="BusinessAdvrtiser" component={BusinessAdvertiser} />
-        <Stack.Screen name="TourGuideSignup" component={TourGuideSignup} />
-        <Stack.Screen name="TourGuideTabScreens" component={TourGuideTabScreens} />
-        <Stack.Screen name="EditTourGuideProfile" component={EditTourGuideProfile} />
-        <Stack.Screen name="AddTripPlans" component={AddTripPlans} />
-        <Stack.Screen name="AdvertiserTabScreens" component={AdvertiserTabScreens} />
-        <Stack.Screen name="BAProfile" component={BAProfile} />
-        <Stack.Screen name="EditBAProfile" component={EditBAProfile} />
       </Stack.Navigator>
 
     </NavigationContainer>

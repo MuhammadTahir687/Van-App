@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native'
+import { Text, View, SafeAreaView, Image, TextInput, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { styles } from './style';
 import { Colors } from '../../constants/Colors'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation } from '@react-navigation/native';
-import DropdownPicker from '../../components/DropdownPicker/DropdownPicker';
 import CountryPickerModal from '../../components/CountryPicker/CountryPicker';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import { ScrollView } from 'react-native-gesture-handler';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
+import { ScrollView } from 'react-native';
 import Languages from '../../constants/Localization/localization';
 import { TaxiServices } from '../../services/taxiServices';
 import Loader from '../../components/Loader/Loader';
-import { AuthServices } from '../../services/authServices';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
+import OneSignal from 'react-native-onesignal';
 
 const TaxiSignup = () => {
 
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
-
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [city, setCity] = useState("")
@@ -71,8 +66,10 @@ const TaxiSignup = () => {
         else if (taxiPlateNumber == "") setTaxiPlateNumberValidation("Required*")
         else if (password == "") setPasswordValidation("Required*")
         else {
+            const player_id = await OneSignal.getDeviceState();
             const taxi_body = {
                 taxi_driver_code: new Date().toDateString(),
+                player_id: player_id?.userId,
                 driver_name: name,
                 taxi_model_name: taxiModel,
                 taxi_image_url: image,
@@ -86,12 +83,13 @@ const TaxiSignup = () => {
                 phone: phone,
                 email: email,
                 password: password,
-                status_ready: false,
+                status_ready: true,
                 registration_date: new Date(),
-                admin_approved: false,
+                admin_approved: true,
                 admin_remarks: "Administration remarks if any...",
                 log_last_login: new Date(),
             }
+            console.log(taxi_body);
 
             try {
 
@@ -114,6 +112,8 @@ const TaxiSignup = () => {
 
 
     }
+
+
 
 
     return (
@@ -203,7 +203,8 @@ const TaxiSignup = () => {
                                 />
                             </View>
                         </View>
-                        <View style={styles.inputContainer}>
+
+                        {/* <View style={styles.inputContainer}>
                             <FontAwesome5 name={"car-side"} color={Colors.PrimaryColor} />
                             <TextInput
                                 style={styles.textInput}
@@ -214,9 +215,9 @@ const TaxiSignup = () => {
 
                             />
                         </View>
-                        {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />}
+                        {taxiImageValidation && <ErrorMessage error={taxiImageValidation} />} */}
 
-                        <TouchableOpacity onPress={() => { setShowImage(true) }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => { setShowImage(true), PickImage() }} style={{ backgroundColor: Colors.PrimaryColor, paddingHorizontal: 40, paddingVertical: 10, borderRadius: 10 }}>
                             <Text style={{ color: Colors.WhiteColor }}>{Languages?.ba_signup_load_image}</Text>
                         </TouchableOpacity>
                         {showImage == true && image != "" && <Image source={{ uri: image }} style={{ width: 200, height: 200, margin: 10, borderRadius: 10 }} />}

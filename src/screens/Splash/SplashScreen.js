@@ -9,11 +9,11 @@ const Splash = () => {
     useEffect(() => {
         setTimeout(() => {
             navigation.replace("Auth")
-        }, 1000)
+        })
     })
     return (
         <SafeAreaView style={styles.container}>
-            {/* <StatusBar animated={true} backgroundColor={Colors.PrimaryColor} barStyle="light-content" /> */}
+            <StatusBar animated={true} backgroundColor={Colors.PrimaryColor} barStyle="light-content" />
             <Image source={require("../../assets/oneapp-logo1.png")} resizeMode="contain" style={styles.image} />
         </SafeAreaView>
     )
@@ -26,11 +26,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#E4aaaa"
+        backgroundColor: Colors.PrimaryColor
     },
     image: {
         width: 200,
-        height: 200
+        height: 200,
+        borderRadius: 5
     },
     text: {
         color: "white",

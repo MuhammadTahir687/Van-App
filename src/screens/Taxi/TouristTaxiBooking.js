@@ -6,13 +6,12 @@ import { Avatar } from "react-native-elements";
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import MeIcon from '../../assets/me-icon.png';
 import { UserServices } from '../../services/userServices';
 import Taxi from '../../assets/taxi.jpeg';
 
 
 
-const TouristTaxiBooking = () => {
+const TouristTaxiBooking = ({ navigation }) => {
 
     const [location, setLocation] = useState("");
     const [data, setData] = useState([])
@@ -35,19 +34,6 @@ const TouristTaxiBooking = () => {
         }
     }
 
-
-
-    // const data = [
-    //     { id: 1, name: "Ali", Distance: "10 km", point: 10 },
-    //     { id: 2, name: "Umer", Distance: "10 km", point: 5 },
-    //     { id: 3, name: "David", Distance: "10 km", point: 10 },
-    //     { id: 4, name: "Akram", Distance: "10 km", point: 5 },
-    //     { id: 5, name: "Karim", Distance: "10 km", point: 10 },
-    //     { id: 6, name: "Jhon", Distance: "10 km", point: 5 },
-    //     { id: 7, name: "Thomas", Distance: "10 km", point: 10 },
-    //     { id: 8, name: "Nik", Distance: "10 km", point: 5 },
-    // ]
-
     const GetLocation = () => {
         Geolocation.getCurrentPosition(
             position => {
@@ -55,7 +41,6 @@ const TouristTaxiBooking = () => {
                 setLocation(position);
             },
             error => {
-                // See error code charts below.
                 console.log("error ===", error.code, error.message);
                 setLocation(false);
             },
@@ -65,12 +50,10 @@ const TouristTaxiBooking = () => {
     };
 
     const region = { latitude: location != "" ? location?.coords?.latitude : 37.78825, longitude: location != "" ? location?.coords?.longitude : -122.4324, latitudeDelta: 0.000922, longitudeDelta: 0.000821 }
-    console.log("Images", data.map((item) => item.taxi_image_url))
+
 
     return (
         <SafeAreaView style={styles.container}>
-
-
             <View style={styles.header}>
                 <Text style={styles.headertext}>Taxi</Text>
             </View>
@@ -115,12 +98,12 @@ const TouristTaxiBooking = () => {
                             <View>
                                 <View style={styles.modelbtncontainer}>
                                     <Text style={{ flex: 1 }}>Model: {item?.taxi_model_name}</Text>
-                                    <TouchableOpacity onPress={() => { alert("Taxi Booked") }} style={styles.listbtn}>
+                                    <TouchableOpacity onPress={() => { navigation.navigate("TouristTaxiBookingDetail", { data: item, location: location }) }} style={styles.listbtn}>
                                         <Text style={styles.btntext}>Book Now</Text>
                                     </TouchableOpacity>
                                 </View>
 
-                                <Text>${item?.hire_rate}</Text>
+                                <Text>{item?.currency} {item?.hire_rate}</Text>
                                 <Text>Plate#: {item?.plate_no}</Text>
                                 {/* <Text>Point: {item.point}</Text>
                                 <Text>Distance: {item.Distance}</Text> */}

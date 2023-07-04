@@ -4,17 +4,66 @@ import { Colors } from '../../constants/Colors'
 import { Avatar } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Switch } from 'react-native-switch';
 import { RootContext } from '../../components/ContextApi/ContextApi'
 import { ScrollView } from 'react-native-gesture-handler'
-
+import { AuthServices } from '../../services/authServices'
+import Loader from '../../components/Loader/Loader'
 
 const TaxiDriverProfile = ({ navigation }) => {
 
     const { user, setUser } = useContext(RootContext)
+    const [loading, setLoading] = useState(false)
+    console.log(user);
+
+    const Submit = async () => {
+        const body = {
+            "biz_code": user?.taxi_driver_code,
+            "biz_name": "",
+            "manager_name": user?.driver_name,
+            "biz_start_date": user?.registration_date,
+            "biz_introduction": user?.brief_introduction,
+            "country": user?.country,
+            "country_code": user?.countryCode,
+            "city": user?.city,
+            "biz_address": "",
+            "phone": user?.phone,
+            "email": user?.email,
+            "password": user?.password,
+            "registration_date": new Date(),
+            "biz_add_order": "",
+            "admin_approved": false,
+            "admin_remarks": "",
+            "log_last_login": new Date()
+        }
+        console.log(body)
+
+        try {
+
+            setLoading(true)
+            const response = await AuthServices.BA_Register(body)
+            if (response) {
+                console.log("response: ", response)
+                setLoading(false)
+                alert("Advertiser Account Registered Successfully")
+            }
+
+        } catch (error) {
+            setLoading(false)
+            alert("You Already Registered ")
+            // alert(error?.response?.data)
+            console.log(error?.response?.data)
+
+        }
+
+
+
+    }
 
     return (
         <SafeAreaView style={styles.container}>
+            <Loader loading={loading} setLoading={setLoading} />
             <ScrollView>
                 <View style={styles.headerContainer}>
                     {/* <TouchableOpacity onPress={() => { navigation.goBack() }}>
@@ -84,6 +133,10 @@ const TaxiDriverProfile = ({ navigation }) => {
                     <TouchableOpacity onPress={() => { navigation.navigate("EditTaxiDriverProfile", { userData: user }) }} style={styles.btn}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                         <FontAwesome name='edit' size={20} color={Colors.PrimaryColor} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { Submit() }} style={styles.btn}>
+                        <Text style={styles.btnText}>Advertise with us!</Text>
+                        <MaterialCommunityIcons name='post' size={20} color={Colors.PrimaryColor} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.reset({ index: 0, routes: [{ name: 'BusinessAccount' }], }) }} style={styles.btn}>
                         <Text style={styles.btnText}>Log Out</Text>

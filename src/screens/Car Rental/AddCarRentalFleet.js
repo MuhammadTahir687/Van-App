@@ -18,12 +18,13 @@ import Loader from '../../components/Loader/Loader';
 import { HotelServices } from '../../services/hotelServices';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import { CarServices } from '../../services/carServices';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const AddCarRentalFleet = ({ navigation, route }) => {
 
     const { user } = useContext(RootContext)
     const data = route?.params?.data;
-    console.log(data)
     const [carCode, setCarCode] = useState(data?.car_code ?? "")
     const [carName, setCarName] = useState(data?.car_name ?? "")
     const [image, setImage] = useState(data?.car_image_url ?? "")
@@ -88,6 +89,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
             }
         }
     }
+
     return (
         <SafeAreaView style={styles.maincontainer}>
             <Loader loading={loading} setLoading={setLoading} />
@@ -123,7 +125,7 @@ const AddCarRentalFleet = ({ navigation, route }) => {
 
 
 
-                <View style={styles.inputContainer}>
+                {/* <View style={styles.inputContainer}>
                     <FontAwesome5 name={"globe-americas"} color={Colors.PrimaryColor} />
                     <TextInput
                         style={{ ...styles.textInput, paddingRight: 12 }}
@@ -134,12 +136,12 @@ const AddCarRentalFleet = ({ navigation, route }) => {
 
                     />
                 </View>
-                {imageValidation && <ErrorMessage error={imageValidation} />}
+                {imageValidation && <ErrorMessage error={imageValidation} />} */}
 
-                <TouchableOpacity onPress={() => { setShowImage(true) }} style={styles.loadImageBtn}>
+                <TouchableOpacity onPress={() => { PickImage() }} style={styles.loadImageBtn}>
                     <Text style={{ color: Colors.WhiteColor }}>Load Image</Text>
                 </TouchableOpacity>
-                {showImage == true && image != "" &&
+                {image != "" &&
                     <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.roomImage} />
                     </View>}

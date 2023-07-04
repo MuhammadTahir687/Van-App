@@ -195,11 +195,11 @@ export const styles = StyleSheet.create({
     },
     loadImageBtn: {
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: Colors.PrimaryColor,
         paddingHorizontal: 40,
         marginHorizontal: 20,
         marginVertical: 10,
-        paddingVertical: 10,
         borderRadius: 10,
         height: 50
     },
