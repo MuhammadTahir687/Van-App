@@ -63,14 +63,7 @@ const CarRentalSignup = () => {
     const [agencyIntroductionValidation, setAgencyIntroductionValidation] = useState("")
 
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: path }], AgencyImageValue: "" })
-        });
-    }
+
 
 
     const AddAgencyImages = () => {

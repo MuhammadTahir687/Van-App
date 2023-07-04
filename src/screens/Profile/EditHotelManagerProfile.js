@@ -97,14 +97,7 @@ const EditHotelManagerProfile = ({ route }) => {
         }
     }
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: path }], hotelImageValue: "" })
-        });
-    }
+
 
 
     const AddHotelImages = () => {
@@ -130,24 +123,6 @@ const EditHotelManagerProfile = ({ route }) => {
         else {
             setLoading(true)
 
-            const ImageList = hotelImages?.hotelImagesList
-
-            for (let i = 0; i < ImageList?.length; i++) {
-                const path = ImageList[i]?.url
-                if (path?.includes("http")) {
-                    console.log("Path====", path)
-                }
-                else {
-                    const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
-                    console.log("file", filename)
-                    const reference = storage().ref(filename);
-                    await reference.putFile(path);
-                    const imageUrl = await storage().ref(filename).getDownloadURL();
-                    console.log("imageUrl", imageUrl)
-                    ImageList[i] = { id: i + 1, url: imageUrl }
-                    console.log("Image List==", ImageList)
-                }
-            }
 
 
 

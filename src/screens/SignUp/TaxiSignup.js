@@ -113,19 +113,7 @@ const TaxiSignup = () => {
 
     }
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            const filename = new Date()?.getTime() + path.substring(path.lastIndexOf('/') + 1);
-            const reference = storage().ref(filename);
-            await reference.putFile(path);
-            const imageUrl = await storage().ref(filename).getDownloadURL();
-            setImage(imageUrl)
-            console.log(imageUrl)
-        });
-    }
+
 
 
     return (

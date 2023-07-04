@@ -63,14 +63,7 @@ const EditCarRentalProfile = ({ route }) => {
     const [numberOfCarsValidation, setNumberOfCarsValidation] = useState("")
     const [agencyIntroductionValidation, setAgencyIntroductionValidation] = useState("")
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: path }], AgencyImageValue: "" })
-        });
-    }
+
     const AddAgencyImages = () => {
         if (!agencyImages?.AgencyImage == "") {
             setAgencyImages({ ...agencyImages, AgencyImagesList: [...agencyImages?.AgencyImagesList, { id: agencyImages?.AgencyImagesList?.length + 1, url: agencyImages?.AgencyImage }], AgencyImageValue: "" })
@@ -95,24 +88,7 @@ const EditCarRentalProfile = ({ route }) => {
         else {
             setLoading(true)
 
-            const ImageList = agencyImages?.AgencyImagesList
 
-            for (let i = 0; i < ImageList?.length; i++) {
-                const path = ImageList[i]?.url
-                if (path?.includes("http")) {
-                    console.log("Path====", path)
-                }
-                else {
-                    const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
-                    console.log("file", filename)
-                    const reference = storage().ref(filename);
-                    await reference.putFile(path);
-                    const imageUrl = await storage().ref(filename).getDownloadURL();
-                    console.log("imageUrl", imageUrl)
-                    ImageList[i] = { id: i + 1, url: imageUrl }
-                    console.log("Image List==", ImageList)
-                }
-            }
             const carRentalBody = {
                 "car_agent_code": data?.car_agent_code,
                 "agent_name": name,

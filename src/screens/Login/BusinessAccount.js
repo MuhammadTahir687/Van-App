@@ -16,6 +16,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { AuthServices } from '../../services/authServices';
 import { RootContext } from '../../components/ContextApi/ContextApi';
 import Geolocation from 'react-native-geolocation-service';
+import OneSignal from 'react-native-onesignal';
 
 const BusinessAccount = () => {
 
@@ -83,17 +84,18 @@ const BusinessAccount = () => {
             setPasswordValidation("Required")
         }
         else {
+            const player_id = await OneSignal.getDeviceState();
+
             const body = {
                 email: email,
                 password: password,
-                ...(value == "Taxi" && { latitude: location?.coords?.latitude ?? "", longitude: location?.coords?.longitude ?? "" })
+                ...(value == "Taxi" && { latitude: location?.coords?.latitude ?? "", longitude: location?.coords?.longitude ?? "", player_id: player_id?.userId })
             }
             console.log(body)
             try {
                 if (value == "Taxi") {
                     setLoading(true)
                     const resp = await TaxiServices.TaxiLogin(body)
-
                     if (resp.data) {
                         console.log(resp.data)
                         setLoading(false)

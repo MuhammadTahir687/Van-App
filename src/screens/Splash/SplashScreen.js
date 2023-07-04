@@ -9,7 +9,7 @@ const Splash = () => {
     useEffect(() => {
         setTimeout(() => {
             navigation.replace("Auth")
-        }, 1000)
+        })
     })
     return (
         <SafeAreaView style={styles.container}>

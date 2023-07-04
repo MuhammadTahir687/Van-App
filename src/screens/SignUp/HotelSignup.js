@@ -166,14 +166,7 @@ const HotelSignup = () => {
     }
 
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            setHotelImages({ ...hotelImages, hotelImagesList: [...hotelImages?.hotelImagesList, { id: hotelImages?.hotelImagesList?.length + 1, url: path }], hotelImageValue: "" })
-        });
-    }
+
 
     const AddHotelImages = () => {
         if (!hotelImages?.hotelImage == "") {

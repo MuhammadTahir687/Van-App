@@ -111,14 +111,7 @@ const TourGuideSignup = () => {
 
     }
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            setTripImages({ ...tripImages, tripImagesList: [...tripImages?.tripImagesList, { id: tripImages?.tripImagesList?.length + 1, url: path }], tripImageValue: "" })
-        });
-    }
+
 
     const AddHotelImages = () => {
         if (!tripImages?.tripImage == "") {

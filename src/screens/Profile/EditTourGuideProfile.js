@@ -67,22 +67,7 @@ const EditTourGuideProfile = ({ route }) => {
 
             const ImageList = tripImages?.tripImagesList
 
-            for (let i = 0; i < ImageList?.length; i++) {
-                const path = ImageList[i]?.url
-                if (path?.includes("http")) {
-                    console.log("Path====", path)
-                }
-                else {
-                    const filename = new Date().getTime() + path.substring(path.lastIndexOf('/') + 1);
-                    console.log("file", filename)
-                    const reference = storage().ref(filename);
-                    await reference.putFile(path);
-                    const imageUrl = await storage().ref(filename).getDownloadURL();
-                    console.log("imageUrl", imageUrl)
-                    ImageList[i] = { id: i + 1, url: imageUrl }
-                    console.log("Image List==", ImageList)
-                }
-            }
+
 
             const body = {
                 "guide_code": data ? data?.guide_code : new Date().getTime(),
@@ -125,14 +110,7 @@ const EditTourGuideProfile = ({ route }) => {
 
     }
 
-    const PickImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(async image => {
-            const { path } = image;
-            setTripImages({ ...tripImages, tripImagesList: [...tripImages?.tripImagesList, { id: tripImages?.tripImagesList?.length + 1, url: path }], tripImageValue: "" })
-        });
-    }
+
 
     const AddHotelImages = () => {
         if (!tripImages?.tripImage == "") {
